@@ -42,7 +42,7 @@
                     <tbody>
                         {% for row in rows %}
                         <tr>
-                            <td class="company-name">{{ row.company_name }}</td>
+                            <td class="company-name"><a href="/company/{{ row.ticker }}">{{ row.company_name }}</a></td>
                             <td class="ticker">{{ row.ticker }}</td>
                             <td>{{ row.sector }}</td>
                             <td class="score">{{ row.financial_score }}</td>

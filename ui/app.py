@@ -1,9 +1,10 @@
 """Flask web UI for Behavioural Business Signals.
 
 Routes:
-    GET /                  — Main dashboard scoreboard
-    GET /api/scores        — Combined scores for all companies as JSON
-    GET /api/company/<ticker> — Full data for a single company as JSON
+    GET /                       — Main dashboard scoreboard
+    GET /company/<ticker>       — Company detail page
+    GET /api/scores             — Combined scores for all companies as JSON
+    GET /api/company/<ticker>   — Full data for a single company as JSON
 """
 
 import json
@@ -15,8 +16,42 @@ import pandas as pd
 from flask import Flask, jsonify, render_template
 
 import config
+from collectors.news_collector import fetch_company_news
 
 logger = logging.getLogger(__name__)
+
+_FINANCIAL_METRIC_LABELS = {
+    "revenue_growth": "Revenue Growth",
+    "gross_margin": "Gross Margin",
+    "operating_margin": "Operating Margin",
+    "net_profit_margin": "Net Profit Margin",
+    "fcf_margin": "FCF Margin",
+    "debt_to_equity": "Debt to Equity",
+    "current_ratio": "Current Ratio",
+    "roe": "Return on Equity (ROE)",
+    "roa": "Return on Assets (ROA)",
+    "interest_coverage": "Interest Coverage Ratio",
+}
+
+_BEHAVIOURAL_METRIC_LABELS = {
+    "google_trends_score": "Google Trends Score",
+    "trustpilot_rating": "Trustpilot Rating",
+    "trustpilot_review_count": "Trustpilot Review Count",
+    "app_rating": "App Rating",
+    "reddit_sentiment": "Reddit Sentiment Score",
+    "glassdoor_overall": "Glassdoor Overall Rating",
+    "glassdoor_ceo_approval": "Glassdoor CEO Approval",
+    "glassdoor_recommend": "Glassdoor Recommend %",
+}
+
+_EMPTY_GLASSDOOR = {
+    "overall_rating": "—",
+    "ceo_approval_pct": "—",
+    "recommend_to_friend_pct": "—",
+    "culture_rating": "—",
+    "work_life_balance_rating": "—",
+    "last_updated": "—",
+}
 
 
 def _load_scores() -> pd.DataFrame:
@@ -85,6 +120,81 @@ def _quadrant_label(fin_score, beh_score) -> str:
     return "Weak / Weak"
 
 
+def _score_bar_colour(score) -> str:
+    """Return a CSS class name for the score bar based on score value.
+
+    Args:
+        score: Numeric score (0–100) or None.
+
+    Returns:
+        "green" if > 66, "amber" if 33–66, "red" if < 33, "pending" if None.
+    """
+    if score is None:
+        return "pending"
+    if score > 66:
+        return "green"
+    if score >= 33:
+        return "amber"
+    return "red"
+
+
+def _gd_display_val(row: pd.Series, col: str, fmt: str = "float") -> str:
+    """Format a Glassdoor CSV value for display.
+
+    Returns "—" for NaN, None, or zero placeholder values.
+
+    Args:
+        row: Pandas Series for a single Glassdoor CSV row.
+        col: Column name to extract.
+        fmt: "float" for one decimal place, "pct" for integer percentage with % sign.
+
+    Returns:
+        Formatted string or "—".
+    """
+    v = row.get(col)
+    if not pd.notna(v):
+        return "—"
+    try:
+        fv = float(v)
+    except (ValueError, TypeError):
+        return "—"
+    if fv == 0.0:
+        return "—"
+    if fmt == "pct":
+        return f"{fv:.0f}%"
+    return f"{fv:.1f}"
+
+
+def _fmt_metric(val) -> str:
+    """Format a raw numeric metric value for display in the metrics table.
+
+    Args:
+        val: Raw value from the scores CSV (float, int, or pandas NA).
+
+    Returns:
+        Four-decimal-place string, or "—" for missing values.
+    """
+    try:
+        return f"{float(val):.4f}" if pd.notna(val) else "—"
+    except (ValueError, TypeError):
+        return "—"
+
+
+def _fmt_norm(val) -> str:
+    """Format a normalised metric value for display in the metrics table.
+
+    Args:
+        val: Normalised value (0–1) or pandas NA.
+
+    Returns:
+        Three-decimal-place string, or "—" for missing values.
+    """
+    try:
+        return f"{float(val):.3f}" if pd.notna(val) else "—"
+    except (ValueError, TypeError):
+        return "—"
+
+
 def create_app() -> Flask:
     """Create and configure the Flask application.
 
@@ -114,6 +224,120 @@ def create_app() -> Flask:
             "index.html",
             rows=rows,
             last_updated=date.today().isoformat(),
+        )
+
+    @app.route("/company/<ticker>")
+    def company_detail(ticker: str):
+        """Render the company detail page.
+
+        Args:
+            ticker: Stock ticker symbol from the URL (case-insensitive).
+        """
+        ticker = ticker.upper()
+
+        companies_path = Path(config.DATA_DIR) / "companies.json"
+        with companies_path.open() as f:
+            companies_data = json.load(f)
+
+        company = next(
+            (c for c in companies_data["companies"] if c["ticker"] == ticker),
+            None,
+        )
+
+        if company is None:
+            return render_template(
+                "company.html",
+                not_found=True,
+                ticker=ticker,
+                company=None,
+                fin_score=None,
+                fin_score_colour="pending",
+                fin_score_pct=0,
+                fin_metrics=[],
+                beh_score=None,
+                beh_score_colour="pending",
+                beh_score_pct=0,
+                beh_metrics=[],
+                glassdoor=dict(_EMPTY_GLASSDOOR),
+                news_articles=[],
+            ), 404
+
+        # ── Financial data ────────────────────────────────────────
+        fin_score = None
+        fin_metrics = []
+        fin_path = Path(config.SCORES_DIR) / "financial_scores.csv"
+        if fin_path.exists():
+            fin_df = pd.read_csv(fin_path)
+            fin_match = fin_df[fin_df["ticker"] == ticker]
+            if not fin_match.empty:
+                fin_row = fin_match.iloc[0]
+                raw_fin = fin_row.get("financial_score")
+                fin_score = float(raw_fin) if pd.notna(raw_fin) else None
+                for key, label in _FINANCIAL_METRIC_LABELS.items():
+                    fin_metrics.append({
+                        "label": label,
+                        "raw": _fmt_metric(fin_row.get(key)),
+                        "norm": _fmt_norm(fin_row.get(f"{key}_norm")),
+                    })
+
+        # ── Behavioural data ──────────────────────────────────────
+        beh_score = None
+        beh_metrics = []
+        beh_path = Path(config.SCORES_DIR) / "behavioural_scores.csv"
+        if beh_path.exists():
+            beh_df = pd.read_csv(beh_path)
+            beh_match = beh_df[beh_df["ticker"] == ticker]
+            if not beh_match.empty:
+                beh_row = beh_match.iloc[0]
+                raw_beh = beh_row.get("behavioural_score")
+                beh_score = float(raw_beh) if pd.notna(raw_beh) else None
+                for key, label in _BEHAVIOURAL_METRIC_LABELS.items():
+                    beh_metrics.append({
+                        "label": label,
+                        "raw": _fmt_metric(beh_row.get(key)),
+                        "norm": _fmt_norm(beh_row.get(f"{key}_norm")),
+                    })
+
+        # ── Glassdoor data ────────────────────────────────────────
+        glassdoor = dict(_EMPTY_GLASSDOOR)
+        gd_path = Path(config.BEHAVIOURAL_DIR) / "glassdoor_manual.csv"
+        if gd_path.exists():
+            gd_df = pd.read_csv(gd_path)
+            gd_match = gd_df[gd_df["ticker"] == ticker]
+            if not gd_match.empty:
+                gd_row = gd_match.iloc[0]
+                lu = gd_row.get("last_updated")
+                glassdoor = {
+                    "overall_rating": _gd_display_val(gd_row, "overall_rating"),
+                    "ceo_approval_pct": _gd_display_val(gd_row, "ceo_approval_pct", "pct"),
+                    "recommend_to_friend_pct": _gd_display_val(gd_row, "recommend_to_friend_pct", "pct"),
+                    "culture_rating": _gd_display_val(gd_row, "culture_rating"),
+                    "work_life_balance_rating": _gd_display_val(gd_row, "work_life_balance_rating"),
+                    "last_updated": str(lu) if pd.notna(lu) else "—",
+                }
+
+        # Fetch live news — returns [] gracefully if unreachable
+        news_articles = fetch_company_news(
+            company_name=company["name"],
+            ticker=company["ticker"],
+            max_articles=8,
+        )
+
+        return render_template(
+            "company.html",
+            not_found=False,
+            ticker=ticker,
+            company=company,
+            fin_score=f"{fin_score:.1f}" if fin_score is not None else None,
+            fin_score_colour=_score_bar_colour(fin_score),
+            fin_score_pct=int(fin_score) if fin_score is not None else 0,
+            fin_metrics=fin_metrics,
+            beh_score=f"{beh_score:.1f}" if beh_score is not None else None,
+            beh_score_colour=_score_bar_colour(beh_score),
+            beh_score_pct=int(beh_score) if beh_score is not None else 0,
+            beh_metrics=beh_metrics,
+            glassdoor=glassdoor,
+            news_articles=news_articles,
         )
 
     @app.route("/api/scores")

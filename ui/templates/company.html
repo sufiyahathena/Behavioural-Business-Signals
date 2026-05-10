@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% if not_found %}Not Found{% else %}{{ company.name }}{% endif %} — Behavioural Business Signals</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <header>
+        <div class="header-inner header-flex">
+            <div>
+                <h1>Behavioural Business Signals</h1>
+                <p class="subtitle">Dual-Score Business Analytics — Beauty &amp; Fashion</p>
+            </div>
+            <a href="/" class="back-link">&#8592; Back to Scoreboard</a>
+        </div>
+    </header>
+
+    <main>
+
+        {% if not_found %}
+
+        <div class="detail-card not-found-card">
+            <h2 class="not-found-title">Company not found</h2>
+            <p class="not-found-body">No company with ticker <strong>{{ ticker }}</strong> exists in the dataset.</p>
+            <a href="/" class="not-found-back">&#8592; Back to Scoreboard</a>
+        </div>
+
+        {% else %}
+
+        <!-- ── Company Hero ──────────────────────────────────────── -->
+        <div class="company-hero">
+            <div class="hero-name-row">
+                <h2 class="hero-name">{{ company.name }}</h2>
+            </div>
+            <div class="hero-meta">
+                <span class="hero-ticker">{{ company.ticker }}</span>
+                <span class="hero-exchange">{{ company.exchange }}</span>
+                <span class="hero-sector">{{ company.sector }}</span>
+                <span class="hero-cap">{{ company.market_cap_tier }}</span>
+            </div>
+            <blockquote class="hero-tagline">{{ company.notes }}</blockquote>
+        </div>
+
+        <!-- ── Info Grid ─────────────────────────────────────────── -->
+        <div class="detail-card">
+            <div class="info-grid">
+                <div class="info-col">
+                    <h3>Company Facts</h3>
+                    <div class="info-row">
+                        <span class="info-label">Founded</span>
+                        <span class="info-value">{{ company.founded }} — {{ company.founded_location }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Headquarters</span>
+                        <span class="info-value">{{ company.headquarters }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Exchange</span>
+                        <span class="info-value">{{ company.exchange }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Market Cap Tier</span>
+                        <span class="info-value">{{ company.market_cap_tier }}</span>
+                    </div>
+                    <div class="info-row info-row-block">
+                        <span class="info-label">Target Audience</span>
+                        <span class="info-value">{{ company.target_audience }}</span>
+                    </div>
+                </div>
+
+                <div class="info-col">
+                    <h3>Business Model</h3>
+                    <p class="business-model-text">{{ company.business_model }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Products & Categories ─────────────────────────────── -->
+        <div class="detail-card">
+            <h3 class="card-title">Products &amp; Categories</h3>
+            <div class="pill-group">
+                {% for item in company.products_and_categories %}
+                <span class="pill">{{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ── Brands & Subsidiaries ─────────────────────────────── -->
+        <div class="detail-card">
+            <h3 class="card-title">Brands &amp; Subsidiaries</h3>
+            <div class="pill-group">
+                {% for item in company.subsidiaries_and_brands %}
+                <span class="pill pill-alt">{{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ── Score Summary Cards ───────────────────────────────── -->
+        <div class="score-cards-row">
+            <div class="score-card">
+                <h3>Financial Health Score</h3>
+                {% if fin_score %}
+                <div class="score-display">{{ fin_score }} <span class="score-denom">/ 100</span></div>
+                <div class="score-bar-track">
+                    <div class="score-bar {{ fin_score_colour }}" style="width: {{ fin_score_pct }}%"></div>
+                </div>
+                {% else %}
+                <p class="score-pending">Pending — run <code>python main.py score --financial</code></p>
+                {% endif %}
+            </div>
+
+            <div class="score-card">
+                <h3>Behavioural Quality Score</h3>
+                {% if beh_score %}
+                <div class="score-display">{{ beh_score }} <span class="score-denom">/ 100</span></div>
+                <div class="score-bar-track">
+                    <div class="score-bar {{ beh_score_colour }}" style="width: {{ beh_score_pct }}%"></div>
+                </div>
+                {% else %}
+                <p class="score-pending">Pending — run <code>python main.py score --behavioural</code></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ── Financial Metrics ─────────────────────────────────── -->
+        <div class="detail-card">
+            <div class="card-title-group">
+                <h3 class="card-title">Financial Metrics</h3>
+                <span class="card-subtitle">Powered by yfinance + Financial Modeling Prep</span>
+            </div>
+
+            {% if fin_metrics %}
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th class="col-raw">Raw Value</th>
+                        <th class="col-norm">Normalised Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in fin_metrics %}
+                    <tr>
+                        <td>{{ m.label }}</td>
+                        <td class="metric-raw">{{ m.raw }}</td>
+                        <td class="metric-norm">{{ m.norm }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="pending-box">
+                <span class="pending-icon">&#9203;</span>
+                <p>Financial data will appear here once the financial collector is implemented and <code>python main.py score --financial</code> has been run.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- ── Behavioural Signals ───────────────────────────────── -->
+        <div class="detail-card">
+            <div class="card-title-group">
+                <h3 class="card-title">Behavioural Signals</h3>
+                <span class="card-subtitle">Consumer, Employee &amp; Market Attention</span>
+            </div>
+
+            {% if beh_metrics %}
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Signal</th>
+                        <th class="col-raw">Raw Value</th>
+                        <th class="col-norm">Normalised Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in beh_metrics %}
+                    <tr>
+                        <td>{{ m.label }}</td>
+                        <td class="metric-raw">{{ m.raw }}</td>
+                        <td class="metric-norm">{{ m.norm }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="pending-box">
+                <span class="pending-icon">&#9203;</span>
+                <p>Behavioural data will appear here once collectors are implemented and <code>python main.py score --behavioural</code> has been run.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- ── Latest News ──────────────────────────────────────── -->
+        <div class="detail-card">
+            <div class="card-title-group">
+                <h3 class="card-title">Latest News</h3>
+                <span class="card-subtitle">Google News — {{ company.name }}</span>
+            </div>
+
+            {% if news_articles %}
+            <div class="news-grid">
+                {% for article in news_articles %}
+                <a class="news-card" href="{{ article.link }}" target="_blank" rel="noopener noreferrer">
+                    <div class="news-meta">
+                        <span class="news-source">{{ article.source }}</span>
+                        <span class="news-date">{{ article.published }}</span>
+                    </div>
+                    <div class="news-title">{{ article.title }}</div>
+                    {% if article.summary %}
+                    <div class="news-summary">{{ article.summary }}...</div>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+            <p class="news-footer-note">&#128225; Live feed via Google News RSS — refreshes on each page load</p>
+            {% else %}
+            <div class="pending-box">
+                <span class="pending-icon">&#128240;</span>
+                <p>No news articles could be retrieved for {{ company.name }} right now.</p>
+                <p class="muted">Check your internet connection or try refreshing the page.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- ── Glassdoor Snapshot ────────────────────────────────── -->
+        <div class="detail-card glassdoor-card">
+            <h3 class="card-title">Glassdoor Snapshot</h3>
+            <div class="glassdoor-grid">
+                <div class="gd-item">
+                    <span class="gd-label">Overall Rating</span>
+                    <span class="gd-value">{{ glassdoor.overall_rating }}</span>
+                </div>
+                <div class="gd-item">
+                    <span class="gd-label">CEO Approval</span>
+                    <span class="gd-value">{{ glassdoor.ceo_approval_pct }}</span>
+                </div>
+                <div class="gd-item">
+                    <span class="gd-label">Recommend to Friend</span>
+                    <span class="gd-value">{{ glassdoor.recommend_to_friend_pct }}</span>
+                </div>
+                <div class="gd-item">
+                    <span class="gd-label">Culture Rating</span>
+                    <span class="gd-value">{{ glassdoor.culture_rating }}</span>
+                </div>
+                <div class="gd-item">
+                    <span class="gd-label">Work / Life Balance</span>
+                    <span class="gd-value">{{ glassdoor.work_life_balance_rating }}</span>
+                </div>
+                <div class="gd-item gd-item-date">
+                    <span class="gd-label">Last Updated</span>
+                    <span class="gd-value gd-date">{{ glassdoor.last_updated }}</span>
+                </div>
+            </div>
+            <p class="gd-note">Glassdoor data is manually collected. Update <code>data/behavioural/glassdoor_manual.csv</code> to refresh.</p>
+        </div>
+
+        {% endif %}
+
+        <footer class="page-footer">
+            <p>Behavioural Business Signals — Data for internal research use only</p>
+        </footer>
+    </main>
+</body>
+</html>
