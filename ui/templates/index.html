@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Behavioural Business Signals</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <h1>Behavioural Business Signals</h1>
+            <p class="subtitle">Dual-Score Business Analytics — Beauty &amp; Fashion</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="scoreboard-section">
+            <div class="section-header">
+                <h2>Company Scoreboard</h2>
+                <span class="legend">
+                    <span class="chip strong-strong">Strong / Strong</span>
+                    <span class="chip strong-weak">Strong / Weak</span>
+                    <span class="chip weak-strong">Weak / Strong</span>
+                    <span class="chip weak-weak">Weak / Weak</span>
+                    <span class="chip pending">Pending Data</span>
+                </span>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="scoreboard">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Ticker</th>
+                            <th>Sector</th>
+                            <th>Financial Score</th>
+                            <th>Behavioural Score</th>
+                            <th>Quadrant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in rows %}
+                        <tr>
+                            <td class="company-name">{{ row.company_name }}</td>
+                            <td class="ticker">{{ row.ticker }}</td>
+                            <td>{{ row.sector }}</td>
+                            <td class="score">{{ row.financial_score }}</td>
+                            <td class="score">{{ row.behavioural_score }}</td>
+                            <td>
+                                <span class="chip {{ row.quadrant | lower | replace(' ', '-') | replace('/', '') }}">
+                                    {{ row.quadrant }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="chart-section">
+            <h2>Scatter Plot</h2>
+            <div class="chart-placeholder">
+                <p class="placeholder-label">Visualisation coming soon — connect chart.js or plotly here</p>
+                <p class="placeholder-sub">
+                    X-axis: Financial Score &nbsp;|&nbsp; Y-axis: Behavioural Score &nbsp;|&nbsp; Each point = one company
+                </p>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <p>Last updated: <strong>{{ last_updated }}</strong></p>
+            <p>Data sources: yfinance &bull; Financial Modeling Prep &bull; Google Trends &bull; Trustpilot &bull; Reddit &bull; App Store &bull; Google Play &bull; Glassdoor (manual)</p>
+        </footer>
+    </main>
+</body>
+</html>
