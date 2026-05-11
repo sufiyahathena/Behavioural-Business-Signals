@@ -10,16 +10,31 @@
       "exchange": "NYSE",
       "sector": "Beauty",
       "founded": 1946,
-      "founded_location": "New York City, New York, USA",
-      "headquarters": "New York City, New York, USA",
+      "founded_location": "New York City, NY, USA",
+      "headquarters": "New York City, NY, USA",
       "business_model": "Prestige multi-brand beauty conglomerate. Manufactures, markets, and sells skincare, makeup, fragrance, and haircare products through department stores, specialty retailers, e-commerce, and company-owned stores globally. Revenue is split across product categories and geographies, with heavy reliance on travel retail and Asia-Pacific markets.",
-      "products_and_categories": ["Skincare", "Makeup", "Fragrance", "Haircare"],
-      "subsidiaries_and_brands": [
-        "Estée Lauder", "Clinique", "MAC", "Bobbi Brown", "La Mer",
-        "Origins", "Aveda", "Jo Malone London", "Tom Ford Beauty",
-        "Bumble and bumble", "Smashbox", "Too Faced", "DKNY Beauty"
+      "products_and_categories": [
+        "Skincare",
+        "Makeup",
+        "Fragrance",
+        "Haircare"
       ],
-      "target_audience": "Prestige and luxury beauty consumers, primarily women aged 25–65, with strong presence in department stores and international travel retail markets",
+      "subsidiaries_and_brands": [
+        "Estée Lauder",
+        "Clinique",
+        "MAC",
+        "Bobbi Brown",
+        "La Mer",
+        "Origins",
+        "Aveda",
+        "Jo Malone London",
+        "Tom Ford Beauty",
+        "Bumble and bumble",
+        "Smashbox",
+        "Too Faced",
+        "DKNY Beauty"
+      ],
+      "target_audience": "Women aged 25–65. Prestige and luxury beauty channels globally.",
       "market_cap_tier": "Large Cap",
       "notes": "One of the largest prestige beauty groups globally. Has faced significant headwinds from Asia-Pacific slowdown and travel retail decline post-2022."
     },
@@ -33,11 +48,19 @@
       "founded_location": "Bolingbrook, Illinois, USA",
       "headquarters": "Bolingbrook, Illinois, USA",
       "business_model": "Specialty beauty retailer operating over 1,400 physical stores across the U.S., complemented by a growing e-commerce platform. Unique positioning as an all-price-point retailer offering both prestige and mass-market beauty brands under one roof, alongside in-store salon services. Revenue primarily from product sales; loyalty program (Ultamate Rewards) is central to retention strategy.",
-      "products_and_categories": ["Makeup", "Skincare", "Haircare", "Fragrance", "Salon Services", "Wellness"],
-      "subsidiaries_and_brands": [
-        "Ulta Beauty (retail)", "Ulta Beauty at Target (shop-in-shop partnership)"
+      "products_and_categories": [
+        "Makeup",
+        "Skincare",
+        "Haircare",
+        "Fragrance",
+        "Salon Services",
+        "Wellness"
       ],
-      "target_audience": "Broad beauty consumer base across all income levels, primarily women aged 18–45 who value product variety and convenience. Loyalty program members are core customers.",
+      "subsidiaries_and_brands": [
+        "Ulta Beauty (retail)",
+        "Ulta Beauty at Target (shop-in-shop partnership)"
+      ],
+      "target_audience": "Women aged 18–45. ~44 million Ultamate Rewards active members (FY2024).",
       "market_cap_tier": "Large Cap",
       "notes": "Largest specialty beauty retailer in the U.S. Known for combining prestige and mass beauty in one retail format. Partnership with Target expands reach significantly."
     },
@@ -51,11 +74,20 @@
       "founded_location": "Oakland, California, USA",
       "headquarters": "Oakland, California, USA",
       "business_model": "Value-oriented beauty brand selling affordable cosmetics, skincare, and body care primarily through mass retail channels (Walmart, Target, CVS, Walgreens) and direct-to-consumer online. Known for rapid product development cycles, strong digital marketing, and manufacturing primarily in China at low cost. Operates lean and reinvests heavily in marketing.",
-      "products_and_categories": ["Makeup", "Skincare", "Body Care", "Tools & Brushes"],
-      "subsidiaries_and_brands": [
-        "e.l.f. Cosmetics", "e.l.f. Skin", "Well People", "Keys Soulcare", "Naturium"
+      "products_and_categories": [
+        "Makeup",
+        "Skincare",
+        "Body Care",
+        "Tools & Brushes"
       ],
-      "target_audience": "Value-conscious beauty consumers, predominantly Gen Z and younger Millennials aged 16–30. Strong resonance with digitally native, socially active shoppers.",
+      "subsidiaries_and_brands": [
+        "e.l.f. Cosmetics",
+        "e.l.f. Skin",
+        "Well People",
+        "Keys Soulcare",
+        "Naturium"
+      ],
+      "target_audience": "Gen Z and Millennials aged 16–30. #1 mass cosmetics brand among teens (Piper Sandler, 2024).",
       "market_cap_tier": "Mid Cap",
       "notes": "One of the fastest-growing beauty companies in the U.S. in recent years. Exceptionally strong TikTok and social media presence. Acquisitive growth strategy via brands like Naturium."
     },
@@ -69,13 +101,26 @@
       "founded_location": "Paris, France",
       "headquarters": "Amsterdam, Netherlands (operational HQ in New York, USA)",
       "business_model": "Global beauty company operating across two divisions: Prestige (fragrances, skincare under licensed luxury brands) and Consumer Beauty (mass-market cosmetics, haircare, body care). Licenses brand names from luxury fashion houses for fragrance lines. Revenue is global with strong European and Americas presence.",
-      "products_and_categories": ["Fragrance", "Skincare", "Makeup", "Haircare", "Nail"],
-      "subsidiaries_and_brands": [
-        "CoverGirl", "Rimmel", "Sally Hansen", "Max Factor", "Bourjois",
-        "Hugo Boss Fragrances (licensed)", "Gucci Beauty (licensed)", "Burberry Beauty (licensed)",
-        "Calvin Klein Fragrances (licensed)", "Marc Jacobs Beauty (licensed)"
+      "products_and_categories": [
+        "Fragrance",
+        "Skincare",
+        "Makeup",
+        "Haircare",
+        "Nail"
       ],
-      "target_audience": "Dual audience: mass-market consumers for consumer beauty division (broad demographic), and prestige fragrance buyers (25–55, aspirational luxury shoppers) for prestige division.",
+      "subsidiaries_and_brands": [
+        "CoverGirl",
+        "Rimmel",
+        "Sally Hansen",
+        "Max Factor",
+        "Bourjois",
+        "Hugo Boss Fragrances (licensed)",
+        "Gucci Beauty (licensed)",
+        "Burberry Beauty (licensed)",
+        "Calvin Klein Fragrances (licensed)",
+        "Marc Jacobs Beauty (licensed)"
+      ],
+      "target_audience": "Mass beauty consumers (Consumer division); fragrance buyers aged 25–55 (Prestige division).",
       "market_cap_tier": "Mid Cap",
       "notes": "Historically complex business with significant debt. Has been restructuring and divesting non-core assets. Kylie Jenner and Kim Kardashian brand stakes are held through Coty."
     },
@@ -89,9 +134,17 @@
       "founded_location": "Santa Barbara, California, USA",
       "headquarters": "Santa Barbara, California, USA",
       "business_model": "Single-brand, patent-protected professional haircare company. Products are built around a proprietary bond-building technology (Bis-Aminopropyl Diglycol Dimaleate). Sells through three channels: professional (salons), specialty retail (Sephora, Ulta), and direct-to-consumer. Asset-light model with third-party manufacturing.",
-      "products_and_categories": ["Bond-building haircare treatments", "Shampoo", "Conditioner", "Hair masks", "Styling products"],
-      "subsidiaries_and_brands": ["Olaplex"],
-      "target_audience": "Professional salon clients and at-home hair enthusiasts, primarily women aged 20–45 who colour or chemically treat hair. Strong influencer and professional endorsement base.",
+      "products_and_categories": [
+        "Bond-building haircare treatments",
+        "Shampoo",
+        "Conditioner",
+        "Hair masks",
+        "Styling products"
+      ],
+      "subsidiaries_and_brands": [
+        "Olaplex"
+      ],
+      "target_audience": "Women aged 20–45 who colour or chemically treat hair. Sold in 100+ countries.",
       "market_cap_tier": "Small/Mid Cap",
       "notes": "Experienced rapid growth post-IPO then significant decline due to consumer perception issues around product efficacy and market saturation. One of the most behaviourally interesting cases in this project."
     },
@@ -105,11 +158,20 @@
       "founded_location": "New Orleans, Louisiana, USA",
       "headquarters": "Denton, Texas, USA",
       "business_model": "Specialty beauty retailer and distributor operating through two segments: Sally Beauty Supply (retail stores open to public and licensed professionals) and Beauty Systems Group (professional-only distribution, including Armstrong McDowell stores). Sells professional-grade hair colour, haircare, nail, and skincare products at accessible prices.",
-      "products_and_categories": ["Hair colour", "Haircare", "Nail", "Skincare", "Beauty tools", "Salon supplies"],
-      "subsidiaries_and_brands": [
-        "Sally Beauty Supply", "CosmoProf", "Armstrong McDowell"
+      "products_and_categories": [
+        "Hair colour",
+        "Haircare",
+        "Nail",
+        "Skincare",
+        "Beauty tools",
+        "Salon supplies"
       ],
-      "target_audience": "DIY beauty consumers and licensed beauty professionals. Core customer is often a value-oriented woman aged 25–55 who colours her own hair or works in the beauty trade.",
+      "subsidiaries_and_brands": [
+        "Sally Beauty Supply",
+        "CosmoProf",
+        "Armstrong McDowell"
+      ],
+      "target_audience": "DIY beauty consumers and licensed professionals aged 25–55. 4,800+ stores across 12 countries.",
       "market_cap_tier": "Small Cap",
       "notes": "Brick-and-mortar heavy with over 4,800 stores globally. Has been working on digital transformation. Unique dual B2C and B2B model within beauty retail."
     },
@@ -121,13 +183,18 @@
       "sector": "Beauty / Tech",
       "founded": 2018,
       "founded_location": "Tel Aviv, Israel",
-      "headquarters": "New York City, New York, USA (with R&D in Tel Aviv)",
+      "headquarters": "New York City, NY, USA (with R&D in Tel Aviv)",
       "business_model": "Digital-first, data-driven beauty and wellness company. Operates two direct-to-consumer brands online only, with no physical retail presence. Uses proprietary tech and data infrastructure to drive product development and personalisation. High gross margins due to DTC model. Invested heavily in AI-driven consumer matching and formulation.",
-      "products_and_categories": ["Haircare", "Skincare", "Wellness"],
-      "subsidiaries_and_brands": [
-        "IL MAKIAGE (makeup and skincare)", "SpoiledChild (haircare and wellness)"
+      "products_and_categories": [
+        "Haircare",
+        "Skincare",
+        "Wellness"
       ],
-      "target_audience": "Digitally native beauty consumers aged 20–40. IL MAKIAGE targets makeup users seeking precision shade matching; SpoiledChild targets younger consumers interested in personalised haircare and wellness.",
+      "subsidiaries_and_brands": [
+        "IL MAKIAGE (makeup and skincare)",
+        "SpoiledChild (haircare and wellness)"
+      ],
+      "target_audience": "Digitally native beauty consumers aged 20–40. 100% DTC, no physical retail.",
       "market_cap_tier": "Mid Cap",
       "notes": "Unique as a tech-forward beauty operator. Strong unit economics and DTC model. Relatively recent IPO (2023). AI-powered shade matching quiz is a core acquisition tool."
     },
@@ -141,14 +208,32 @@
       "founded_location": "Clichy, France",
       "headquarters": "Clichy, France",
       "business_model": "Largest beauty company in the world by revenue. Operates across four divisions: Consumer Products (mass market), L'Oréal Luxe (prestige), Professional Products (salon), and Dermatological Beauty (pharmacy). Sells in 150+ countries. Business model is built on R&D investment, brand portfolio depth, and global distribution reach.",
-      "products_and_categories": ["Skincare", "Haircare", "Makeup", "Fragrance", "Dermatological products"],
-      "subsidiaries_and_brands": [
-        "L'Oréal Paris", "Garnier", "Maybelline New York", "NYX Professional Makeup",
-        "Lancôme", "Yves Saint Laurent Beauty", "Giorgio Armani Beauty", "Kiehl's",
-        "Urban Decay", "IT Cosmetics", "La Roche-Posay", "CeraVe", "Vichy",
-        "Kérastase", "Redken", "Matrix"
+      "products_and_categories": [
+        "Skincare",
+        "Haircare",
+        "Makeup",
+        "Fragrance",
+        "Dermatological products"
       ],
-      "target_audience": "Global beauty consumer across all income levels and demographics. Each division and brand targets distinct consumer segments from mass-market to ultra-luxury.",
+      "subsidiaries_and_brands": [
+        "L'Oréal Paris",
+        "Garnier",
+        "Maybelline New York",
+        "NYX Professional Makeup",
+        "Lancôme",
+        "Yves Saint Laurent Beauty",
+        "Giorgio Armani Beauty",
+        "Kiehl's",
+        "Urban Decay",
+        "IT Cosmetics",
+        "La Roche-Posay",
+        "CeraVe",
+        "Vichy",
+        "Kérastase",
+        "Redken",
+        "Matrix"
+      ],
+      "target_audience": "Global consumers across all demographics. Present in 150+ countries across four divisions.",
       "market_cap_tier": "Large Cap (Mega Cap)",
       "notes": "Included as a global benchmark. Most challenging to analyse at company level for behavioural signals due to multi-brand structure. CeraVe and La Roche-Posay have been standout performers."
     },
@@ -162,11 +247,20 @@
       "founded_location": "New York City, New York, USA",
       "headquarters": "New Albany, Ohio, USA",
       "business_model": "Global omnichannel specialty apparel retailer operating through two brand segments: Abercrombie (adult) and Hollister (teen). Sells through company-owned stores and e-commerce globally. Known for a significant brand turnaround in the 2020s, shifting from exclusionary positioning to inclusive lifestyle brand.",
-      "products_and_categories": ["Casual apparel", "Denim", "Outerwear", "Swimwear", "Accessories"],
-      "subsidiaries_and_brands": [
-        "Abercrombie & Fitch", "Abercrombie Kids", "Hollister Co.", "Gilly Hicks"
+      "products_and_categories": [
+        "Casual apparel",
+        "Denim",
+        "Outerwear",
+        "Swimwear",
+        "Accessories"
       ],
-      "target_audience": "Abercrombie targets Millennials and older Gen Z adults (20–35); Hollister targets teens and younger Gen Z (15–22). Both focus on casual, aspirational lifestyle positioning.",
+      "subsidiaries_and_brands": [
+        "Abercrombie & Fitch",
+        "Abercrombie Kids",
+        "Hollister Co.",
+        "Gilly Hicks"
+      ],
+      "target_audience": "Abercrombie: adults aged 20–35. Hollister: teens aged 15–22. 750+ stores globally.",
       "market_cap_tier": "Mid Cap",
       "notes": "One of the most compelling brand turnaround stories in retail. Strong financial recovery post-2022. CEO Fran Horowitz led significant repositioning. Good case for financial vs behavioural divergence."
     },
@@ -180,11 +274,21 @@
       "founded_location": "Pittsburgh, Pennsylvania, USA",
       "headquarters": "Pittsburgh, Pennsylvania, USA",
       "business_model": "Specialty apparel retailer operating American Eagle (casual denim and apparel) and Aerie (intimates, activewear, swimwear) brands through stores and e-commerce. Aerie has been a key growth driver, known for its body-positive marketing. Also operates Quiet Platforms, a supply chain and logistics business.",
-      "products_and_categories": ["Denim", "Casual apparel", "Intimates", "Activewear", "Swimwear", "Accessories"],
-      "subsidiaries_and_brands": [
-        "American Eagle", "Aerie", "Offline by Aerie", "Quiet Platforms"
+      "products_and_categories": [
+        "Denim",
+        "Casual apparel",
+        "Intimates",
+        "Activewear",
+        "Swimwear",
+        "Accessories"
       ],
-      "target_audience": "Gen Z and younger Millennials aged 15–28. American Eagle is core denim brand for teens and young adults; Aerie targets a broader age range with body-inclusive positioning.",
+      "subsidiaries_and_brands": [
+        "American Eagle",
+        "Aerie",
+        "Offline by Aerie",
+        "Quiet Platforms"
+      ],
+      "target_audience": "Gen Z and Millennials aged 15–28. Aerie is one of the fastest-growing intimates brands in the US.",
       "market_cap_tier": "Mid Cap",
       "notes": "Aerie's body-positive brand identity has been a strong differentiator. Jeans are a core product category. Has faced margin pressure and supply chain challenges."
     },
@@ -198,12 +302,25 @@
       "founded_location": "Philadelphia, Pennsylvania, USA",
       "headquarters": "Philadelphia, Pennsylvania, USA",
       "business_model": "Multi-brand lifestyle retail company operating through retail segment (Urban Outfitters, Free People, Anthropologie, Nuuly, Menus & Venues) and subscription/rental (Nuuly). Strong omnichannel presence. Each brand targets a distinct lifestyle consumer segment. Free People wholesale is a significant revenue contributor.",
-      "products_and_categories": ["Apparel", "Accessories", "Home décor", "Beauty", "Books & lifestyle", "Rental subscription"],
-      "subsidiaries_and_brands": [
-        "Urban Outfitters", "Free People", "FP Movement", "Anthropologie",
-        "Terrain", "BHLDN", "Nuuly (rental subscription)", "Menus & Venues"
+      "products_and_categories": [
+        "Apparel",
+        "Accessories",
+        "Home décor",
+        "Beauty",
+        "Books & lifestyle",
+        "Rental subscription"
       ],
-      "target_audience": "Urban Outfitters: Gen Z and younger Millennials (18–28) with alternative/indie lifestyle orientation. Free People: women aged 25–35 into bohemian lifestyle. Anthropologie: women aged 30–50, home and fashion lifestyle buyers.",
+      "subsidiaries_and_brands": [
+        "Urban Outfitters",
+        "Free People",
+        "FP Movement",
+        "Anthropologie",
+        "Terrain",
+        "BHLDN",
+        "Nuuly (rental subscription)",
+        "Menus & Venues"
+      ],
+      "target_audience": "Urban Outfitters: 18–28. Free People: 25–35. Anthropologie: 30–50. All women-skewed.",
       "market_cap_tier": "Mid Cap",
       "notes": "Nuuly rental subscription is a differentiated and growing business unit. Strong brand portfolio with distinct identities. Free People wholesale adds B2B revenue."
     },
@@ -217,11 +334,21 @@
       "founded_location": "San Francisco, California, USA",
       "headquarters": "San Francisco, California, USA",
       "business_model": "Global apparel retail company operating four distinct brands across different consumer segments. Revenue from company-owned stores, e-commerce, franchise partnerships, and licensing. Has divested international operations in some regions and closed underperforming stores. Now focused on brand stabilisation and margin recovery.",
-      "products_and_categories": ["Casual apparel", "Denim", "Activewear", "Outerwear", "Kids' clothing", "Accessories"],
-      "subsidiaries_and_brands": [
-        "Gap", "Old Navy", "Banana Republic", "Athleta"
+      "products_and_categories": [
+        "Casual apparel",
+        "Denim",
+        "Activewear",
+        "Outerwear",
+        "Kids' clothing",
+        "Accessories"
       ],
-      "target_audience": "Old Navy: families and value-oriented consumers; Gap: core casual apparel shoppers aged 25–45; Banana Republic: professional and premium casual consumers; Athleta: active women aged 30–50.",
+      "subsidiaries_and_brands": [
+        "Gap",
+        "Old Navy",
+        "Banana Republic",
+        "Athleta"
+      ],
+      "target_audience": "Old Navy: families. Gap: 25–45. Banana Republic: professionals. Athleta: active women 30–50.",
       "market_cap_tier": "Mid Cap",
       "notes": "Old Navy is the largest revenue contributor. Company has struggled with brand coherence and has undergone significant restructuring. Athleta competes directly with Lululemon in the activewear space."
     },
@@ -235,11 +362,20 @@
       "founded_location": "San Francisco, California, USA",
       "headquarters": "San Francisco, California, USA",
       "business_model": "Global branded apparel company most closely associated with denim. Sells through wholesale (department stores, specialty retailers), company-owned stores, and growing DTC e-commerce. Three brands under portfolio. Iconic global brand with strong recognition across demographics. Revenue is globally distributed.",
-      "products_and_categories": ["Denim jeans", "Casualwear", "Tops", "Outerwear", "Footwear", "Accessories"],
-      "subsidiaries_and_brands": [
-        "Levi's", "Dockers", "Beyond Yoga"
+      "products_and_categories": [
+        "Denim jeans",
+        "Casualwear",
+        "Tops",
+        "Outerwear",
+        "Footwear",
+        "Accessories"
       ],
-      "target_audience": "Broad consumer base across age groups and geographies. Core Levi's customer is 18–45. Beyond Yoga targets women's activewear market (25–45). Dockers targets professional casual (30–55).",
+      "subsidiaries_and_brands": [
+        "Levi's",
+        "Dockers",
+        "Beyond Yoga"
+      ],
+      "target_audience": "Broad demographic aged 18–45. Levi's sold in 110+ countries.",
       "market_cap_tier": "Mid Cap",
       "notes": "One of the world's oldest and most recognisable apparel brands. Has been actively growing DTC channel and reducing wholesale dependence. Dockers has been an underperformer."
     },
@@ -253,12 +389,20 @@
       "founded_location": "Cerritos, California, USA",
       "headquarters": "Cerritos, California, USA",
       "business_model": "Digital-first fashion retailer with no physical stores. Uses a data-driven, influencer-led marketing model to curate and sell apparel, footwear, beauty, and lifestyle products from hundreds of brands, alongside its own private labels. Revenue is almost entirely e-commerce. FORWARD is its higher-end luxury companion platform.",
-      "products_and_categories": ["Apparel", "Footwear", "Accessories", "Beauty", "Swimwear", "Lifestyle"],
+      "products_and_categories": [
+        "Apparel",
+        "Footwear",
+        "Accessories",
+        "Beauty",
+        "Swimwear",
+        "Lifestyle"
+      ],
       "subsidiaries_and_brands": [
-        "REVOLVE (main platform)", "FORWARD (luxury companion platform)",
+        "REVOLVE (main platform)",
+        "FORWARD (luxury companion platform)",
         "Alliance Apparel (owned brand group)"
       ],
-      "target_audience": "Millennial and Gen Z women aged 18–35 with strong digital and social media presence. Heavy influencer marketing orientation. Higher-income digitally native fashion consumers.",
+      "target_audience": "Millennial and Gen Z women aged 18–35. ~2 million active customers (FY2024).",
       "market_cap_tier": "Small/Mid Cap",
       "notes": "Pioneered influencer-driven e-commerce. REVOLVE Festival at Coachella is a signature brand moment. Has faced margin pressure and return rate challenges. Excellent behavioural signal candidate."
     },
@@ -272,11 +416,21 @@
       "founded_location": "Vancouver, British Columbia, Canada",
       "headquarters": "Vancouver, British Columbia, Canada",
       "business_model": "Premium activewear and lifestyle apparel brand selling through company-owned stores and e-commerce globally. Known for community-based marketing, ambassador programmes, and in-store yoga/fitness events. DTC-heavy revenue model with very high brand loyalty and repeat purchase rates. Entered footwear and self-care categories.",
-      "products_and_categories": ["Activewear", "Yoga apparel", "Running gear", "Training apparel", "Outerwear", "Accessories", "Footwear", "Self-care"],
-      "subsidiaries_and_brands": [
-        "Lululemon", "MIRROR (connected fitness, since divested)"
+      "products_and_categories": [
+        "Activewear",
+        "Yoga apparel",
+        "Running gear",
+        "Training apparel",
+        "Outerwear",
+        "Accessories",
+        "Footwear",
+        "Self-care"
       ],
-      "target_audience": "Health-conscious, active consumers aged 20–45. Strong female-skew historically but growing menswear business. Premium income bracket. Community-oriented lifestyle consumer.",
+      "subsidiaries_and_brands": [
+        "Lululemon",
+        "MIRROR (connected fitness, since divested)"
+      ],
+      "target_audience": "Active consumers aged 20–45. ~20 million loyalty members globally. Growing menswear segment.",
       "market_cap_tier": "Large Cap",
       "notes": "One of the strongest brand loyalty cases in retail. Community flywheel and ambassador model are distinctive. MIRROR acquisition was unsuccessful and divested. International expansion is a key growth driver."
     },
@@ -290,9 +444,18 @@
       "founded_location": "Zürich, Switzerland",
       "headquarters": "Zürich, Switzerland",
       "business_model": "Premium performance running and lifestyle footwear and apparel brand. Sells DTC via e-commerce and branded stores alongside selective wholesale (Foot Locker, Nordstrom, etc.). Known for proprietary CloudTec sole technology. Has entered apparel and accessories. Strong innovation and design positioning.",
-      "products_and_categories": ["Running shoes", "Trail shoes", "Lifestyle footwear", "Activewear apparel", "Accessories"],
-      "subsidiaries_and_brands": ["On Running", "On"],
-      "target_audience": "Performance-oriented runners, fitness consumers, and premium lifestyle buyers aged 20–45. Strong appeal to health-conscious urban professionals. Federer partnership amplifies premium positioning.",
+      "products_and_categories": [
+        "Running shoes",
+        "Trail shoes",
+        "Lifestyle footwear",
+        "Activewear apparel",
+        "Accessories"
+      ],
+      "subsidiaries_and_brands": [
+        "On Running",
+        "On"
+      ],
+      "target_audience": "Performance and lifestyle consumers aged 20–45. Sold in 60+ countries.",
       "market_cap_tier": "Large/Mid Cap",
       "notes": "One of the fastest-growing premium footwear brands globally. Roger Federer is a co-owner and ambassador. Strong DTC growth and international expansion trajectory. High valuations relative to peers."
     },
@@ -303,15 +466,26 @@
       "exchange": "NYSE",
       "sector": "Luxury / Premium Apparel",
       "founded": 1967,
-      "founded_location": "New York City, New York, USA",
-      "headquarters": "New York City, New York, USA",
+      "founded_location": "New York City, NY, USA",
+      "headquarters": "New York City, NY, USA",
       "business_model": "Global premium lifestyle brand selling apparel, accessories, home, and fragrance through its own retail stores, e-commerce, and wholesale (department stores). Known for aspirational American luxury aesthetic. Multiple price-tier brands under portfolio. Strong brand equity and global recognition.",
-      "products_and_categories": ["Apparel", "Accessories", "Footwear", "Home & bedding", "Fragrance", "Watches"],
-      "subsidiaries_and_brands": [
-        "Ralph Lauren (flagship)", "Polo Ralph Lauren", "Double RL (RRL)",
-        "Ralph Lauren Purple Label", "Club Monaco", "Chaps"
+      "products_and_categories": [
+        "Apparel",
+        "Accessories",
+        "Footwear",
+        "Home & bedding",
+        "Fragrance",
+        "Watches"
       ],
-      "target_audience": "Aspirational and premium consumers aged 25–65. Polo Ralph Lauren targets broad mid-premium buyers; Purple Label targets luxury consumers. Strong international resonance, especially in Asia and Europe.",
+      "subsidiaries_and_brands": [
+        "Ralph Lauren (flagship)",
+        "Polo Ralph Lauren",
+        "Double RL (RRL)",
+        "Ralph Lauren Purple Label",
+        "Club Monaco",
+        "Chaps"
+      ],
+      "target_audience": "Premium consumers aged 25–65. Present in 55+ countries across all price tiers.",
       "market_cap_tier": "Large Cap",
       "notes": "One of the most enduring premium American lifestyle brands. Has done well repositioning upmarket. DTC growth and international expansion have been key strategic priorities. Club Monaco sold in 2020."
     },
@@ -325,11 +499,20 @@
       "founded_location": "Portland, Oregon, USA",
       "headquarters": "Portland, Oregon, USA",
       "business_model": "Multi-brand outdoor and active lifestyle apparel, footwear, and equipment company. Sells through wholesale (department stores, outdoor retailers), DTC stores, and e-commerce. Designs and markets products globally with manufacturing outsourced. Family-controlled company (Boyle family).",
-      "products_and_categories": ["Outerwear", "Sportswear", "Footwear", "Equipment", "Accessories"],
-      "subsidiaries_and_brands": [
-        "Columbia Sportswear", "Sorel", "Mountain Hardwear", "prAna"
+      "products_and_categories": [
+        "Outerwear",
+        "Sportswear",
+        "Footwear",
+        "Equipment",
+        "Accessories"
       ],
-      "target_audience": "Outdoor enthusiasts, hikers, skiers, and active consumers aged 25–55. Broad demographic but skews toward practical outdoor performance buyers rather than fashion-forward consumers.",
+      "subsidiaries_and_brands": [
+        "Columbia Sportswear",
+        "Sorel",
+        "Mountain Hardwear",
+        "prAna"
+      ],
+      "target_audience": "Outdoor and active consumers aged 25–55. Sold in 90+ countries.",
       "market_cap_tier": "Mid Cap",
       "notes": "Strong wholesale business and global distribution. Less fashion-forward than peers but solid fundamentals. prAna is sustainability-focused. Sorel has stronger lifestyle/fashion crossover appeal."
     },
@@ -343,11 +526,20 @@
       "founded_location": "Langenselbold, Germany",
       "headquarters": "Linz am Rhein, Germany",
       "business_model": "Premium lifestyle footwear brand built around anatomical cork-latex footbed technology. Sells through selective wholesale (Nordstrom, specialty retailers), DTC stores, and e-commerce. Brand has repositioned from orthopaedic/functional into fashion-lifestyle crossover with premium pricing. Very selective distribution to protect brand equity.",
-      "products_and_categories": ["Sandals", "Clogs", "Sneakers", "Closed-toe footwear", "Skincare (small category)", "Accessories"],
-      "subsidiaries_and_brands": [
-        "Birkenstock", "Papillio (fashion sub-line)", "Betula"
+      "products_and_categories": [
+        "Sandals",
+        "Clogs",
+        "Sneakers",
+        "Closed-toe footwear",
+        "Skincare (small category)",
+        "Accessories"
       ],
-      "target_audience": "Broad consumer base from functional comfort buyers to premium lifestyle and fashion consumers. Has expanded significantly into younger demographics (20–35) due to fashion crossover positioning, especially post-Barbie movie cultural moment.",
+      "subsidiaries_and_brands": [
+        "Birkenstock",
+        "Papillio (fashion sub-line)",
+        "Betula"
+      ],
+      "target_audience": "Comfort and lifestyle consumers aged 20–65. Expanded into fashion demographics post-2023. Sold in 100+ countries.",
       "market_cap_tier": "Mid Cap",
       "notes": "Recently IPO'd (2023). One of the most culturally interesting cases. Barbie movie association in 2023 was a significant brand moment. Selective distribution is a deliberate brand protection strategy. L Catterton (LVMH-affiliated) is a major shareholder."
     }

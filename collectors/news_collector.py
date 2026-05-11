@@ -32,9 +32,19 @@ def fetch_company_news(
             - published: publication date as a human-readable string
             - published_parsed: datetime object or None
             - source: news source name extracted from Google News title
-            - summary: short description truncated to 200 chars, or ""
+            - summary: always "" (Google News RSS summaries repeat the title)
     """
-    query = f"{company_name} {ticker}".replace(" ", "+")
+    QUERY_OVERRIDES = {
+        "LRLCY": "L'Oréal beauty",
+        "BIRK": "Birkenstock",
+        "OLPX": "Olaplex hair",
+        "ODD": "Oddity Tech beauty",
+    }
+
+    if ticker in QUERY_OVERRIDES:
+        query = QUERY_OVERRIDES[ticker].replace(" ", "+")
+    else:
+        query = f"{company_name} {ticker}".replace(" ", "+")
     url = f"https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en"
 
     try:
@@ -51,6 +61,9 @@ def fetch_company_news(
             title_parts = raw_title.rsplit(" - ", 1)
             title = title_parts[0].strip() if len(title_parts) > 1 else raw_title
             source = title_parts[1].strip() if len(title_parts) > 1 else "Unknown source"
+            # Remove stock ticker references appended by financial sites
+            # e.g. "(OTCMKTS:LRLCY)", "(NYSE:EL)", "(NASDAQ:ULTA)", "(OTC:LRLCF)"
+            title = re.sub(r'\s*\([A-Z]+:[A-Z]+\)', '', title).strip()
 
             published_parsed = None
             published_str = "Date unavailable"
@@ -61,16 +74,13 @@ def fetch_company_news(
                 except Exception:
                     pass
 
-            # Google News RSS summaries contain HTML — strip tags before display
-            summary_raw = entry.get("summary", "") or ""
-            summary_text = re.sub(r"<[^>]+>", "", summary_raw).strip()
             articles.append({
                 "title": title,
                 "link": entry.get("link", "#"),
                 "published": published_str,
                 "published_parsed": published_parsed,
                 "source": source,
-                "summary": summary_text[:200] if summary_text else "",
+                "summary": "",
             })
 
         logger.info("Fetched %d articles for %s", len(articles), company_name)

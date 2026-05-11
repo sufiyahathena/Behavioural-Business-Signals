@@ -29,75 +29,54 @@
 
         {% else %}
 
-        <!-- ── Company Hero ──────────────────────────────────────── -->
-        <div class="company-hero">
-            <div class="hero-name-row">
-                <h2 class="hero-name">{{ company.name }}</h2>
-            </div>
-            <div class="hero-meta">
-                <span class="hero-ticker">{{ company.ticker }}</span>
-                <span class="hero-exchange">{{ company.exchange }}</span>
-                <span class="hero-sector">{{ company.sector }}</span>
-                <span class="hero-cap">{{ company.market_cap_tier }}</span>
-            </div>
-            <blockquote class="hero-tagline">{{ company.notes }}</blockquote>
+        <!-- 1 ── Hero ────────────────────────────────────────────── -->
+        <div class="hero-section">
+            <h1>{{ company.name }}</h1>
         </div>
 
-        <!-- ── Info Grid ─────────────────────────────────────────── -->
-        <div class="detail-card">
-            <div class="info-grid">
-                <div class="info-col">
-                    <h3>Company Facts</h3>
-                    <div class="info-row">
-                        <span class="info-label">Founded</span>
-                        <span class="info-value">{{ company.founded }} — {{ company.founded_location }}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Headquarters</span>
-                        <span class="info-value">{{ company.headquarters }}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Exchange</span>
-                        <span class="info-value">{{ company.exchange }}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Market Cap Tier</span>
-                        <span class="info-value">{{ company.market_cap_tier }}</span>
-                    </div>
-                    <div class="info-row info-row-block">
-                        <span class="info-label">Target Audience</span>
-                        <span class="info-value">{{ company.target_audience }}</span>
-                    </div>
+        <!-- 2 ── Company Facts ──────────────────────────────────── -->
+        <section class="section-block">
+            <div class="facts-row">
+                <div class="fact-card">
+                    <div class="fact-label">Founded</div>
+                    <div class="fact-value fact-value--large">{{ company.founded }}</div>
                 </div>
-
-                <div class="info-col">
-                    <h3>Business Model</h3>
-                    <p class="business-model-text">{{ company.business_model }}</p>
+                <div class="fact-card">
+                    <div class="fact-label">Headquarters</div>
+                    <div class="fact-value">{{ company.headquarters }}</div>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-label">Market Cap Tier</div>
+                    <div class="fact-value fact-value--large">{{ company.market_cap_tier }}</div>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-label">Ticker</div>
+                    <div class="fact-value fact-value--large ticker-value">{{ company.ticker }}</div>
                 </div>
             </div>
-        </div>
 
-        <!-- ── Products & Categories ─────────────────────────────── -->
-        <div class="detail-card">
-            <h3 class="card-title">Products &amp; Categories</h3>
-            <div class="pill-group">
-                {% for item in company.products_and_categories %}
-                <span class="pill">{{ item }}</span>
-                {% endfor %}
+            <div class="facts-row">
+                <div class="fact-card">
+                    <div class="fact-label">Sector</div>
+                    <div class="fact-value">{{ company.sector }}</div>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-label">Exchange</div>
+                    <div class="fact-value fact-value--large">{{ company.exchange }}</div>
+                </div>
+                <div class="fact-card fact-card--wide">
+                    <div class="fact-label">Target Audience</div>
+                    <div class="fact-value">{{ company.target_audience }}</div>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- ── Brands & Subsidiaries ─────────────────────────────── -->
+        <!-- 3 ── About ──────────────────────────────────────────── -->
         <div class="detail-card">
-            <h3 class="card-title">Brands &amp; Subsidiaries</h3>
-            <div class="pill-group">
-                {% for item in company.subsidiaries_and_brands %}
-                <span class="pill pill-alt">{{ item }}</span>
-                {% endfor %}
-            </div>
+            <p class="about-text">{{ company.business_model }}</p>
         </div>
 
-        <!-- ── Score Summary Cards ───────────────────────────────── -->
+        <!-- 4 ── Score Summary Cards ────────────────────────────── -->
         <div class="score-cards-row">
             <div class="score-card">
                 <h3>Financial Health Score</h3>
@@ -124,7 +103,7 @@
             </div>
         </div>
 
-        <!-- ── Financial Metrics ─────────────────────────────────── -->
+        <!-- 5 ── Financial Metrics ──────────────────────────────── -->
         <div class="detail-card">
             <div class="card-title-group">
                 <h3 class="card-title">Financial Metrics</h3>
@@ -158,7 +137,7 @@
             {% endif %}
         </div>
 
-        <!-- ── Behavioural Signals ───────────────────────────────── -->
+        <!-- 6 ── Behavioural Signals ────────────────────────────── -->
         <div class="detail-card">
             <div class="card-title-group">
                 <h3 class="card-title">Behavioural Signals</h3>
@@ -192,39 +171,7 @@
             {% endif %}
         </div>
 
-        <!-- ── Latest News ──────────────────────────────────────── -->
-        <div class="detail-card">
-            <div class="card-title-group">
-                <h3 class="card-title">Latest News</h3>
-                <span class="card-subtitle">Google News — {{ company.name }}</span>
-            </div>
-
-            {% if news_articles %}
-            <div class="news-grid">
-                {% for article in news_articles %}
-                <a class="news-card" href="{{ article.link }}" target="_blank" rel="noopener noreferrer">
-                    <div class="news-meta">
-                        <span class="news-source">{{ article.source }}</span>
-                        <span class="news-date">{{ article.published }}</span>
-                    </div>
-                    <div class="news-title">{{ article.title }}</div>
-                    {% if article.summary %}
-                    <div class="news-summary">{{ article.summary }}...</div>
-                    {% endif %}
-                </a>
-                {% endfor %}
-            </div>
-            <p class="news-footer-note">&#128225; Live feed via Google News RSS — refreshes on each page load</p>
-            {% else %}
-            <div class="pending-box">
-                <span class="pending-icon">&#128240;</span>
-                <p>No news articles could be retrieved for {{ company.name }} right now.</p>
-                <p class="muted">Check your internet connection or try refreshing the page.</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- ── Glassdoor Snapshot ────────────────────────────────── -->
+        <!-- 7 ── Glassdoor Snapshot ─────────────────────────────── -->
         <div class="detail-card glassdoor-card">
             <h3 class="card-title">Glassdoor Snapshot</h3>
             <div class="glassdoor-grid">
@@ -254,6 +201,56 @@
                 </div>
             </div>
             <p class="gd-note">Glassdoor data is manually collected. Update <code>data/behavioural/glassdoor_manual.csv</code> to refresh.</p>
+        </div>
+
+        <!-- 8 ── Products & Categories ──────────────────────────── -->
+        <div class="detail-card">
+            <h3 class="card-title">Products &amp; Categories</h3>
+            <div class="pill-group">
+                {% for item in company.products_and_categories %}
+                <span class="pill">{{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 9 ── Brands & Subsidiaries ──────────────────────────── -->
+        <div class="detail-card">
+            <h3 class="card-title">Brands &amp; Subsidiaries</h3>
+            <div class="pill-group">
+                {% for item in company.subsidiaries_and_brands %}
+                <span class="pill pill-alt">{{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 10 ── Latest News ───────────────────────────────────── -->
+        <div class="detail-card">
+            <div class="card-title-group">
+                <h3 class="card-title">Latest News</h3>
+                <span class="card-subtitle">Google News — {{ company.name }}</span>
+            </div>
+
+            {% if news_articles %}
+            <div class="news-grid">
+                {% for article in news_articles %}
+                <a class="news-card" href="{{ article.link }}" target="_blank" rel="noopener noreferrer">
+                    <div class="news-meta">
+                        <span class="news-source">{{ article.source }}</span>
+                        <span class="news-date">{{ article.published }}</span>
+                    </div>
+                    <div class="news-title">{{ article.title }}</div>
+                    <div class="news-read-more">Read article &#8594;</div>
+                </a>
+                {% endfor %}
+            </div>
+            <p class="news-footer-note">&#128225; Live feed via Google News RSS — refreshes on each page load</p>
+            {% else %}
+            <div class="pending-box">
+                <span class="pending-icon">&#128240;</span>
+                <p>No news articles could be retrieved for {{ company.name }} right now.</p>
+                <p class="muted">Check your internet connection or try refreshing the page.</p>
+            </div>
+            {% endif %}
         </div>
 
         {% endif %}
