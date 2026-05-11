@@ -9,9 +9,9 @@
 <body>
     <nav class="navbar">
         <div class="nav-inner">
-            <a href="/" class="nav-brand">BrandSignals</a>
+            <a href="/home" class="nav-brand">BrandSignals</a>
             <div class="nav-links">
-                <a href="/" class="{{ 'nav-active' if active_page == 'companies' }}">Companies</a>
+                <a href="/companies" class="{{ 'nav-active' if active_page == 'companies' }}">Companies</a>
                 <a href="/financial-breakdown" class="{{ 'nav-active' if active_page == 'financial' }}">Financial Breakdown</a>
                 <a href="/behavioural-breakdown" class="{{ 'nav-active' if active_page == 'behavioural' }}">Behavioural Breakdown</a>
                 <a href="/about" class="{{ 'nav-active' if active_page == 'about' }}">About</a>
@@ -19,7 +19,7 @@
             </div>
         </div>
     </nav>
-    <main>
+    <main style="margin:0;padding:0;">
         {% block content %}{% endblock %}
     </main>
     <footer class="site-footer">

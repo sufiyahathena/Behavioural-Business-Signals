@@ -13,7 +13,7 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, redirect, render_template, url_for
 
 import config
 from collectors.news_collector import fetch_company_news
@@ -204,6 +204,11 @@ def create_app() -> Flask:
     app = Flask(__name__, template_folder="templates", static_folder="static")
 
     @app.route("/")
+    def root():
+        """Redirect root to the home/cover page."""
+        return redirect(url_for("home"))
+
+    @app.route("/companies")
     def index():
         """Render the main dashboard."""
         df = _load_scores()
@@ -342,6 +347,11 @@ def create_app() -> Flask:
             news_articles=news_articles,
             active_page="companies",
         )
+
+    @app.route("/home")
+    def home():
+        """Render the cover / home page."""
+        return render_template("home.html", active_page="home")
 
     @app.route("/financial-breakdown")
     def financial_breakdown():

@@ -15,7 +15,9 @@ body {
     font-size: 14px;
     line-height: 1.6;
     color: #1a1a2e;
-    background: #f7f8fc;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
 }
 
 /* ── Header ─────────────────────────────────────────────── */
@@ -42,9 +44,9 @@ header {
 /* ── Main layout ─────────────────────────────────────────── */
 
 main {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 32px 24px 48px;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
 }
 
 /* ── Section headers ─────────────────────────────────────── */
@@ -813,53 +815,58 @@ table.scoreboard td a:hover {
 /* ── Navbar ──────────────────────────────────────────────── */
 
 .navbar {
-    background: #1a1f36;
+    background: #EDCDD4;
     height: 56px;
     width: 100%;
     position: sticky;
     top: 0;
     z-index: 100;
+    border-bottom: none;
+    margin: 0;
 }
 
 .nav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 32px;
+    box-sizing: border-box;
 }
 
 .nav-brand {
-    color: #ffffff;
+    color: #1a1a1a;
     font-weight: 700;
     font-size: 1.1rem;
     text-decoration: none;
-    letter-spacing: -0.01em;
+    margin-right: auto;
+    flex-shrink: 0;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
     gap: 32px;
+    margin-left: auto;
+    flex-shrink: 0;
 }
 
 .nav-links a {
-    color: rgba(255,255,255,0.75);
+    color: #1a1a1a;
     text-decoration: none;
     font-size: 0.88rem;
-    font-weight: 500;
+    font-weight: 700;
     transition: color 0.15s ease;
 }
 
 .nav-links a:hover {
-    color: #ffffff;
+    color: #000000;
 }
 
 .nav-links a.nav-active {
-    color: #ffffff;
-    border-bottom: 2px solid rgba(255,255,255,0.6);
+    color: #000000;
+    border-bottom: 2px solid #000000;
     padding-bottom: 2px;
 }
 
@@ -877,10 +884,16 @@ table.scoreboard td a:hover {
 /* ── Placeholder pages ───────────────────────────────────── */
 
 .placeholder-page {
-    max-width: 720px;
-    margin: 80px auto;
-    padding: 0 32px;
+    width: 100%;
+    min-height: calc(100vh - 56px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: 64px 32px;
+    box-sizing: border-box;
+    background: #ffffff;
 }
 
 .placeholder-page h1 {
@@ -894,6 +907,7 @@ table.scoreboard td a:hover {
     color: #6b7280;
     font-size: 0.95rem;
     line-height: 1.7;
+    max-width: 600px;
 }
 
 /* ── About page ──────────────────────────────────────────── */
@@ -1019,4 +1033,137 @@ table.scoreboard td a:hover {
     border-radius: 12px;
     display: block;
     box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+/* ══════════════════════════════
+   HOME PAGE — clean rebuild
+══════════════════════════════ */
+
+.hp-wrap {
+  width: 100%;
+  background: #000000;
+  min-height: calc(100vh - 56px);
+  box-sizing: border-box;
+}
+
+.hp-top {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  width: 100%;
+  min-height: 560px;
+  box-sizing: border-box;
+}
+
+.hp-left {
+  padding: 56px 40px 40px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+}
+
+.hp-logo {
+  font-size: 9rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  margin-bottom: 20px;
+  margin-top: -60px;
+}
+
+.hp-sub {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.hp-tag {
+  font-size: 1.4rem;
+  color: #ffffff;
+  line-height: 1.55;
+  max-width: 680px;
+}
+
+.hp-right {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 32px;
+}
+
+.hp-img {
+  width: 45%;
+  height: auto;
+  object-fit: contain;
+  object-position: bottom center;
+  display: block;
+}
+
+.hp-bottom {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 56px 56px 72px 56px;
+}
+
+.hp-bs-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin: 0 0 32px 0;
+}
+
+.hp-bs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hp-card {
+  background: #000000;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.hp-card:hover {
+  border-color: #555555;
+  box-shadow: 0 4px 16px rgba(255,255,255,0.06);
+}
+
+.hp-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hp-card-desc {
+  font-size: 0.92rem;
+  color: #ffffff;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.hp-card-link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #EDCDD4;
+  text-decoration: none;
+  margin-top: 4px;
+}
+
+.hp-card-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
