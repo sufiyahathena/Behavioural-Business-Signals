@@ -368,10 +368,18 @@ def create_app() -> Flask:
         """Render the about page."""
         return render_template("about.html", active_page="about")
 
+    @app.route("/ethics")
+    def ethics():
+        return render_template("ethics.html", active_page="ethics")
+
     @app.route("/purpose")
     def purpose():
         """Render the purpose placeholder page."""
         return render_template("purpose.html", active_page="purpose")
+
+    @app.route("/visualise")
+    def visualise():
+        return render_template("visualise.html", active_page="visualise")
 
     @app.route("/api/scores")
     def api_scores():

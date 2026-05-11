@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% block title %}Visualise — BrandSignals{% endblock %}
+{% block content %}
+<div class="vis-dark-wrap">
+<div class="vis-page">
+
+    <div class="vis-header">
+        <h1 class="vis-title">BrandSignals Dual-Score Visualisation</h1>
+        <p class="vis-subtitle">A visual map of consumer companies by financial and behavioural scores, with bubble size representing share price</p>
+    </div>
+
+    <!-- Chart full width -->
+    <div class="vis-chart-wrap">
+        <div id="bubble-chart"></div>
+    </div>
+
+    <!-- Quadrant guide: horizontal row below chart -->
+    <div class="vis-guide-row">
+        <div class="vis-quad-card vis-quad-ws">
+            <div class="vis-quad-card-title">↖ Hidden Momentum</div>
+            <div class="vis-quad-card-desc">Financially weaker but behaviourally strong. These companies show positive signals in consumer perception, brand trust, or employee culture that may not yet be fully reflected in the financials.</div>
+        </div>
+        <div class="vis-quad-card vis-quad-ww">
+            <div class="vis-quad-card-title">↙ Under Pressure</div>
+            <div class="vis-quad-card-desc">Financially weaker and behaviourally weaker. These companies show limited positive signals in consumer perception, brand trust, or employee culture — reflected across both dimensions.</div>
+        </div>
+        <div class="vis-quad-card vis-quad-ss">
+            <div class="vis-quad-card-title">↗ Dual Strength</div>
+            <div class="vis-quad-card-desc">Financially strong and behaviourally strong. These companies show positive signals in consumer perception, brand trust, and employee culture — fully reflected in the financials.</div>
+        </div>
+        <div class="vis-quad-card vis-quad-sw">
+            <div class="vis-quad-card-title">↘ Financial Leader</div>
+            <div class="vis-quad-card-desc">Financially strong but behaviourally weaker. Solid margins and growth metrics, but consumer sentiment, brand trust, or internal culture may not yet be fully reflected in the financials.</div>
+        </div>
+    </div>
+
+    <!-- Quick view panel -->
+    <div class="qv-overlay" id="qv-overlay"></div>
+    <div class="qv-panel" id="qv-panel">
+        <button class="qv-close" id="qv-close">✕</button>
+        <div class="qv-content">
+            <h2 class="qv-name" id="qv-name"></h2>
+            <div class="qv-sector" id="qv-sector"></div>
+            <!-- Scores -->
+            <div class="qv-scores">
+                <div class="qv-score-card">
+                    <div class="qv-score-label">Financial Score</div>
+                    <div class="qv-score-value" id="qv-fin"></div>
+                </div>
+                <div class="qv-score-card">
+                    <div class="qv-score-label">Behavioural Score</div>
+                    <div class="qv-score-value" id="qv-beh"></div>
+                </div>
+            </div>
+
+            <!-- Quadrant label -->
+            <div class="qv-quadrant" id="qv-quadrant"></div>
+
+            <!-- Description -->
+            <p class="qv-desc" id="qv-desc"></p>
+
+            <!-- Company facts row -->
+            <div class="qv-facts">
+                <div class="qv-fact">
+                    <div class="qv-fact-label">Founded</div>
+                    <div class="qv-fact-value" id="qv-founded"></div>
+                </div>
+                <div class="qv-fact">
+                    <div class="qv-fact-label">Headquarters</div>
+                    <div class="qv-fact-value" id="qv-hq"></div>
+                </div>
+                <div class="qv-fact">
+                    <div class="qv-fact-label">Market Cap</div>
+                    <div class="qv-fact-value" id="qv-mktcap"></div>
+                </div>
+            </div>
+
+            <!-- Brands -->
+            <div class="qv-brands-section">
+                <div class="qv-brands-label">Brands &amp; Subsidiaries</div>
+                <div class="qv-brands-pills" id="qv-brands"></div>
+            </div>
+
+            <!-- Stock price -->
+            <div class="qv-stock">
+                <div class="qv-stock-label">Live Stock Price</div>
+                <div class="qv-stock-value" id="qv-price">—</div>
+                <div class="qv-stock-note">Live price via API — coming soon</div>
+            </div>
+            <a class="qv-explore-btn" id="qv-explore" href="#">Explore →</a>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script>
+// ── Placeholder company data ──
+// Replace scores and prices with real data once collectors are implemented
+const companies = [
+    { ticker: "EL",    name: "Estée Lauder",        sector: "Beauty",               hq: "New York City, NY",      founded: 1946, market_cap: "Large Cap",      brands: ["Estée Lauder","Clinique","MAC","La Mer","Jo Malone"],              desc: "Prestige multi-brand beauty conglomerate with 20+ brands across skincare, makeup, fragrance, and haircare.",          fin: 38, beh: 52, price: 98  },
+    { ticker: "ULTA",  name: "Ulta Beauty",          sector: "Beauty Retail",        hq: "Bolingbrook, IL",        founded: 1990, market_cap: "Large Cap",      brands: ["Ulta Beauty","Ulta at Target"],                                    desc: "Largest specialty beauty retailer in the U.S., offering prestige and mass beauty under one roof.",                     fin: 72, beh: 78, price: 385 },
+    { ticker: "ELF",   name: "e.l.f. Beauty",        sector: "Beauty",               hq: "Oakland, CA",            founded: 2004, market_cap: "Mid Cap",        brands: ["e.l.f. Cosmetics","e.l.f. Skin","Naturium","Well People"],         desc: "Value-oriented beauty brand with exceptional digital presence and rapid product development cycles.",                   fin: 81, beh: 85, price: 67  },
+    { ticker: "COTY",  name: "Coty Inc.",             sector: "Beauty",               hq: "New York City, NY",      founded: 1904, market_cap: "Mid Cap",        brands: ["CoverGirl","Rimmel","Sally Hansen","Hugo Boss","Gucci"],            desc: "Global beauty company spanning prestige fragrances and mass-market cosmetics across two divisions.",                    fin: 42, beh: 44, price: 9   },
+    { ticker: "OLPX",  name: "Olaplex",              sector: "Haircare",             hq: "Santa Barbara, CA",      founded: 2014, market_cap: "Small/Mid Cap",  brands: ["Olaplex"],                                                        desc: "Patent-protected professional haircare brand built around proprietary bond-building technology.",                       fin: 29, beh: 38, price: 4   },
+    { ticker: "SBH",   name: "Sally Beauty",         sector: "Beauty Retail",        hq: "Denton, TX",             founded: 1964, market_cap: "Small Cap",      brands: ["Sally Beauty Supply","CosmoProf","Armstrong McDowell"],            desc: "International specialty beauty retailer and distributor serving both consumers and licensed professionals.",             fin: 48, beh: 41, price: 11  },
+    { ticker: "ODD",   name: "Oddity Tech",          sector: "Beauty / Tech",        hq: "New York City, NY",      founded: 2018, market_cap: "Mid Cap",        brands: ["IL MAKIAGE","SpoiledChild"],                                       desc: "Digital-first beauty company using AI-driven personalisation across IL MAKIAGE and SpoiledChild brands.",              fin: 68, beh: 72, price: 38  },
+    { ticker: "LRLCY", name: "L'Oréal",              sector: "Beauty",               hq: "Clichy, France",         founded: 1909, market_cap: "Mega Cap",       brands: ["L'Oréal Paris","Lancôme","Maybelline","CeraVe","Kiehl's"],         desc: "World's largest beauty company with four divisions spanning mass, prestige, professional, and dermatological beauty.",  fin: 76, beh: 74, price: 43  },
+    { ticker: "ANF",   name: "Abercrombie & Fitch",  sector: "Apparel",              hq: "New Albany, OH",         founded: 1892, market_cap: "Mid Cap",        brands: ["Abercrombie & Fitch","Hollister","Gilly Hicks","Abercrombie Kids"], desc: "Global omnichannel apparel retailer behind one of retail's most compelling brand turnaround stories.",                 fin: 74, beh: 69, price: 82  },
+    { ticker: "AEO",   name: "American Eagle",       sector: "Apparel",              hq: "Pittsburgh, PA",         founded: 1977, market_cap: "Mid Cap",        brands: ["American Eagle","Aerie","Offline by Aerie"],                       desc: "Specialty retailer known for denim and Aerie's body-positive intimates and activewear positioning.",                   fin: 55, beh: 61, price: 14  },
+    { ticker: "URBN",  name: "Urban Outfitters",     sector: "Lifestyle Retail",     hq: "Philadelphia, PA",       founded: 1970, market_cap: "Mid Cap",        brands: ["Urban Outfitters","Free People","Anthropologie","Nuuly"],          desc: "Multi-brand lifestyle retailer spanning Urban Outfitters, Free People, Anthropologie, and Nuuly rental.",             fin: 63, beh: 58, price: 42  },
+    { ticker: "GAP",   name: "Gap Inc.",             sector: "Apparel",              hq: "San Francisco, CA",      founded: 1969, market_cap: "Mid Cap",        brands: ["Old Navy","Gap","Banana Republic","Athleta"],                      desc: "Global apparel group operating Old Navy, Gap, Banana Republic, and Athleta across distinct consumer segments.",        fin: 51, beh: 47, price: 22  },
+    { ticker: "LEVI",  name: "Levi Strauss",         sector: "Apparel",              hq: "San Francisco, CA",      founded: 1853, market_cap: "Mid Cap",        brands: ["Levi's","Dockers","Beyond Yoga"],                                  desc: "One of the world's most iconic denim brands, expanding DTC and growing beyond its core jeans business.",              fin: 58, beh: 62, price: 17  },
+    { ticker: "RVLV",  name: "Revolve",              sector: "Fashion / E-commerce", hq: "Cerritos, CA",           founded: 2003, market_cap: "Small/Mid Cap",  brands: ["REVOLVE","FORWARD"],                                              desc: "Digital-first fashion retailer built on influencer marketing, serving Millennial and Gen Z consumers online.",         fin: 44, beh: 66, price: 19  },
+    { ticker: "LULU",  name: "Lululemon",            sector: "Activewear",           hq: "Vancouver, Canada",      founded: 1998, market_cap: "Large Cap",      brands: ["Lululemon"],                                                      desc: "Premium activewear brand with exceptional community loyalty, strong DTC model, and global expansion momentum.",        fin: 78, beh: 82, price: 298 },
+    { ticker: "ONON",  name: "On Holding",           sector: "Performance Footwear", hq: "Zürich, Switzerland",    founded: 2010, market_cap: "Large/Mid Cap",  brands: ["On Running","On"],                                                desc: "Swiss premium running and lifestyle footwear brand with rapid global growth and strong innovation positioning.",       fin: 71, beh: 76, price: 52  },
+    { ticker: "RL",    name: "Ralph Lauren",         sector: "Premium Apparel",      hq: "New York City, NY",      founded: 1967, market_cap: "Large Cap",      brands: ["Polo Ralph Lauren","Purple Label","Double RL","Chaps"],            desc: "Global premium lifestyle brand known for aspirational American aesthetic across apparel, home, and fragrance.",         fin: 69, beh: 65, price: 198 },
+    { ticker: "COLM",  name: "Columbia Sportswear",  sector: "Outdoor Apparel",      hq: "Portland, OR",           founded: 1938, market_cap: "Mid Cap",        brands: ["Columbia","Sorel","Mountain Hardwear","prAna"],                    desc: "Multi-brand outdoor and active lifestyle company with strong wholesale presence and global distribution.",             fin: 57, beh: 49, price: 71  },
+    { ticker: "BIRK",  name: "Birkenstock",          sector: "Footwear",             hq: "Linz am Rhein, Germany", founded: 1774, market_cap: "Mid Cap",        brands: ["Birkenstock","Papillio","Betula"],                                 desc: "Premium lifestyle footwear brand repositioned from orthopaedic heritage into fashion-lifestyle crossover.",            fin: 62, beh: 68, price: 54  },
+];
+
+// Bubble size scaled from stock price
+const minPrice = Math.min(...companies.map(c => c.price));
+const maxPrice = Math.max(...companies.map(c => c.price));
+const scaleSize = (price) => 20 + ((price - minPrice) / (maxPrice - minPrice)) * 60;
+
+// Quadrant colours
+const getColour = (fin, beh) => {
+    if (fin >= 50 && beh >= 50) return 'rgba(74, 179, 120, 0.75)';   // strong/strong — green
+    if (fin >= 50 && beh < 50)  return 'rgba(255, 160, 80, 0.75)';   // strong/weak — amber
+    if (fin < 50  && beh >= 50) return 'rgba(100, 160, 220, 0.75)';  // weak/strong — blue
+    return 'rgba(220, 80, 80, 0.75)';                                  // weak/weak — red
+};
+
+const trace = {
+    x: companies.map(c => c.fin),
+    y: companies.map(c => c.beh),
+    mode: 'markers+text',
+    type: 'scatter',
+    text: companies.map(c => c.ticker),
+    textposition: 'top center',
+    textfont: { size: 11, color: '#1a1f36', family: 'system-ui, sans-serif' },
+    marker: {
+        size: companies.map(c => scaleSize(c.price)),
+        color: companies.map(c => getColour(c.fin, c.beh)),
+        line: { width: 1.5, color: companies.map(c => getColour(c.fin, c.beh).replace('0.75', '1')) }
+    },
+    cliponaxis: false,
+    customdata: companies.map(c => [c.name, c.fin, c.beh, c.price]),
+    hovertemplate:
+        '<b>%{customdata[0]}</b><br>' +
+        'Financial Score: %{customdata[1]}/100<br>' +
+        'Behavioural Score: %{customdata[2]}/100<br>' +
+        'Stock Price: $%{customdata[3]}<br>' +
+        '<extra></extra>',
+};
+
+const layout = {
+    paper_bgcolor: '#ffffff',
+    plot_bgcolor: '#fafafa',
+    font: { family: 'system-ui, -apple-system, sans-serif', color: '#1a1f36' },
+    xaxis: {
+        title: { text: 'Financial Score', font: { size: 13 } },
+        range: [0, 100],
+        gridcolor: '#e5e7eb',
+        zeroline: false,
+        tickfont: { size: 11 },
+    },
+    yaxis: {
+        title: { text: 'Behavioural Score', font: { size: 13 } },
+        range: [0, 100],
+        gridcolor: '#e5e7eb',
+        zeroline: false,
+        tickfont: { size: 11 },
+    },
+    shapes: [
+        {
+            type: 'line', x0: 50, x1: 50, y0: 0, y1: 100,
+            line: { color: '#9ca3af', width: 1.5, dash: 'dash' }
+        },
+        {
+            type: 'line', x0: 0, x1: 100, y0: 50, y1: 50,
+            line: { color: '#9ca3af', width: 1.5, dash: 'dash' }
+        }
+    ],
+    annotations: [
+        {
+            // Top-left: Hidden Momentum — centred over left half, above chart
+            x: 0.25, y: 1.06,
+            xref: 'paper', yref: 'paper',
+            text: '<b>Hidden Momentum</b>',
+            showarrow: false,
+            font: { size: 12, color: '#5ea0d8', family: 'system-ui, sans-serif' },
+            xanchor: 'center',
+            yanchor: 'bottom',
+        },
+        {
+            // Top-right: Dual Strength — centred over right half, above chart
+            x: 0.75, y: 1.06,
+            xref: 'paper', yref: 'paper',
+            text: '<b>Dual Strength</b>',
+            showarrow: false,
+            font: { size: 12, color: '#4ab378', family: 'system-ui, sans-serif' },
+            xanchor: 'center',
+            yanchor: 'bottom',
+        },
+        {
+            // Bottom-left: Under Pressure — centred over left half, below chart
+            x: 0.25, y: -0.12,
+            xref: 'paper', yref: 'paper',
+            text: '<b>Under Pressure</b>',
+            showarrow: false,
+            font: { size: 12, color: '#dc5050', family: 'system-ui, sans-serif' },
+            xanchor: 'center',
+            yanchor: 'top',
+        },
+        {
+            // Bottom-right: Financial Leader — centred over right half, below chart
+            x: 0.75, y: -0.12,
+            xref: 'paper', yref: 'paper',
+            text: '<b>Financial Leader</b>',
+            showarrow: false,
+            font: { size: 12, color: '#f4a04a', family: 'system-ui, sans-serif' },
+            xanchor: 'center',
+            yanchor: 'top',
+        },
+    ],
+    margin: { t: 50, r: 40, b: 80, l: 60 },
+    hovermode: 'closest',
+    showlegend: false,
+};
+
+Plotly.newPlot('bubble-chart', [trace], layout, { responsive: true, displayModeBar: false });
+
+// Quick view panel logic
+const panel = document.getElementById('qv-panel');
+const overlay = document.getElementById('qv-overlay');
+const closeBtn = document.getElementById('qv-close');
+
+function openPanel(company) {
+    document.getElementById('qv-name').textContent = company.name;
+    document.getElementById('qv-sector').textContent = company.sector;
+    document.getElementById('qv-fin').textContent = company.fin + ' / 100';
+    document.getElementById('qv-beh').textContent = company.beh + ' / 100';
+    document.getElementById('qv-desc').textContent = company.desc;
+    document.getElementById('qv-founded').textContent = company.founded;
+    document.getElementById('qv-hq').textContent = company.hq;
+    document.getElementById('qv-mktcap').textContent = company.market_cap;
+
+    // Quadrant label
+    const fin = company.fin;
+    const beh = company.beh;
+    const qEl = document.getElementById('qv-quadrant');
+    if (fin >= 50 && beh >= 50)      { qEl.textContent = '↗ Dual Strength';    qEl.className = 'qv-quadrant qv-q-ss'; }
+    else if (fin >= 50 && beh < 50)  { qEl.textContent = '↘ Financial Leader'; qEl.className = 'qv-quadrant qv-q-sw'; }
+    else if (fin < 50  && beh >= 50) { qEl.textContent = '↖ Hidden Momentum';  qEl.className = 'qv-quadrant qv-q-ws'; }
+    else                              { qEl.textContent = '↙ Under Pressure';   qEl.className = 'qv-quadrant qv-q-ww'; }
+
+    // Brands pills
+    const brandsEl = document.getElementById('qv-brands');
+    brandsEl.innerHTML = company.brands.map(b => `<span class="qv-brand-pill">${b}</span>`).join('');
+
+    // Explore button
+    const exploreBtn = document.getElementById('qv-explore');
+    exploreBtn.textContent = 'Explore ' + company.name + ' →';
+    exploreBtn.href = '/company/' + company.ticker;
+
+    panel.classList.add('qv-open');
+    overlay.classList.add('qv-open');
+}
+
+function closePanel() {
+    panel.classList.remove('qv-open');
+    overlay.classList.remove('qv-open');
+}
+
+document.getElementById('bubble-chart').on('plotly_click', function(data) {
+    const idx = data.points[0].pointIndex;
+    openPanel(companies[idx]);
+});
+
+closeBtn.addEventListener('click', closePanel);
+overlay.addEventListener('click', closePanel);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePanel(); });
+</script>
+
+</div>
+</div>
+{% endblock %}
