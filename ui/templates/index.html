@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Behavioural Business Signals</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
-    <header>
-        <div class="header-inner">
-            <h1>Behavioural Business Signals</h1>
-            <p class="subtitle">Dual-Score Business Analytics — Beauty &amp; Fashion</p>
-        </div>
-    </header>
-
-    <main>
+{% extends "base.html" %}
+{% block title %}Companies — BrandSignals{% endblock %}
+{% block content %}
         <section class="scoreboard-section">
             <div class="section-header">
                 <h2>Company Scoreboard</h2>
@@ -73,6 +59,4 @@
             <p>Last updated: <strong>{{ last_updated }}</strong></p>
             <p>Data sources: yfinance &bull; Financial Modeling Prep &bull; Google Trends &bull; Trustpilot &bull; Reddit &bull; App Store &bull; Google Play &bull; Glassdoor (manual)</p>
         </footer>
-    </main>
-</body>
-</html>
+{% endblock %}

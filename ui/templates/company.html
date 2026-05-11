@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% if not_found %}Not Found{% else %}{{ company.name }}{% endif %} — Behavioural Business Signals</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
-    <header>
-        <div class="header-inner header-flex">
-            <div>
-                <h1>Behavioural Business Signals</h1>
-                <p class="subtitle">Dual-Score Business Analytics — Beauty &amp; Fashion</p>
-            </div>
-            <a href="/" class="back-link">&#8592; Back to Scoreboard</a>
-        </div>
-    </header>
-
-    <main>
+{% extends "base.html" %}
+{% block title %}{% if not_found %}Not Found{% else %}{{ company.name }}{% endif %} — BrandSignals{% endblock %}
+{% block content %}
 
         {% if not_found %}
 
@@ -255,9 +238,4 @@
 
         {% endif %}
 
-        <footer class="page-footer">
-            <p>Behavioural Business Signals — Data for internal research use only</p>
-        </footer>
-    </main>
-</body>
-</html>
+{% endblock %}

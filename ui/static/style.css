@@ -809,3 +809,152 @@ table.scoreboard td a:hover {
     font-size: 0.82rem;
     margin-top: 4px;
 }
+
+/* ── Navbar ──────────────────────────────────────────────── */
+
+.navbar {
+    background: #1a1f36;
+    height: 56px;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+}
+
+.nav-brand {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+}
+
+.nav-links a.nav-active {
+    color: #ffffff;
+    border-bottom: 2px solid rgba(255,255,255,0.6);
+    padding-bottom: 2px;
+}
+
+/* ── Site footer ─────────────────────────────────────────── */
+
+.site-footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 0.78rem;
+    color: #9ca3af;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 48px;
+}
+
+/* ── Placeholder pages ───────────────────────────────────── */
+
+.placeholder-page {
+    max-width: 720px;
+    margin: 80px auto;
+    padding: 0 32px;
+    text-align: center;
+}
+
+.placeholder-page h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1f36;
+    margin-bottom: 20px;
+}
+
+.placeholder-note {
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* ── About page ──────────────────────────────────────────── */
+
+.about-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 32px 64px 32px;
+}
+
+.about-hero {
+    padding: 48px 0 32px 0;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 40px;
+}
+
+.about-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a1f36;
+    margin: 0;
+}
+
+.about-section {
+    margin-bottom: 48px;
+}
+
+.about-section h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1f36;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.about-section p {
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.75;
+    margin-bottom: 14px;
+}
+
+.about-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.about-list li {
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.7;
+    padding-left: 16px;
+    border-left: 3px solid #1a1f36;
+}
+
+.about-section--muted h2 {
+    color: #9ca3af;
+    border-bottom-color: #f3f4f6;
+}

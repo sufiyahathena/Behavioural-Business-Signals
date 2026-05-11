@@ -224,6 +224,7 @@ def create_app() -> Flask:
             "index.html",
             rows=rows,
             last_updated=date.today().isoformat(),
+            active_page="companies",
         )
 
     @app.route("/company/<ticker>")
@@ -260,6 +261,7 @@ def create_app() -> Flask:
                 beh_metrics=[],
                 glassdoor=dict(_EMPTY_GLASSDOOR),
                 news_articles=[],
+                active_page="companies",
             ), 404
 
         # ── Financial data ────────────────────────────────────────
@@ -338,7 +340,28 @@ def create_app() -> Flask:
             beh_metrics=beh_metrics,
             glassdoor=glassdoor,
             news_articles=news_articles,
+            active_page="companies",
         )
+
+    @app.route("/financial-breakdown")
+    def financial_breakdown():
+        """Render the financial breakdown placeholder page."""
+        return render_template("financial_breakdown.html", active_page="financial")
+
+    @app.route("/behavioural-breakdown")
+    def behavioural_breakdown():
+        """Render the behavioural breakdown placeholder page."""
+        return render_template("behavioural_breakdown.html", active_page="behavioural")
+
+    @app.route("/about")
+    def about():
+        """Render the about page."""
+        return render_template("about.html", active_page="about")
+
+    @app.route("/purpose")
+    def purpose():
+        """Render the purpose placeholder page."""
+        return render_template("purpose.html", active_page="purpose")
 
     @app.route("/api/scores")
     def api_scores():
