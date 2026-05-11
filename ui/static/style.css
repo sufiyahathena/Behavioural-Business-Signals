@@ -1052,7 +1052,7 @@ table.scoreboard td a:hover {
   display: grid;
   grid-template-columns: 55% 45%;
   width: 100%;
-  min-height: 200px;
+  min-height: 0;
   box-sizing: border-box;
 }
 
@@ -1099,11 +1099,11 @@ table.scoreboard td a:hover {
   align-items: flex-end;
   justify-content: center;
   overflow: hidden;
-  padding-top: 32px;
+  padding-top: 72px;
 }
 
 .hp-img {
-  width: 45%;
+  width: 52%;
   height: auto;
   object-fit: contain;
   object-position: bottom center;
@@ -1113,7 +1113,7 @@ table.scoreboard td a:hover {
 .hp-bottom {
   width: 100%;
   box-sizing: border-box;
-  padding: 56px 56px 72px 56px;
+  padding: 4px 56px 72px 56px;
 }
 
 .hp-bs-title {
