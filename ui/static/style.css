@@ -958,3 +958,65 @@ table.scoreboard td a:hover {
     color: #9ca3af;
     border-bottom-color: #f3f4f6;
 }
+
+/* ── Purpose page ────────────────────────────────────────── */
+
+.purpose-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 32px 64px 32px;
+}
+
+.purpose-section {
+    margin-bottom: 52px;
+}
+
+.purpose-section h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1f36;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.purpose-section p {
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.75;
+    margin-bottom: 14px;
+}
+
+.personal-grid {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 32px;
+    align-items: stretch;
+    margin-top: 8px;
+}
+
+.personal-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.personal-text p {
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.75;
+    margin-bottom: 14px;
+}
+
+.personal-photo {
+    display: flex;
+}
+
+.personal-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 12px;
+    display: block;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
