@@ -1,7 +1,9 @@
-# API Keys — fill in before running collectors
-FMP_API_KEY = "ltRDcNCruA1NZkStwTuYOiDShWMocELk"
-REDDIT_CLIENT_ID = ""
-REDDIT_CLIENT_SECRET = ""
+import os
+
+# API Keys — set these as environment variables, never hardcode
+FMP_API_KEY = os.environ.get("FMP_API_KEY", "")
+REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "")
+REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "")
 REDDIT_USER_AGENT = "behavioural-business-signals/1.0"
 
 # Paths
