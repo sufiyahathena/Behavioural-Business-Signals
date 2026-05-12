@@ -61,6 +61,11 @@ def cmd_score(args: argparse.Namespace) -> None:
         sys.exit(1)
 
     if run_financial:
+        logger.info("Running financial collector")
+        from collectors import financial_collector
+        raw_df = financial_collector.fetch_all_companies()
+        financial_collector.save_financial_data(raw_df)
+
         logger.info("Running financial scorer")
         from processors import financial_scorer
         df = financial_scorer.run()

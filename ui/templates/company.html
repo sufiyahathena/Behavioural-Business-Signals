@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{% if not_found %}Not Found{% else %}{{ company.name }}{% endif %} — BrandSignals{% endblock %}
 {% block content %}
+<div class="company-page-wrap">
 
         {% if not_found %}
 
@@ -55,8 +56,8 @@
         </section>
 
         <!-- 3 ── About ──────────────────────────────────────────── -->
-        <div class="detail-card">
-            <p class="about-text">{{ company.business_model }}</p>
+        <div class="about-card">
+            <p>{{ company.business_model }}</p>
         </div>
 
         <!-- 4 ── Score Summary Cards ────────────────────────────── -->
@@ -88,37 +89,197 @@
 
         <!-- 5 ── Financial Metrics ──────────────────────────────── -->
         <div class="detail-card">
-            <div class="card-title-group">
-                <h3 class="card-title">Financial Metrics</h3>
-                <span class="card-subtitle">Powered by yfinance + Financial Modeling Prep</span>
+            <div class="metrics-header" onclick="toggleMetrics()" id="metrics-toggle">
+                <div class="metrics-header-left">
+                    <h2 class="section-title" style="margin:0;">Financial Metrics</h2>
+                    <span class="section-subtitle">Powered by yfinance + Financial Modeling Prep</span>
+                </div>
+                <button class="metrics-toggle-btn" id="metrics-chevron" aria-label="Toggle metrics">
+                    ▾
+                </button>
             </div>
 
-            {% if fin_metrics %}
+            <div class="metrics-body" id="metrics-body" style="display: none;">
+            {% if financial_data %}
+
+            {% set abs_map = {
+                'revenue_growth':    ('abs_revenue',          'Revenue',               'abs_revenue_prev',          'Prior Year Revenue'),
+                'gross_margin':      ('abs_gross_profit',     'Gross Profit',           '',                          ''),
+                'operating_margin':  ('abs_operating_income', 'Op. Income',             '',                          ''),
+                'net_profit_margin': ('abs_net_income',       'Net Income',             '',                          ''),
+                'fcf_margin':        ('abs_fcf',              'Free Cash Flow',         '',                          ''),
+                'debt_to_equity':    ('abs_total_debt',       'Total Debt',             '',                          ''),
+                'current_ratio':     ('abs_current_assets',   'Current Assets',         'abs_current_liabilities',   'Current Liabilities'),
+                'roe':               ('abs_equity',           "Shareholders' Equity",   '',                          ''),
+                'roa':               ('abs_total_assets',     'Total Assets',           '',                          ''),
+                'interest_coverage': ('abs_ebit',             'EBIT',                   '',                          ''),
+            } %}
+
             <table class="metrics-table">
                 <thead>
                     <tr>
                         <th>Metric</th>
-                        <th class="col-raw">Raw Value</th>
-                        <th class="col-norm">Normalised Score</th>
+                        <th>Reported Figure</th>
+                        <th>Ratio / Rate</th>
+                        <th>Normalised Score</th>
+                        <th>Note</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for m in fin_metrics %}
+                    {% set metrics = [
+                        ('revenue_growth',    'Revenue Growth',          '%'),
+                        ('gross_margin',      'Gross Margin',            '%'),
+                        ('operating_margin',  'Operating Margin',        '%'),
+                        ('net_profit_margin', 'Net Profit Margin',       '%'),
+                        ('fcf_margin',        'FCF Margin',              '%'),
+                        ('debt_to_equity',    'Debt to Equity',          'x'),
+                        ('current_ratio',     'Current Ratio',           'x'),
+                        ('roe',               'Return on Equity (ROE)',  '%'),
+                        ('roa',               'Return on Assets (ROA)',  '%'),
+                        ('interest_coverage', 'Interest Coverage Ratio', 'x'),
+                    ] %}
+                    {% for key, label, unit in metrics %}
                     <tr>
-                        <td>{{ m.label }}</td>
-                        <td class="metric-raw">{{ m.raw }}</td>
-                        <td class="metric-norm">{{ m.norm }}</td>
+                        <td>{{ label }}</td>
+                        <td class="metric-abs">
+                            {% if key in abs_map %}
+                                {% set abs_key   = abs_map[key][0] %}
+                                {% set abs_label = abs_map[key][1] %}
+                                {% set abs_key2  = abs_map[key][2] %}
+                                {% set abs_label2 = abs_map[key][3] %}
+                                {% if abs_figures and abs_figures.get(abs_key) %}
+                                    <span class="abs-label">{{ abs_label }}</span>
+                                    {{ abs_figures[abs_key] | format_dollars }}
+                                    {% if abs_key2 and abs_figures.get(abs_key2) %}
+                                        <br><span class="abs-label">{{ abs_label2 }}</span>
+                                        {{ abs_figures[abs_key2] | format_dollars }}
+                                    {% endif %}
+                                {% else %}—{% endif %}
+                            {% else %}—{% endif %}
+                        </td>
+                        <td class="metric-raw">
+                            {% if financial_data.get(key) is not none %}
+                                {{ "%.4f"|format(financial_data[key]) }}{{ unit if unit == 'x' else '' }}
+                            {% else %}—{% endif %}
+                        </td>
+                        <td class="metric-norm">
+                            {% if financial_norm and financial_norm.get(key) is not none %}
+                                <div class="norm-bar-wrap">
+                                    <div class="norm-bar" style="width: {{ (financial_norm[key] * 100)|int }}%"></div>
+                                    <span class="norm-val">{{ "%.2f"|format(financial_norm[key]) }}</span>
+                                </div>
+                            {% else %}—{% endif %}
+                        </td>
+                        <td class="metric-note-cell">
+                        {% if key == 'revenue_growth' %}
+                            {% if financial_data and financial_data.get('revenue_growth', 0) < 0 %}
+                                <span class="metric-quirk">⚑ Negative — revenue contracted year-over-year.</span>
+                            {% elif peer_context and peer_context.get('revenue_growth_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest revenue growth in peer group.</span>
+                            {% endif %}
+
+                        {% elif key == 'gross_margin' %}
+                            {% if financial_data and financial_data.get('gross_margin', 0) < 0 %}
+                                <span class="metric-quirk">⚑ Negative — cost of revenue exceeded total revenue.</span>
+                            {% elif peer_context and peer_context.get('gross_margin_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest gross margin in peer group — exceptional pricing power.</span>
+                            {% elif peer_context and peer_context.get('gross_margin_min_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Lowest gross margin in peer group — reflects thin-margin retail or distribution model.</span>
+                            {% endif %}
+
+                        {% elif key == 'operating_margin' %}
+                            {% if financial_data and financial_data.get('operating_margin', 0) < 0 %}
+                                <span class="metric-quirk">⚑ Negative — operating costs exceeded revenue in the most recent annual period.</span>
+                            {% elif peer_context and peer_context.get('operating_margin_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest operating margin in peer group — strongest operational efficiency.</span>
+                            {% endif %}
+
+                        {% elif key == 'net_profit_margin' %}
+                            {% if financial_data and financial_data.get('net_profit_margin', 0) < 0 %}
+                                <span class="metric-quirk">⚑ Negative — company reported a net loss in the most recent annual period.</span>
+                            {% elif peer_context and peer_context.get('net_profit_margin_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest net profit margin in peer group.</span>
+                            {% endif %}
+
+                        {% elif key == 'fcf_margin' %}
+                            {% if financial_data and financial_data.get('fcf_margin', 0) < 0 %}
+                                <span class="metric-quirk">⚑ Negative — company consumed more cash than it generated after capital expenditure.</span>
+                            {% elif peer_context and peer_context.get('fcf_margin_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest free cash flow margin in peer group.</span>
+                            {% endif %}
+
+                        {% elif key == 'current_ratio' %}
+                            {% if financial_data and financial_data.get('current_ratio', 1) < 1.0 %}
+                                <span class="metric-quirk">⚑ Below 1.0 — current liabilities exceed current assets, indicating potential short-term liquidity pressure.</span>
+                            {% elif peer_context and peer_context.get('current_ratio_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest current ratio in peer group — strongest short-term liquidity position.</span>
+                            {% endif %}
+
+                        {% elif key == 'roe' %}
+                            {% if financial_data and financial_data.get('roe', 0) < 0 %}
+                                <span class="metric-quirk">⚑ Negative — company generated a net loss in the most recent annual period.</span>
+                            {% elif peer_context and peer_context.get('roe_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest ROE in peer group.</span>
+                            {% endif %}
+
+                        {% elif key == 'roa' %}
+                            {% if financial_data and financial_data.get('roa', 0) < 0 %}
+                                <span class="metric-quirk">⚑ Negative — net loss relative to total assets.</span>
+                            {% elif peer_context and peer_context.get('roa_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest ROA in peer group — most efficient use of assets to generate profit.</span>
+                            {% endif %}
+
+                        {% elif key == 'debt_to_equity' %}
+                            {% if financial_data and financial_data.get('debt_to_equity', 1) < 0.1 %}
+                                <span class="metric-quirk">⚑ Near debt-free capital structure.</span>
+                            {% elif peer_context and peer_context.get('debt_to_equity_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest leverage in peer group — greatest reliance on debt financing.</span>
+                            {% endif %}
+
+                        {% elif key == 'interest_coverage' %}
+                            {% if financial_data and financial_data.get('interest_coverage') == 25.0 and financial_data.get('debt_to_equity', 1) < 0.5 %}
+                                <span class="metric-quirk">⚑ Debt-light adjustment applied — no meaningful interest expense. <a href="/financial-breakdown#health">See methodology</a></span>
+                            {% elif peer_context and peer_context.get('interest_coverage_min_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Lowest in peer group — highest interest burden relative to operating earnings among the 19 companies scored. The normalised score reflects peer-relative standing, not an absolute assessment of solvency.</span>
+                            {% elif peer_context and peer_context.get('interest_coverage_max_ticker') == company.ticker %}
+                                <span class="metric-quirk">⚑ Highest in peer group — exceptionally low interest burden relative to operating earnings.</span>
+                            {% endif %}
+                        {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+
+            {% if financial_data.get('interest_coverage') == 25.0 and financial_data.get('debt_to_equity', 1) < 0.5 %}
+            <div class="fin-note">
+                <span class="fin-note-icon">ℹ</span>
+                <span>Interest Coverage Ratio: This company carries minimal debt (Debt-to-Equity below 0.5) with no meaningful interest expense. Rather than applying median imputation, BrandSignals assigns a value of 25.0 to this metric — reflecting the absence of any interest burden and awarding full strength on this dimension. This is a documented analytical adjustment, not an estimated or fabricated value. <a href="/financial-breakdown#health">Learn more →</a></span>
+            </div>
+            {% endif %}
+
             {% else %}
             <div class="pending-box">
                 <span class="pending-icon">&#9203;</span>
                 <p>Financial data will appear here once the financial collector is implemented and <code>python main.py score --financial</code> has been run.</p>
             </div>
             {% endif %}
+            </div><!-- /metrics-body -->
         </div>
+
+        <script>
+        function toggleMetrics() {
+            const body = document.getElementById('metrics-body');
+            const btn = document.getElementById('metrics-chevron');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                btn.textContent = '▴';
+            } else {
+                body.style.display = 'none';
+                btn.textContent = '▾';
+            }
+        }
+        </script>
 
         <!-- 6 ── Behavioural Signals ────────────────────────────── -->
         <div class="detail-card">
@@ -238,4 +399,5 @@
 
         {% endif %}
 
+</div>
 {% endblock %}

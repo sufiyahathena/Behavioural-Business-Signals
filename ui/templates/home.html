@@ -11,7 +11,7 @@
         <span style="color:#FF6B6B;">B</span><span style="color:#FFB347;">r</span><span style="color:#A8E6CF;">a</span><span style="color:#C9B1FF;">n</span><span style="color:#87CEEB;">d</span><span style="color:#FFB3C6;">S</span><span style="color:#FFF176;">i</span><span style="color:#D4A5FF;">g</span><span style="color:#80CBC4;">n</span><span style="color:#FFCDD2;">a</span><span style="color:#FFCC80;">l</span><span style="color:#B5EAD7;">s</span>
       </div>
       <div class="hp-sub">Behavioural Business Brand Signals</div>
-      <div class="hp-tag">A dual-score intelligence platform for evaluating publicly traded consumer<br>companies through financial performance and behavioural business quality.</div>
+      <div class="hp-tag">A dual-score intelligence platform for evaluating publicly traded consumer<br>companies through financial performance and behavioural business quality</div>
     </div>
     <div class="hp-right">
       <img class="hp-img" src="{{ url_for('static', filename='pic.png') }}" alt="Carven fashion sketch 1949"/>
@@ -19,24 +19,61 @@
   </div>
 
   <!-- BOTTOM SECTION: Three B's -->
-  <div class="hp-bottom">
-    <h2 class="hp-bs-title">The Three B's</h2>
+  <div class="three-bs-outer">
+
+    <!-- Divider with star accent -->
+    <div class="hp-divider">
+        <span class="hp-divider-line"></span>
+        <span class="hp-divider-star">✦</span>
+        <span class="hp-divider-line"></span>
+    </div>
+
+    <h2 class="hp-bs-title">Explore What Drives Value</h2>
+
     <div class="hp-bs-grid">
-      <div class="hp-card">
-        <div class="hp-card-title">Brands</div>
-        <div class="hp-card-desc">Understand how companies are perceived by consumers, employees, and the wider market.</div>
-        <a href="/companies" class="hp-card-link">Explore brands →</a>
-      </div>
-      <div class="hp-card">
-        <div class="hp-card-title">Behaviour</div>
-        <div class="hp-card-desc">Track sentiment, engagement, trust, and other behavioural signals that shape business quality.</div>
-        <a href="/behavioural-breakdown" class="hp-card-link">Explore behaviour →</a>
-      </div>
-      <div class="hp-card">
-        <div class="hp-card-title">Business</div>
-        <div class="hp-card-desc">Assess financial health, performance, and the commercial fundamentals behind each company.</div>
-        <a href="/financial-breakdown" class="hp-card-link">Explore business →</a>
-      </div>
+
+        <div class="hp-card">
+            <div class="hp-card-header">
+                <div class="hp-card-icon hp-icon-green">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                    </svg>
+                </div>
+                <div class="hp-card-title">Brands</div>
+            </div>
+            <div class="hp-card-desc">Understand how companies are perceived by consumers, employees, and the wider market.</div>
+            <a href="/companies" class="hp-card-link">Explore brands →</a>
+        </div>
+
+        <div class="hp-card">
+            <div class="hp-card-header">
+                <div class="hp-card-icon hp-icon-pink">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </div>
+                <div class="hp-card-title">Behaviour</div>
+            </div>
+            <div class="hp-card-desc">Track sentiment, engagement, trust, and other behavioural signals that shape business quality.</div>
+            <a href="/behavioural-breakdown" class="hp-card-link">Explore behaviour →</a>
+        </div>
+
+        <div class="hp-card">
+            <div class="hp-card-header">
+                <div class="hp-card-icon hp-icon-blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                </div>
+                <div class="hp-card-title">Business</div>
+            </div>
+            <div class="hp-card-desc">Assess financial health, performance, and the commercial fundamentals behind each company.</div>
+            <a href="/financial-breakdown" class="hp-card-link">Explore business →</a>
+        </div>
+
     </div>
   </div>
 

@@ -1,5 +1,5 @@
 # API Keys — fill in before running collectors
-FMP_API_KEY = ""
+FMP_API_KEY = "ltRDcNCruA1NZkStwTuYOiDShWMocELk"
 REDDIT_CLIENT_ID = ""
 REDDIT_CLIENT_SECRET = ""
 REDDIT_USER_AGENT = "behavioural-business-signals/1.0"
@@ -12,16 +12,16 @@ SCORES_DIR = "data/scores"
 
 # Scoring weights — Financial (must sum to 1.0)
 FINANCIAL_WEIGHTS = {
-    "revenue_growth": 0.15,
-    "gross_margin": 0.12,
-    "operating_margin": 0.12,
-    "net_profit_margin": 0.10,
-    "fcf_margin": 0.12,
-    "debt_to_equity": 0.10,
-    "current_ratio": 0.06,
-    "roe": 0.10,
-    "roa": 0.06,
-    "interest_coverage": 0.07,
+    "revenue_growth":    0.15,
+    "gross_margin":      0.10,
+    "operating_margin":  0.12,
+    "net_profit_margin": 0.06,
+    "fcf_margin":        0.11,
+    "debt_to_equity":    0.08,
+    "current_ratio":     0.07,
+    "roe":               0.10,
+    "roa":               0.15,
+    "interest_coverage": 0.06,
 }
 
 # Scoring weights — Behavioural (must sum to 1.0)

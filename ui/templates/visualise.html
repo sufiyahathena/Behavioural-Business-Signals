@@ -6,7 +6,7 @@
 
     <div class="vis-header">
         <h1 class="vis-title">BrandSignals Dual-Score Visualisation</h1>
-        <p class="vis-subtitle">A visual map of consumer companies by financial and behavioural scores, with bubble size representing share price</p>
+        <p class="vis-subtitle">A visual map of consumer companies by financial and behavioural scores, with bubble size representing market capitalisation</p>
     </div>
 
     <!-- Chart full width -->
@@ -83,9 +83,9 @@
 
             <!-- Stock price -->
             <div class="qv-stock">
-                <div class="qv-stock-label">Live Stock Price</div>
+                <div class="qv-stock-label">Live Market Cap</div>
                 <div class="qv-stock-value" id="qv-price">—</div>
-                <div class="qv-stock-note">Live price via API — coming soon</div>
+                <div class="qv-stock-note">Live market cap via API — coming soon</div>
             </div>
             <a class="qv-explore-btn" id="qv-explore" href="#">Explore →</a>
         </div>
@@ -95,34 +95,33 @@
 
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 <script>
-// ── Placeholder company data ──
-// Replace scores and prices with real data once collectors are implemented
+// ── Company data — fin scores from yfinance pipeline, beh scores placeholder ──
 const companies = [
-    { ticker: "EL",    name: "Estée Lauder",        sector: "Beauty",               hq: "New York City, NY",      founded: 1946, market_cap: "Large Cap",      brands: ["Estée Lauder","Clinique","MAC","La Mer","Jo Malone"],              desc: "Prestige multi-brand beauty conglomerate with 20+ brands across skincare, makeup, fragrance, and haircare.",          fin: 38, beh: 52, price: 98  },
-    { ticker: "ULTA",  name: "Ulta Beauty",          sector: "Beauty Retail",        hq: "Bolingbrook, IL",        founded: 1990, market_cap: "Large Cap",      brands: ["Ulta Beauty","Ulta at Target"],                                    desc: "Largest specialty beauty retailer in the U.S., offering prestige and mass beauty under one roof.",                     fin: 72, beh: 78, price: 385 },
-    { ticker: "ELF",   name: "e.l.f. Beauty",        sector: "Beauty",               hq: "Oakland, CA",            founded: 2004, market_cap: "Mid Cap",        brands: ["e.l.f. Cosmetics","e.l.f. Skin","Naturium","Well People"],         desc: "Value-oriented beauty brand with exceptional digital presence and rapid product development cycles.",                   fin: 81, beh: 85, price: 67  },
-    { ticker: "COTY",  name: "Coty Inc.",             sector: "Beauty",               hq: "New York City, NY",      founded: 1904, market_cap: "Mid Cap",        brands: ["CoverGirl","Rimmel","Sally Hansen","Hugo Boss","Gucci"],            desc: "Global beauty company spanning prestige fragrances and mass-market cosmetics across two divisions.",                    fin: 42, beh: 44, price: 9   },
-    { ticker: "OLPX",  name: "Olaplex",              sector: "Haircare",             hq: "Santa Barbara, CA",      founded: 2014, market_cap: "Small/Mid Cap",  brands: ["Olaplex"],                                                        desc: "Patent-protected professional haircare brand built around proprietary bond-building technology.",                       fin: 29, beh: 38, price: 4   },
-    { ticker: "SBH",   name: "Sally Beauty",         sector: "Beauty Retail",        hq: "Denton, TX",             founded: 1964, market_cap: "Small Cap",      brands: ["Sally Beauty Supply","CosmoProf","Armstrong McDowell"],            desc: "International specialty beauty retailer and distributor serving both consumers and licensed professionals.",             fin: 48, beh: 41, price: 11  },
-    { ticker: "ODD",   name: "Oddity Tech",          sector: "Beauty / Tech",        hq: "New York City, NY",      founded: 2018, market_cap: "Mid Cap",        brands: ["IL MAKIAGE","SpoiledChild"],                                       desc: "Digital-first beauty company using AI-driven personalisation across IL MAKIAGE and SpoiledChild brands.",              fin: 68, beh: 72, price: 38  },
-    { ticker: "LRLCY", name: "L'Oréal",              sector: "Beauty",               hq: "Clichy, France",         founded: 1909, market_cap: "Mega Cap",       brands: ["L'Oréal Paris","Lancôme","Maybelline","CeraVe","Kiehl's"],         desc: "World's largest beauty company with four divisions spanning mass, prestige, professional, and dermatological beauty.",  fin: 76, beh: 74, price: 43  },
-    { ticker: "ANF",   name: "Abercrombie & Fitch",  sector: "Apparel",              hq: "New Albany, OH",         founded: 1892, market_cap: "Mid Cap",        brands: ["Abercrombie & Fitch","Hollister","Gilly Hicks","Abercrombie Kids"], desc: "Global omnichannel apparel retailer behind one of retail's most compelling brand turnaround stories.",                 fin: 74, beh: 69, price: 82  },
-    { ticker: "AEO",   name: "American Eagle",       sector: "Apparel",              hq: "Pittsburgh, PA",         founded: 1977, market_cap: "Mid Cap",        brands: ["American Eagle","Aerie","Offline by Aerie"],                       desc: "Specialty retailer known for denim and Aerie's body-positive intimates and activewear positioning.",                   fin: 55, beh: 61, price: 14  },
-    { ticker: "URBN",  name: "Urban Outfitters",     sector: "Lifestyle Retail",     hq: "Philadelphia, PA",       founded: 1970, market_cap: "Mid Cap",        brands: ["Urban Outfitters","Free People","Anthropologie","Nuuly"],          desc: "Multi-brand lifestyle retailer spanning Urban Outfitters, Free People, Anthropologie, and Nuuly rental.",             fin: 63, beh: 58, price: 42  },
-    { ticker: "GAP",   name: "Gap Inc.",             sector: "Apparel",              hq: "San Francisco, CA",      founded: 1969, market_cap: "Mid Cap",        brands: ["Old Navy","Gap","Banana Republic","Athleta"],                      desc: "Global apparel group operating Old Navy, Gap, Banana Republic, and Athleta across distinct consumer segments.",        fin: 51, beh: 47, price: 22  },
-    { ticker: "LEVI",  name: "Levi Strauss",         sector: "Apparel",              hq: "San Francisco, CA",      founded: 1853, market_cap: "Mid Cap",        brands: ["Levi's","Dockers","Beyond Yoga"],                                  desc: "One of the world's most iconic denim brands, expanding DTC and growing beyond its core jeans business.",              fin: 58, beh: 62, price: 17  },
-    { ticker: "RVLV",  name: "Revolve",              sector: "Fashion / E-commerce", hq: "Cerritos, CA",           founded: 2003, market_cap: "Small/Mid Cap",  brands: ["REVOLVE","FORWARD"],                                              desc: "Digital-first fashion retailer built on influencer marketing, serving Millennial and Gen Z consumers online.",         fin: 44, beh: 66, price: 19  },
-    { ticker: "LULU",  name: "Lululemon",            sector: "Activewear",           hq: "Vancouver, Canada",      founded: 1998, market_cap: "Large Cap",      brands: ["Lululemon"],                                                      desc: "Premium activewear brand with exceptional community loyalty, strong DTC model, and global expansion momentum.",        fin: 78, beh: 82, price: 298 },
-    { ticker: "ONON",  name: "On Holding",           sector: "Performance Footwear", hq: "Zürich, Switzerland",    founded: 2010, market_cap: "Large/Mid Cap",  brands: ["On Running","On"],                                                desc: "Swiss premium running and lifestyle footwear brand with rapid global growth and strong innovation positioning.",       fin: 71, beh: 76, price: 52  },
-    { ticker: "RL",    name: "Ralph Lauren",         sector: "Premium Apparel",      hq: "New York City, NY",      founded: 1967, market_cap: "Large Cap",      brands: ["Polo Ralph Lauren","Purple Label","Double RL","Chaps"],            desc: "Global premium lifestyle brand known for aspirational American aesthetic across apparel, home, and fragrance.",         fin: 69, beh: 65, price: 198 },
-    { ticker: "COLM",  name: "Columbia Sportswear",  sector: "Outdoor Apparel",      hq: "Portland, OR",           founded: 1938, market_cap: "Mid Cap",        brands: ["Columbia","Sorel","Mountain Hardwear","prAna"],                    desc: "Multi-brand outdoor and active lifestyle company with strong wholesale presence and global distribution.",             fin: 57, beh: 49, price: 71  },
-    { ticker: "BIRK",  name: "Birkenstock",          sector: "Footwear",             hq: "Linz am Rhein, Germany", founded: 1774, market_cap: "Mid Cap",        brands: ["Birkenstock","Papillio","Betula"],                                 desc: "Premium lifestyle footwear brand repositioned from orthopaedic heritage into fashion-lifestyle crossover.",            fin: 62, beh: 68, price: 54  },
+    { ticker: "EL",    name: "Estée Lauder",        sector: "Beauty",               hq: "New York City, NY",      founded: 1946, market_cap_tier: "Large Cap",      brands: ["Estée Lauder","Clinique","MAC","La Mer","Jo Malone"],             desc: "Prestige multi-brand beauty conglomerate with 20+ brands across skincare, makeup, fragrance, and haircare.",         fin: 12.35, beh: 52, market_cap: 16  },
+    { ticker: "ULTA",  name: "Ulta Beauty",          sector: "Beauty Retail",        hq: "Bolingbrook, IL",        founded: 1990, market_cap_tier: "Large Cap",      brands: ["Ulta Beauty","Ulta at Target"],                                   desc: "Largest specialty beauty retailer in the U.S., offering prestige and mass beauty under one roof.",                    fin: 60.90, beh: 78, market_cap: 17  },
+    { ticker: "ELF",   name: "e.l.f. Beauty",        sector: "Beauty",               hq: "Oakland, CA",            founded: 2004, market_cap_tier: "Mid Cap",        brands: ["e.l.f. Cosmetics","e.l.f. Skin","Naturium","Well People"],        desc: "Value-oriented beauty brand with exceptional digital presence and rapid product development cycles.",                  fin: 63.75, beh: 85, market_cap: 7   },
+    { ticker: "COTY",  name: "Coty Inc.",             sector: "Beauty",               hq: "New York City, NY",      founded: 1904, market_cap_tier: "Mid Cap",        brands: ["CoverGirl","Rimmel","Sally Hansen","Hugo Boss","Gucci"],           desc: "Global beauty company spanning prestige fragrances and mass-market cosmetics across two divisions.",                   fin: 25.33, beh: 44, market_cap: 5   },
+    { ticker: "OLPX",  name: "Olaplex",              sector: "Haircare",             hq: "Santa Barbara, CA",      founded: 2014, market_cap_tier: "Small/Mid Cap",  brands: ["Olaplex"],                                                       desc: "Patent-protected professional haircare brand built around proprietary bond-building technology.",                      fin: 41.08, beh: 38, market_cap: 1   },
+    { ticker: "SBH",   name: "Sally Beauty",         sector: "Beauty Retail",        hq: "Denton, TX",             founded: 1964, market_cap_tier: "Small Cap",      brands: ["Sally Beauty Supply","CosmoProf","Armstrong McDowell"],           desc: "International specialty beauty retailer and distributor serving both consumers and licensed professionals.",            fin: 35.00, beh: 41, market_cap: 1   },
+    { ticker: "ODD",   name: "Oddity Tech",          sector: "Beauty / Tech",        hq: "New York City, NY",      founded: 2018, market_cap_tier: "Mid Cap",        brands: ["IL MAKIAGE","SpoiledChild"],                                      desc: "Digital-first beauty company using AI-driven personalisation across IL MAKIAGE and SpoiledChild brands.",             fin: 61.84, beh: 72, market_cap: 3   },
+    { ticker: "LRLCY", name: "L'Oréal",              sector: "Beauty",               hq: "Clichy, France",         founded: 1909, market_cap_tier: "Mega Cap",       brands: ["L'Oréal Paris","Lancôme","Maybelline","CeraVe","Kiehl's"],        desc: "World's largest beauty company with four divisions spanning mass, prestige, professional, and dermatological beauty.", fin: 67.71, beh: 74, market_cap: 220 },
+    { ticker: "ANF",   name: "Abercrombie & Fitch",  sector: "Apparel",              hq: "New Albany, OH",         founded: 1892, market_cap_tier: "Mid Cap",        brands: ["Abercrombie & Fitch","Hollister","Gilly Hicks"],                  desc: "Global omnichannel apparel retailer behind one of retail's most compelling brand turnaround stories.",                fin: 58.39, beh: 69, market_cap: 4   },
+    { ticker: "AEO",   name: "American Eagle",       sector: "Apparel",              hq: "Pittsburgh, PA",         founded: 1977, market_cap_tier: "Mid Cap",        brands: ["American Eagle","Aerie","Offline by Aerie"],                      desc: "Specialty retailer known for denim and Aerie's body-positive intimates and activewear positioning.",                  fin: 31.63, beh: 61, market_cap: 2   },
+    { ticker: "URBN",  name: "Urban Outfitters",     sector: "Lifestyle Retail",     hq: "Philadelphia, PA",       founded: 1970, market_cap_tier: "Mid Cap",        brands: ["Urban Outfitters","Free People","Anthropologie","Nuuly"],         desc: "Multi-brand lifestyle retailer spanning Urban Outfitters, Free People, Anthropologie, and Nuuly rental.",            fin: 45.78, beh: 58, market_cap: 4   },
+    { ticker: "GAP",   name: "Gap Inc.",             sector: "Apparel",              hq: "San Francisco, CA",      founded: 1969, market_cap_tier: "Mid Cap",        brands: ["Old Navy","Gap","Banana Republic","Athleta"],                     desc: "Global apparel group operating Old Navy, Gap, Banana Republic, and Athleta across distinct consumer segments.",       fin: 34.36, beh: 47, market_cap: 3   },
+    { ticker: "LEVI",  name: "Levi Strauss",         sector: "Apparel",              hq: "San Francisco, CA",      founded: 1853, market_cap_tier: "Mid Cap",        brands: ["Levi's","Dockers","Beyond Yoga"],                                 desc: "One of the world's most iconic denim brands, expanding DTC and growing beyond its core jeans business.",             fin: 44.79, beh: 62, market_cap: 6   },
+    { ticker: "RVLV",  name: "Revolve",              sector: "Fashion / E-commerce", hq: "Cerritos, CA",           founded: 2003, market_cap_tier: "Small/Mid Cap",  brands: ["REVOLVE","FORWARD"],                                             desc: "Digital-first fashion retailer built on influencer marketing, serving Millennial and Gen Z consumers online.",        fin: 48.47, beh: 66, market_cap: 1   },
+    { ticker: "LULU",  name: "Lululemon",            sector: "Activewear",           hq: "Vancouver, Canada",      founded: 1998, market_cap_tier: "Large Cap",      brands: ["Lululemon"],                                                     desc: "Premium activewear brand with exceptional community loyalty, strong DTC model, and global expansion momentum.",       fin: 63.77, beh: 82, market_cap: 38  },
+    { ticker: "ONON",  name: "On Holding",           sector: "Performance Footwear", hq: "Zürich, Switzerland",    founded: 2010, market_cap_tier: "Large/Mid Cap",  brands: ["On Running","On"],                                               desc: "Swiss premium running and lifestyle footwear brand with rapid global growth and strong innovation positioning.",      fin: 60.79, beh: 76, market_cap: 18  },
+    { ticker: "RL",    name: "Ralph Lauren",         sector: "Premium Apparel",      hq: "New York City, NY",      founded: 1967, market_cap_tier: "Large Cap",      brands: ["Polo Ralph Lauren","Purple Label","Double RL","Chaps"],           desc: "Global premium lifestyle brand known for aspirational American aesthetic across apparel, home, and fragrance.",        fin: 60.14, beh: 65, market_cap: 14  },
+    { ticker: "COLM",  name: "Columbia Sportswear",  sector: "Outdoor Apparel",      hq: "Portland, OR",           founded: 1938, market_cap_tier: "Mid Cap",        brands: ["Columbia","Sorel","Mountain Hardwear","prAna"],                   desc: "Multi-brand outdoor and active lifestyle company with strong wholesale presence and global distribution.",            fin: 37.65, beh: 49, market_cap: 4   },
+    { ticker: "BIRK",  name: "Birkenstock",          sector: "Footwear",             hq: "Linz am Rhein, Germany", founded: 1774, market_cap_tier: "Mid Cap",        brands: ["Birkenstock","Papillio","Betula"],                                desc: "Premium lifestyle footwear brand repositioned from orthopaedic heritage into fashion-lifestyle crossover.",           fin: 65.95, beh: 68, market_cap: 9   },
 ];
 
-// Bubble size scaled from stock price
-const minPrice = Math.min(...companies.map(c => c.price));
-const maxPrice = Math.max(...companies.map(c => c.price));
-const scaleSize = (price) => 20 + ((price - minPrice) / (maxPrice - minPrice)) * 60;
+// Bubble size scaled from market cap
+const minMCap = Math.min(...companies.map(c => c.market_cap));
+const maxMCap = Math.max(...companies.map(c => c.market_cap));
+const scaleSize = (mc) => 16 + ((mc - minMCap) / (maxMCap - minMCap)) * 64;
 
 // Quadrant colours
 const getColour = (fin, beh) => {
@@ -141,17 +140,17 @@ const trace = {
     textposition: 'top center',
     textfont: { size: 11, color: '#1a1f36', family: 'system-ui, sans-serif' },
     marker: {
-        size: companies.map(c => scaleSize(c.price)),
+        size: companies.map(c => scaleSize(c.market_cap)),
         color: companies.map(c => getColour(c.fin, c.beh)),
         line: { width: 1.5, color: companies.map(c => getColour(c.fin, c.beh).replace('0.75', '1')) }
     },
     cliponaxis: false,
-    customdata: companies.map(c => [c.name, c.fin, c.beh, c.price]),
+    customdata: companies.map(c => [c.name, c.fin, c.beh, c.market_cap]),
     hovertemplate:
         '<b>%{customdata[0]}</b><br>' +
         'Financial Score: %{customdata[1]}/100<br>' +
         'Behavioural Score: %{customdata[2]}/100<br>' +
-        'Stock Price: $%{customdata[3]}<br>' +
+        'Market Cap: $%{customdata[3]}B<br>' +
         '<extra></extra>',
 };
 

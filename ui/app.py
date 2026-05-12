@@ -195,6 +195,23 @@ def _fmt_norm(val) -> str:
         return "—"
 
 
+def _format_dollars(val) -> str:
+    """Format an absolute dollar value as $XB or $XM for display."""
+    try:
+        fv = float(val)
+    except (ValueError, TypeError):
+        return "—"
+    if not pd.notna(fv):
+        return "—"
+    abs_fv = abs(fv)
+    sign = "-" if fv < 0 else ""
+    if abs_fv >= 1e9:
+        return f"{sign}${abs_fv / 1e9:.2f}B"
+    if abs_fv >= 1e6:
+        return f"{sign}${abs_fv / 1e6:.1f}M"
+    return f"{sign}${abs_fv:,.0f}"
+
+
 def create_app() -> Flask:
     """Create and configure the Flask application.
 
@@ -202,6 +219,10 @@ def create_app() -> Flask:
         Configured Flask app instance.
     """
     app = Flask(__name__, template_folder="templates", static_folder="static")
+
+    @app.template_filter("format_dollars")
+    def format_dollars_filter(val):
+        return _format_dollars(val)
 
     @app.route("/")
     def root():
@@ -260,6 +281,10 @@ def create_app() -> Flask:
                 fin_score_colour="pending",
                 fin_score_pct=0,
                 fin_metrics=[],
+                financial_data={},
+                financial_norm={},
+                peer_context={},
+                abs_figures={},
                 beh_score=None,
                 beh_score_colour="pending",
                 beh_score_pct=0,
@@ -272,6 +297,10 @@ def create_app() -> Flask:
         # ── Financial data ────────────────────────────────────────
         fin_score = None
         fin_metrics = []
+        financial_data = {}
+        financial_norm = {}
+        peer_context = {}
+        abs_figures = {}
         fin_path = Path(config.SCORES_DIR) / "financial_scores.csv"
         if fin_path.exists():
             fin_df = pd.read_csv(fin_path)
@@ -281,11 +310,44 @@ def create_app() -> Flask:
                 raw_fin = fin_row.get("financial_score")
                 fin_score = float(raw_fin) if pd.notna(raw_fin) else None
                 for key, label in _FINANCIAL_METRIC_LABELS.items():
+                    val = fin_row.get(key)
+                    norm_val = fin_row.get(f"norm_{key}")
                     fin_metrics.append({
                         "label": label,
-                        "raw": _fmt_metric(fin_row.get(key)),
-                        "norm": _fmt_norm(fin_row.get(f"{key}_norm")),
+                        "key": key,
+                        "raw": _fmt_metric(val),
+                        "norm": _fmt_norm(norm_val),
                     })
+                    if pd.notna(val):
+                        financial_data[key] = round(float(val), 4)
+                    if pd.notna(norm_val):
+                        financial_norm[key] = round(float(norm_val), 3)
+
+            # Absolute figures from financial_raw.csv
+            _abs_fields = [
+                "abs_revenue", "abs_gross_profit", "abs_operating_income",
+                "abs_net_income", "abs_fcf", "abs_total_debt", "abs_total_assets", "abs_ebit",
+                "abs_current_assets", "abs_current_liabilities", "abs_equity", "abs_revenue_prev",
+            ]
+            raw_path = Path(config.FINANCIAL_DIR) / "financial_raw.csv"
+            if raw_path.exists():
+                raw_df = pd.read_csv(raw_path)
+                raw_match = raw_df[raw_df["ticker"] == ticker]
+                if not raw_match.empty:
+                    raw_row = raw_match.iloc[0]
+                    for field in _abs_fields:
+                        v = raw_row.get(field)
+                        if pd.notna(v):
+                            abs_figures[field] = float(v)
+
+            # Peer context: min/max ticker and value for each metric
+            _peer_metrics = list(_FINANCIAL_METRIC_LABELS.keys())
+            for metric in _peer_metrics:
+                if metric in fin_df.columns and fin_df[metric].notna().any():
+                    peer_context[f"{metric}_min_ticker"] = fin_df.loc[fin_df[metric].idxmin(), "ticker"]
+                    peer_context[f"{metric}_max_ticker"] = fin_df.loc[fin_df[metric].idxmax(), "ticker"]
+                    peer_context[f"{metric}_min"] = float(fin_df[metric].min())
+                    peer_context[f"{metric}_max"] = float(fin_df[metric].max())
 
         # ── Behavioural data ──────────────────────────────────────
         beh_score = None
@@ -339,6 +401,10 @@ def create_app() -> Flask:
             fin_score_colour=_score_bar_colour(fin_score),
             fin_score_pct=int(fin_score) if fin_score is not None else 0,
             fin_metrics=fin_metrics,
+            financial_data=financial_data,
+            financial_norm=financial_norm,
+            peer_context=peer_context,
+            abs_figures=abs_figures,
             beh_score=f"{beh_score:.1f}" if beh_score is not None else None,
             beh_score_colour=_score_bar_colour(beh_score),
             beh_score_pct=int(beh_score) if beh_score is not None else 0,

@@ -1,8 +1,171 @@
 {% extends "base.html" %}
 {% block title %}Financial Breakdown — BrandSignals{% endblock %}
 {% block content %}
-<div class="placeholder-page">
-    <h1>Financial Breakdown</h1>
-    <p class="placeholder-note">This page will detail the financial scoring methodology — which metrics are used, how they are weighted, how scores are compiled, and what they mean in the context of this framework.</p>
+
+<div class="about-page fb-page">
+
+    <!-- PAGE TITLE -->
+    <div class="fb-hero">
+        <h1 class="fb-title">How the Financial Score Works</h1>
+        <p class="fb-intro">The BrandSignals Financial Score provides a structured view of financial quality across publicly traded consumer companies. Each company is evaluated through 10 financial metrics grouped into four core dimensions. Scores range from 0 to 100 and are comparative — calculated relative to the other companies in the BrandSignals universe, not against an absolute benchmark.</p>
+    </div>
+
+    <!-- FOUR BUCKET NAVIGATION CARDS -->
+    <div class="fb-buckets">
+        <a href="#growth" class="fb-bucket-card fb-bucket-growth">
+            <div class="fb-bucket-icon">↑</div>
+            <div class="fb-bucket-label">Growth</div>
+            <div class="fb-bucket-weight">15%</div>
+        </a>
+        <a href="#profitability" class="fb-bucket-card fb-bucket-profit">
+            <div class="fb-bucket-icon">$</div>
+            <div class="fb-bucket-label">Profitability</div>
+            <div class="fb-bucket-weight">39%</div>
+        </a>
+        <a href="#health" class="fb-bucket-card fb-bucket-health">
+            <div class="fb-bucket-icon">◎</div>
+            <div class="fb-bucket-label">Financial Health</div>
+            <div class="fb-bucket-weight">21%</div>
+        </a>
+        <a href="#returns" class="fb-bucket-card fb-bucket-returns">
+            <div class="fb-bucket-icon">⟳</div>
+            <div class="fb-bucket-label">Return / Capital Efficiency</div>
+            <div class="fb-bucket-weight">25%</div>
+        </a>
+    </div>
+
+    <!-- HOW SCORES ARE CALCULATED -->
+    <div class="about-section">
+        <h2>How Scores Are Calculated</h2>
+        <p>Financial data is drawn from each company's most recently filed annual report, including the income statement, balance sheet, and cash flow statement. Given that fiscal year-end dates vary across the 19 companies, data currency differs slightly between companies; this is disclosed where relevant.</p>
+        <p>Each metric is collected through a two-source waterfall. The primary structured source is checked first. If a value is missing, a secondary source is consulted. This approach prioritises consistency while preserving broad company coverage.</p>
+        <p>Once collected, each metric is converted into a comparable format using min-max normalisation across the BrandSignals universe — meaning every company is scored relative to its peers on each metric. Debt to Equity is the only metric where a lower raw value indicates stronger financial health; its normalised score is therefore inverted. All other nine metrics are directionally positive.</p>
+        <p>Each normalised metric is then multiplied by its assigned weight. The weighted values are summed to produce a final Financial Score out of 100.</p>
+    </div>
+
+    <!-- BUCKET 1: GROWTH -->
+    <div class="about-section fb-bucket-section" id="growth">
+        <div class="fb-bucket-tag fb-tag-growth">Growth — 15%</div>
+        <h2>1. Growth</h2>
+        <p>This dimension measures whether a company is expanding its top line.</p>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Revenue Growth <span class="fb-metric-w">15%</span></div>
+            <p>Year-over-year percentage change in total revenue. In beauty, fashion, and lifestyle, top-line growth reflects brand relevance, customer demand, and market traction. It is the single highest-weighted metric in the framework because momentum matters enormously in consumer sectors — a growing brand is capturing share; a contracting one may be losing relevance regardless of current profitability.</p>
+        </div>
+    </div>
+
+    <!-- BUCKET 2: PROFITABILITY -->
+    <div class="about-section fb-bucket-section" id="profitability">
+        <div class="fb-bucket-tag fb-tag-profit">Profitability — 39%</div>
+        <h2>2. Profitability</h2>
+        <p>This is the largest dimension, capturing how much economic value the business retains at different stages of the income statement and cash flow cycle. Four metrics together capture different layers of profitability.</p>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Gross Margin <span class="fb-metric-w">10%</span></div>
+            <p>Gross profit as a percentage of revenue. Reflects product economics and pricing power — how much revenue is retained after the direct cost of producing or sourcing products. High gross margins signal strong brand pricing power and room to invest in marketing and operations.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Operating Margin <span class="fb-metric-w">12%</span></div>
+            <p>Operating income as a percentage of revenue. Reflects execution and cost discipline — how efficiently a company translates revenue into operating profit after all operating costs including selling, general, and administrative expenses.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Net Profit Margin <span class="fb-metric-w">6%</span></div>
+            <p>Net income as a percentage of revenue. Captures bottom-line profitability, though at a lower weight because it can be influenced by taxes, financing structure, and non-recurring items that do not reflect underlying business quality.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Free Cash Flow Margin <span class="fb-metric-w">11%</span></div>
+            <p>Free cash flow as a percentage of revenue. Provides an additional measure of earnings quality by showing how much cash the business actually generates relative to revenue. Free cash flow is harder to manipulate than reported net income and reflects the underlying cash-generating reality of the business.</p>
+        </div>
+    </div>
+
+    <!-- BUCKET 3: FINANCIAL HEALTH -->
+    <div class="about-section fb-bucket-section" id="health">
+        <div class="fb-bucket-tag fb-tag-health">Financial Health — 21%</div>
+        <h2>3. Financial Health</h2>
+        <p>This dimension measures balance-sheet resilience and the company's ability to meet its financial obligations. These metrics serve as a check on stability rather than a driver of performance.</p>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Debt to Equity <span class="fb-metric-w">8%</span></div>
+            <p>Total debt divided by stockholders' equity. Measures how heavily the business relies on leverage. High leverage amplifies both gains and losses. In volatile consumer sectors, high debt increases vulnerability during downturns. This is the only metric in the framework where a lower value is stronger — its normalised score is therefore inverted.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Current Ratio <span class="fb-metric-w">7%</span></div>
+            <p>Current assets divided by current liabilities. Measures short-term liquidity — whether the company can meet its near-term obligations. A ratio below 1.0 indicates potential liquidity risk. This is a health check rather than a performance driver.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Interest Coverage <span class="fb-metric-w">6%</span></div>
+            <p>EBIT divided by interest expense. Measures how comfortably operating earnings cover interest obligations. A ratio below 2x is a warning sign. This metric is most informative for companies carrying significant debt and least applicable to debt-light companies — see the Missing Data Policy below for how this case is handled.</p>
+        </div>
+    </div>
+
+    <!-- BUCKET 4: RETURNS -->
+    <div class="about-section fb-bucket-section" id="returns">
+        <div class="fb-bucket-tag fb-tag-returns">Return / Capital Efficiency — 25%</div>
+        <h2>4. Return / Capital Efficiency</h2>
+        <p>This dimension measures how effectively the company turns its capital base into profit. It is the second-largest dimension, reflecting the importance of capital productivity in evaluating business quality.</p>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Return on Equity — ROE <span class="fb-metric-w">10%</span></div>
+            <p>Net income divided by stockholders' equity. Shows how much profit is generated per dollar of shareholder capital. ROE can be flattered by high leverage, which is why it is paired with ROA.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Return on Assets — ROA <span class="fb-metric-w">15%</span></div>
+            <p>Net income divided by total assets. Shows how much profit is generated per dollar of total assets and is weighted more heavily than ROE because it is less influenced by financial leverage. This is especially meaningful when comparing asset-light DTC brands against asset-heavy physical retailers — the difference in ROA reflects genuine structural differences in business model efficiency rather than capital structure choices.</p>
+        </div>
+    </div>
+
+    <!-- METRIC WEIGHTS TABLE + BAR CHART -->
+    <div class="about-section">
+        <h2>Metric Weights</h2>
+        <div class="fb-weights-layout">
+            <table class="fb-weights-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Bucket</th>
+                        <th>Weight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Revenue Growth</td><td><span class="fb-badge fb-badge-growth">Growth</span></td><td>15%</td></tr>
+                    <tr><td>Operating Margin</td><td><span class="fb-badge fb-badge-profit">Profitability</span></td><td>12%</td></tr>
+                    <tr><td>Return on Assets</td><td><span class="fb-badge fb-badge-returns">Returns</span></td><td>15%</td></tr>
+                    <tr><td>Free Cash Flow Margin</td><td><span class="fb-badge fb-badge-profit">Profitability</span></td><td>11%</td></tr>
+                    <tr><td>Gross Margin</td><td><span class="fb-badge fb-badge-profit">Profitability</span></td><td>10%</td></tr>
+                    <tr><td>Return on Equity</td><td><span class="fb-badge fb-badge-returns">Returns</span></td><td>10%</td></tr>
+                    <tr><td>Debt to Equity</td><td><span class="fb-badge fb-badge-health">Health</span></td><td>8%</td></tr>
+                    <tr><td>Current Ratio</td><td><span class="fb-badge fb-badge-health">Health</span></td><td>7%</td></tr>
+                    <tr><td>Net Profit Margin</td><td><span class="fb-badge fb-badge-profit">Profitability</span></td><td>6%</td></tr>
+                    <tr><td>Interest Coverage</td><td><span class="fb-badge fb-badge-health">Health</span></td><td>6%</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MISSING DATA POLICY -->
+    <div class="about-section">
+        <h2>Missing Data Policy</h2>
+        <p>BrandSignals does not use median imputation or fabricated values to fill ordinary missing data.</p>
+        <p>If a metric cannot be sourced through the waterfall, the company is scored using only the metrics that are genuinely available. In that case, the weights of the remaining metrics are rebalanced proportionally so that the total still sums to 100%. A separate data completeness indicator records how many metrics were used for each company.</p>
+        <p>One exception applies: companies with a Debt-to-Equity ratio below 0.5 that have no reportable interest expense are assigned an Interest Coverage value of 25.0, reflecting the absence of a meaningful interest burden. This is not an attempt to fabricate an average or estimated number, but a documented analytical judgment that awards the company the full strength of that metric. It is disclosed transparently on each affected company's page.</p>
+        <p>In the current dataset, all 19 companies achieved 10/10 data completeness after this adjustment was applied.</p>
+    </div>
+
+    <!-- WHAT THE SCORE MEANS -->
+    <div class="about-section">
+        <h2>What the Financial Score Means</h2>
+        <p>The Financial Score summarises how a company performs across four dimensions: growth, profitability, financial resilience, and capital efficiency. A higher score indicates stronger financial performance relative to the other companies in this framework.</p>
+        <p>Scores are comparative, not absolute. A score of 50 does not mean a company is weak — it means it sits around the middle of this specific peer group. A score of 30 in this universe might represent a perfectly profitable business that simply scores lower than its peers on growth and capital efficiency.</p>
+        <p>The Financial Score says nothing on its own about behavioural quality, consumer trust, employee sentiment, or brand strength. Those dimensions are captured separately in the Behavioural Score. The most analytically interesting cases in BrandSignals are often the mismatches — companies that score very differently across the two dimensions.</p>
+    </div>
+
 </div>
+
 {% endblock %}
