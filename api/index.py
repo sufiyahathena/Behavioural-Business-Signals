@@ -2,21 +2,21 @@ import sys
 import os
 
 # Add project root to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, root)
 
+from flask import send_from_directory
 from ui.app import create_app
 
-application = create_app()
+app = create_app()
 
-# Ensure static files are served correctly
-application.static_folder = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'ui', 'static'
-)
-application.template_folder = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'ui', 'templates'
-)
+# Override static folder to absolute path
+app.static_folder = os.path.join(root, 'ui', 'static')
+app.static_url_path = '/static'
+app.template_folder = os.path.join(root, 'ui', 'templates')
 
-handler = application
-app = application
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory(app.static_folder, filename)
+
+handler = app
