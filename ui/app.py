@@ -218,7 +218,11 @@ def create_app() -> Flask:
     Returns:
         Configured Flask app instance.
     """
-    app = Flask(__name__, template_folder="templates", static_folder="static")
+    import os as _os
+    _here = _os.path.dirname(_os.path.abspath(__file__))
+    app = Flask(__name__,
+                template_folder=_os.path.join(_here, "templates"),
+                static_folder=_os.path.join(_here, "static"))
 
     @app.template_filter("format_dollars")
     def format_dollars_filter(val):
