@@ -407,6 +407,7 @@ table.scoreboard td a:hover {
     color: #374151;
     line-height: 1.75;
     margin: 0;
+    text-align: justify;
 }
 
 .info-mono {
@@ -1028,6 +1029,7 @@ table.scoreboard td a:hover {
     color: #374151;
     line-height: 1.75;
     margin-bottom: 14px;
+    text-align: justify;
 }
 
 .about-list {
@@ -1045,6 +1047,7 @@ table.scoreboard td a:hover {
     line-height: 1.7;
     padding-left: 16px;
     border-left: 3px solid #1a1f36;
+    text-align: justify;
 }
 
 .about-section--muted h2 {
@@ -1443,6 +1446,7 @@ table.scoreboard td a:hover {
     font-size: 0.78rem;
     line-height: 1.6;
     color: #4b5563;
+    text-align: justify;
 }
 
 .vis-quad-ss {
@@ -1768,6 +1772,7 @@ table.scoreboard td a:hover {
     line-height: 1.75;
     margin: 0;
     max-width: 720px;
+    text-align: justify;
 }
 
 /* Four bucket nav cards */
