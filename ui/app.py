@@ -367,6 +367,7 @@ def create_app() -> Flask:
                 for key, label in _BEHAVIOURAL_METRIC_LABELS.items():
                     beh_metrics.append({
                         "label": label,
+                        "key": key,
                         "raw": _fmt_metric(beh_row.get(key)),
                         "norm": _fmt_norm(beh_row.get(f"{key}_norm")),
                     })

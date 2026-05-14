@@ -52,6 +52,11 @@ def load_glassdoor(behavioural_dir: str = config.BEHAVIOURAL_DIR) -> pd.DataFram
     df = pd.read_csv(path)
     df = df.rename(columns=GLASSDOOR_COL_MAP)
 
+    # Convert percentage columns to 0–1 scale before normalisation
+    for pct_col in ["glassdoor_ceo_approval", "glassdoor_recommend"]:
+        if pct_col in df.columns:
+            df[pct_col] = df[pct_col] / 100.0
+
     # Replace 0.0 placeholders (unfilled) with NaN so median fallback triggers
     for col in GLASSDOOR_COL_MAP.values():
         if col in df.columns:

@@ -20,37 +20,36 @@
 
         <!-- 2 ── Company Facts ──────────────────────────────────── -->
         <section class="section-block">
-            <div class="facts-row">
-                <div class="fact-card">
-                    <div class="fact-label">Founded</div>
-                    <div class="fact-value fact-value--large">{{ company.founded }}</div>
+            <div class="facts-pills-row">
+                <div class="fact-pill">
+                    <span class="fact-pill-label">Founded</span>
+                    <span class="fact-pill-value">{{ company.founded }}</span>
                 </div>
-                <div class="fact-card">
-                    <div class="fact-label">Headquarters</div>
-                    <div class="fact-value">{{ company.headquarters }}</div>
+                <div class="fact-pill">
+                    <span class="fact-pill-label">Ticker</span>
+                    <span class="fact-pill-value">{{ company.ticker }}</span>
                 </div>
-                <div class="fact-card">
-                    <div class="fact-label">Market Cap Tier</div>
-                    <div class="fact-value fact-value--large">{{ company.market_cap_tier }}</div>
+                <div class="fact-pill">
+                    <span class="fact-pill-label">Exchange</span>
+                    <span class="fact-pill-value">{{ company.exchange }}</span>
                 </div>
-                <div class="fact-card">
-                    <div class="fact-label">Ticker</div>
-                    <div class="fact-value fact-value--large ticker-value">{{ company.ticker }}</div>
+                <div class="fact-pill">
+                    <span class="fact-pill-label">Sector</span>
+                    <span class="fact-pill-value">{{ company.sector }}</span>
                 </div>
             </div>
-
-            <div class="facts-row">
-                <div class="fact-card">
-                    <div class="fact-label">Sector</div>
-                    <div class="fact-value">{{ company.sector }}</div>
+            <div class="facts-pills-row">
+                <div class="fact-pill">
+                    <span class="fact-pill-label">Market Cap</span>
+                    <span class="fact-pill-value">{{ company.market_cap_tier }}</span>
                 </div>
-                <div class="fact-card">
-                    <div class="fact-label">Exchange</div>
-                    <div class="fact-value fact-value--large">{{ company.exchange }}</div>
+                <div class="fact-pill">
+                    <span class="fact-pill-label">Headquarters</span>
+                    <span class="fact-pill-value">{{ company.headquarters }}</span>
                 </div>
-                <div class="fact-card fact-card--wide">
-                    <div class="fact-label">Target Audience</div>
-                    <div class="fact-value">{{ company.target_audience }}</div>
+                <div class="fact-pill fact-pill--wide">
+                    <span class="fact-pill-label">Target Audience</span>
+                    <span class="fact-pill-value">{{ company.target_audience }}</span>
                 </div>
             </div>
         </section>
@@ -92,7 +91,7 @@
             <div class="metrics-header" onclick="toggleMetrics()" id="metrics-toggle">
                 <div class="metrics-header-left">
                     <h2 class="section-title" style="margin:0;">Financial Metrics</h2>
-                    <span class="section-subtitle">Powered by yfinance + Financial Modeling Prep</span>
+                    <span class="section-subtitle">10 metrics across growth, profitability, financial health, and capital efficiency — powered by Financial Modeling Prep + yfinance</span>
                 </div>
                 <button class="metrics-toggle-btn" id="metrics-chevron" aria-label="Toggle metrics">
                     ▾
@@ -279,22 +278,40 @@
                 btn.textContent = '▾';
             }
         }
+        function toggleBehMetrics() {
+            const body = document.getElementById('beh-metrics-body');
+            const btn = document.getElementById('beh-metrics-chevron');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                btn.textContent = '▴';
+            } else {
+                body.style.display = 'none';
+                btn.textContent = '▾';
+            }
+        }
         </script>
 
         <!-- 6 ── Behavioural Signals ────────────────────────────── -->
         <div class="detail-card">
-            <div class="card-title-group">
-                <h3 class="card-title">Behavioural Signals</h3>
-                <span class="card-subtitle">Consumer, Employee &amp; Market Attention</span>
+            <div class="metrics-header" onclick="toggleBehMetrics()" id="beh-metrics-toggle">
+                <div class="metrics-header-left">
+                    <h2 class="section-title" style="margin:0;">Behavioural Signals</h2>
+                    <span class="section-subtitle">Consumer, employee &amp; market attention — powered by Glassdoor, Google Trends, Reddit, Trustpilot &amp; App Store</span>
+                </div>
+                <button class="metrics-toggle-btn" id="beh-metrics-chevron" aria-label="Toggle behavioural metrics">
+                    ▾
+                </button>
             </div>
 
+            <div class="metrics-body" id="beh-metrics-body" style="display: none;">
             {% if beh_metrics %}
             <table class="metrics-table">
                 <thead>
                     <tr>
                         <th>Signal</th>
-                        <th class="col-raw">Raw Value</th>
-                        <th class="col-norm">Normalised Score</th>
+                        <th>Reported Figure</th>
+                        <th>Normalised Score</th>
+                        <th>Note</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -302,7 +319,35 @@
                     <tr>
                         <td>{{ m.label }}</td>
                         <td class="metric-raw">{{ m.raw }}</td>
-                        <td class="metric-norm">{{ m.norm }}</td>
+                        <td class="metric-norm">
+                            {% if m.norm != '—' %}
+                            <span class="norm-bar-wrap">
+                                <span class="norm-bar" style="width:{{ (m.norm | float * 100) | int }}%"></span>
+                                <span class="norm-val">{{ m.norm }}</span>
+                            </span>
+                            {% else %}
+                            <span class="norm-val">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="metric-note">
+                            {% if m.key == 'google_trends_score' %}
+                                <span class="metric-quirk">⚑ Average search interest score (0–100) over the past 12 months.</span>
+                            {% elif m.key == 'trustpilot_rating' %}
+                                <span class="metric-quirk">⚑ Customer star rating on Trustpilot (1–5).</span>
+                            {% elif m.key == 'trustpilot_review_count' %}
+                                <span class="metric-quirk">⚑ Total number of customer reviews on Trustpilot.</span>
+                            {% elif m.key == 'app_rating' %}
+                                <span class="metric-quirk">⚑ App Store or Google Play rating (1–5).</span>
+                            {% elif m.key == 'reddit_sentiment' %}
+                                <span class="metric-quirk">⚑ Net sentiment score from brand mentions in relevant subreddits.</span>
+                            {% elif m.key == 'glassdoor_overall' %}
+                                <span class="metric-quirk">⚑ Overall employee rating on Glassdoor (1–5).</span>
+                            {% elif m.key == 'glassdoor_ceo_approval' %}
+                                <span class="metric-quirk">⚑ % of employees who approve of the CEO.</span>
+                            {% elif m.key == 'glassdoor_recommend' %}
+                                <span class="metric-quirk">⚑ % of employees who would recommend the company to a friend.</span>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -313,6 +358,7 @@
                 <p>Behavioural data will appear here once collectors are implemented and <code>python main.py score --behavioural</code> has been run.</p>
             </div>
             {% endif %}
+            </div><!-- /beh-metrics-body -->
         </div>
 
         <!-- 7 ── Glassdoor Snapshot ─────────────────────────────── -->
@@ -339,12 +385,8 @@
                     <span class="gd-label">Work / Life Balance</span>
                     <span class="gd-value">{{ glassdoor.work_life_balance_rating }}</span>
                 </div>
-                <div class="gd-item gd-item-date">
-                    <span class="gd-label">Last Updated</span>
-                    <span class="gd-value gd-date">{{ glassdoor.last_updated }}</span>
-                </div>
             </div>
-            <p class="gd-note">Glassdoor data is manually collected. Update <code>data/behavioural/glassdoor_manual.csv</code> to refresh.</p>
+            <p class="gd-note">Glassdoor data is manually collected. Last updated: {{ glassdoor.last_updated }}</p>
         </div>
 
         <!-- 8 ── Products & Categories ──────────────────────────── -->

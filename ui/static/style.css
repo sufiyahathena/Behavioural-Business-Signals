@@ -371,25 +371,25 @@ table.scoreboard td a:hover {
 }
 
 .fact-value {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: #1a1f36;
     line-height: 1.4;
 }
 
 .fact-value--large {
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: #1a1f36;
-    letter-spacing: -0.01em;
+    line-height: 1.4;
+    letter-spacing: 0;
 }
 
 .ticker-value {
     color: #1a1f36;
     font-family: monospace;
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: 0.02em;
+    font-size: 1.1rem;
+    font-weight: 700;
 }
 
 .about-card {
@@ -751,7 +751,7 @@ table.scoreboard td a:hover {
 
 .glassdoor-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 14px;
     margin-top: 4px;
     margin-bottom: 16px;
@@ -777,7 +777,7 @@ table.scoreboard td a:hover {
 
 .gd-value {
     display: block;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: #1a1f36;
     font-variant-numeric: tabular-nums;
@@ -799,6 +799,7 @@ table.scoreboard td a:hover {
     margin: 0;
     line-height: 1.6;
 }
+
 
 .gd-note code {
     font-family: "SF Mono", "Fira Code", "Consolas", monospace;
@@ -2061,4 +2062,57 @@ html {
 
 @media (max-width: 540px) {
     .fb-buckets { grid-template-columns: 1fr; }
+}
+
+/* ── Company fact pills ──────────────────────────────────── */
+
+.facts-pills-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.fact-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
+    background: #fdf4f6;
+    border: 1px solid #f0d6dc;
+    border-radius: 999px;
+    padding: 14px 24px;
+    flex: 1;
+    transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.fact-pill:hover {
+    background: #faeaed;
+    box-shadow: 0 2px 8px rgba(237, 205, 212, 0.4);
+}
+
+.fact-pill--wide {
+    border-radius: 20px;
+    flex: 2;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.fact-pill-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #c08090;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+.fact-pill-value {
+    font-size: 1.0rem;
+    font-weight: 700;
+    color: #1a1f36;
+    line-height: 1.3;
 }
