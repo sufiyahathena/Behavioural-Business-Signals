@@ -99,12 +99,12 @@ def fetch_trends_for_all(companies: list) -> pd.DataFrame:
         # US score
         us_df = fetch_trends(keyword, geo="US")
         us_score = compute_average_interest(us_df)
-        time.sleep(10)
+        time.sleep(15)
 
         # Global score
         global_df = fetch_trends(keyword, geo="")
         global_score = compute_average_interest(global_df)
-        time.sleep(10)
+        time.sleep(15)
 
         results.append({
             "ticker": ticker,
@@ -119,8 +119,21 @@ def fetch_trends_for_all(companies: list) -> pd.DataFrame:
 def run(
     companies: list = None,
     behavioural_dir: str = config.BEHAVIOURAL_DIR,
+    resume: bool = True,
 ) -> pd.DataFrame:
-    """Run the Google Trends collector and save results to CSV."""
+    """Run the Google Trends collector and save results to CSV.
+
+    If resume=True (default), skips companies that already have non-zero
+    data in the existing trends.csv so you can run in batches.
+
+    Args:
+        companies: List of company dicts. If None, loads from companies.json.
+        behavioural_dir: Directory to save trends.csv output.
+        resume: If True, skip companies already collected successfully.
+
+    Returns:
+        DataFrame with google_trends_score_us and google_trends_score_global.
+    """
     import json
 
     if companies is None:
@@ -128,13 +141,49 @@ def run(
         with companies_path.open() as f:
             companies = json.load(f)["companies"]
 
-    print(f"Collecting Google Trends data for {len(companies)} companies...")
-    df = fetch_trends_for_all(companies)
-
     output_path = Path(behavioural_dir) / "trends.csv"
+
+    # Load existing data if resuming
+    existing_df = pd.DataFrame()
+    already_done = set()
+    if resume and output_path.exists():
+        existing_df = pd.read_csv(output_path)
+        # Consider a company done if both scores are non-zero
+        if "google_trends_score_us" in existing_df.columns:
+            done_mask = (
+                existing_df["google_trends_score_us"].fillna(0) > 0
+            ) | (
+                existing_df["google_trends_score_global"].fillna(0) > 0
+            )
+            already_done = set(existing_df[done_mask]["ticker"].tolist())
+            print(f"Resuming — {len(already_done)} companies already collected: {sorted(already_done)}")
+
+    # Filter to only companies not yet done
+    remaining = [c for c in companies if c["ticker"] not in already_done]
+    print(f"Collecting Google Trends data for {len(remaining)} remaining companies...")
+
+    if not remaining:
+        print("All companies already collected!")
+        return existing_df
+
+    new_df = fetch_trends_for_all(remaining)
+
+    # Merge with existing data
+    if not existing_df.empty and not already_done == set():
+        done_df = existing_df[existing_df["ticker"].isin(already_done)]
+        combined_df = pd.concat([done_df, new_df], ignore_index=True)
+        # Reorder to match original companies.json order
+        ticker_order = [c["ticker"] for c in companies]
+        combined_df["_order"] = combined_df["ticker"].map(
+            {t: i for i, t in enumerate(ticker_order)}
+        )
+        combined_df = combined_df.sort_values("_order").drop(columns=["_order"])
+    else:
+        combined_df = new_df
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(output_path, index=False)
+    combined_df.to_csv(output_path, index=False)
     print(f"Google Trends data saved to {output_path}")
     logger.info("Google Trends data saved to %s", output_path)
 
-    return df
+    return combined_df
