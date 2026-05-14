@@ -330,8 +330,10 @@
                             {% endif %}
                         </td>
                         <td class="metric-note">
-                            {% if m.key == 'google_trends_score' %}
-                                <span class="metric-quirk">⚑ Average search interest score (0–100) over the past 12 months.</span>
+                            {% if m.key == 'google_trends_score_us' %}
+                                <span class="metric-quirk">⚑ Average US search interest score (0–100) over the past 12 months.</span>
+                            {% elif m.key == 'google_trends_score_global' %}
+                                <span class="metric-quirk">⚑ Average worldwide search interest score (0–100) over the past 12 months.</span>
                             {% elif m.key == 'trustpilot_rating' %}
                                 <span class="metric-quirk">⚑ Customer star rating on Trustpilot (1–5).</span>
                             {% elif m.key == 'trustpilot_review_count' %}

@@ -34,7 +34,8 @@ _FINANCIAL_METRIC_LABELS = {
 }
 
 _BEHAVIOURAL_METRIC_LABELS = {
-    "google_trends_score": "Google Trends Score",
+    "google_trends_score_us": "Google Trends Score (US)",
+    "google_trends_score_global": "Google Trends Score (Global)",
     "trustpilot_rating": "Trustpilot Rating",
     "trustpilot_review_count": "Trustpilot Review Count",
     "app_rating": "App Rating",

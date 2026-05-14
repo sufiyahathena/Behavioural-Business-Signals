@@ -27,20 +27,23 @@ FINANCIAL_WEIGHTS = {
 }
 
 # Scoring weights — Behavioural (must sum to 1.0)
+# google_trends_score split into US and global — weighting TBD once all data collected
 BEHAVIOURAL_WEIGHTS = {
-    "google_trends_score": 0.20,
-    "trustpilot_rating": 0.15,
-    "trustpilot_review_count": 0.05,
-    "app_rating": 0.10,
-    "reddit_sentiment": 0.15,
-    "glassdoor_overall": 0.15,
-    "glassdoor_ceo_approval": 0.10,
-    "glassdoor_recommend": 0.10,
+    "google_trends_score_us":     0.10,
+    "google_trends_score_global": 0.10,
+    "trustpilot_rating":          0.15,
+    "trustpilot_review_count":    0.05,
+    "app_rating":                 0.10,
+    "reddit_sentiment":           0.15,
+    "glassdoor_overall":          0.15,
+    "glassdoor_ceo_approval":     0.10,
+    "glassdoor_recommend":        0.10,
 }
 
 # Google Trends settings
 TRENDS_TIMEFRAME = "today 12-m"
-TRENDS_GEO = "US"
+TRENDS_GEO_US = "US"
+TRENDS_GEO_GLOBAL = ""
 
 # UI settings
 UI_HOST = "127.0.0.1"

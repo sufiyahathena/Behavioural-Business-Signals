@@ -18,7 +18,8 @@ from processors.normaliser import normalise_dataframe
 logger = logging.getLogger(__name__)
 
 BEHAVIOURAL_METRICS = [
-    "google_trends_score",
+    "google_trends_score_us",
+    "google_trends_score_global",
     "trustpilot_rating",
     "trustpilot_review_count",
     "app_rating",
@@ -79,7 +80,7 @@ def load_collector_outputs(behavioural_dir: str = config.BEHAVIOURAL_DIR) -> pd.
     """
     data_path = Path(behavioural_dir)
     collector_files = {
-        "trends.csv": ["google_trends_score"],
+        "trends.csv": ["google_trends_score_us", "google_trends_score_global"],
         "trustpilot.csv": ["trustpilot_rating", "trustpilot_review_count"],
         "appstore.csv": ["app_rating"],
         "reddit.csv": ["reddit_sentiment"],
