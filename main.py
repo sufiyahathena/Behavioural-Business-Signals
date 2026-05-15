@@ -82,6 +82,34 @@ def cmd_score(args: argparse.Namespace) -> None:
             _print_score_table(df, "behavioural_score")
 
 
+def cmd_collect(args: argparse.Namespace) -> None:
+    """Run one or more data collectors based on CLI flags.
+
+    Args:
+        args: Parsed argparse namespace with boolean flags trends, reddit, all.
+    """
+    run_trends = args.trends or args.all
+    run_reddit = args.reddit or args.all
+
+    if not run_trends and not run_reddit:
+        logger.error("Specify at least one of --trends, --reddit, or --all")
+        sys.exit(1)
+
+    if run_trends:
+        logger.info("Running Google Trends collector")
+        from collectors import trends_collector
+        df = trends_collector.run()
+        if not df.empty:
+            print(f"\nGoogle Trends collected for {len(df)} companies.")
+
+    if run_reddit:
+        logger.info("Running Reddit sentiment collector")
+        from collectors import reddit_collector
+        df = reddit_collector.run()
+        if not df.empty:
+            print(f"\nReddit sentiment collected for {len(df)} companies.")
+
+
 def cmd_ui(args: argparse.Namespace) -> None:
     """Launch the Flask web UI.
 
@@ -112,6 +140,11 @@ def build_parser() -> argparse.ArgumentParser:
     score_parser.add_argument("--behavioural", action="store_true", help="Run behavioural scorer")
     score_parser.add_argument("--all", action="store_true", help="Run both scorers")
 
+    collect_parser = subparsers.add_parser("collect", help="Run data collectors")
+    collect_parser.add_argument("--trends", action="store_true", help="Run Google Trends collector")
+    collect_parser.add_argument("--reddit", action="store_true", help="Run Reddit sentiment collector")
+    collect_parser.add_argument("--all", action="store_true", help="Run all collectors")
+
     subparsers.add_parser("ui", help="Launch the Flask web UI")
 
     return parser
@@ -124,6 +157,8 @@ def main() -> None:
 
     if args.command == "score":
         cmd_score(args)
+    elif args.command == "collect":
+        cmd_collect(args)
     elif args.command == "ui":
         cmd_ui(args)
 

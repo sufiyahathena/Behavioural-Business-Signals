@@ -296,7 +296,7 @@
             <div class="metrics-header" onclick="toggleBehMetrics()" id="beh-metrics-toggle">
                 <div class="metrics-header-left">
                     <h2 class="section-title" style="margin:0;">Behavioural Signals</h2>
-                    <span class="section-subtitle">Consumer, employee &amp; market attention — powered by Glassdoor, Google Trends, Reddit, Trustpilot &amp; App Store</span>
+                    <span class="section-subtitle">Consumer, employee &amp; market attention — powered by Glassdoor, Google Trends, Trustpilot &amp; App Store</span>
                 </div>
                 <button class="metrics-toggle-btn" id="beh-metrics-chevron" aria-label="Toggle behavioural metrics">
                     ▾
@@ -316,7 +316,7 @@
                 </thead>
                 <tbody>
                     {% for m in beh_metrics %}
-                    <tr>
+                    <tr{% if m.key == 'app_rating' and m.raw == '—' %} class="metric-row-muted"{% endif %}>
                         <td>{{ m.label }}</td>
                         <td class="metric-raw">{{ m.raw }}</td>
                         <td class="metric-norm">
@@ -339,9 +339,15 @@
                             {% elif m.key == 'trustpilot_review_count' %}
                                 <span class="metric-quirk">⚑ Total number of customer reviews on Trustpilot.</span>
                             {% elif m.key == 'app_rating' %}
-                                <span class="metric-quirk">⚑ App Store or Google Play rating (1–5).</span>
-                            {% elif m.key == 'reddit_sentiment' %}
-                                <span class="metric-quirk">⚑ Net sentiment score from brand mentions in relevant subreddits.</span>
+                                {% if m.raw == '—' %}
+                                    <span class="metric-quirk">⚑ No consumer app available or insufficient ratings data — not included in behavioural score weighting.</span>
+                                {% elif company.ticker == 'OLPX' %}
+                                    <span class="metric-quirk">⚑ Rating for the Olaplex Pro app — professional/stylist-facing, not a consumer app.</span>
+                                {% elif company.ticker == 'EL' %}
+                                    <span class="metric-quirk">⚑ Average rating across Estée Lauder Companies' consumer brand apps (Clinique, MAC, Estée Lauder Expert).</span>
+                                {% else %}
+                                    <span class="metric-quirk">⚑ Google Play Store rating (1–5).</span>
+                                {% endif %}
                             {% elif m.key == 'glassdoor_overall' %}
                                 <span class="metric-quirk">⚑ Overall employee rating on Glassdoor (1–5).</span>
                             {% elif m.key == 'glassdoor_ceo_approval' %}

@@ -39,9 +39,8 @@ _BEHAVIOURAL_METRIC_LABELS = {
     "trustpilot_rating": "Trustpilot Rating",
     "trustpilot_review_count": "Trustpilot Review Count",
     "app_rating": "App Rating",
-    "reddit_sentiment": "Reddit Sentiment Score",
     "glassdoor_overall": "Glassdoor Overall Rating",
-    "glassdoor_ceo_approval": "Glassdoor CEO Approval",
+    "glassdoor_ceo_approval": "Glassdoor CEO Approval %",
     "glassdoor_recommend": "Glassdoor Recommend %",
 }
 
@@ -194,6 +193,44 @@ def _fmt_norm(val) -> str:
         return f"{float(val):.3f}" if pd.notna(val) else "—"
     except (ValueError, TypeError):
         return "—"
+
+
+def _fmt_beh_metric(key: str, val) -> str:
+    """Format a raw behavioural metric value for display.
+
+    Uses context-aware formatting based on the metric type:
+    - Review counts: integer with comma separator
+    - Percentage fields (CEO approval, recommend): shown as X%
+    - Ratings and scores: one decimal place
+
+    Args:
+        key: The metric key (e.g. "trustpilot_review_count").
+        val: Raw value from the scores CSV.
+
+    Returns:
+        Formatted string, or "—" for missing values.
+    """
+    try:
+        if not pd.notna(val):
+            return "—"
+        fv = float(val)
+    except (ValueError, TypeError):
+        return "—"
+
+    # Integer fields — review counts
+    if key in ("trustpilot_review_count",):
+        return f"{int(fv):,}"
+
+    # Percentage fields — stored as 0–1 after conversion
+    if key in ("glassdoor_ceo_approval", "glassdoor_recommend"):
+        return f"{fv * 100:.0f}%"
+
+    # Score fields — Google Trends (0–100 scale)
+    if key in ("google_trends_score_us", "google_trends_score_global"):
+        return f"{fv:.1f}"
+
+    # Default: one decimal place for ratings
+    return f"{fv:.1f}"
 
 
 def _format_dollars(val) -> str:
@@ -369,7 +406,7 @@ def create_app() -> Flask:
                     beh_metrics.append({
                         "label": label,
                         "key": key,
-                        "raw": _fmt_metric(beh_row.get(key)),
+                        "raw": _fmt_beh_metric(key, beh_row.get(key)),
                         "norm": _fmt_norm(beh_row.get(f"{key}_norm")),
                     })
 

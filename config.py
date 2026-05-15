@@ -33,11 +33,10 @@ BEHAVIOURAL_WEIGHTS = {
     "google_trends_score_global": 0.10,
     "trustpilot_rating":          0.15,
     "trustpilot_review_count":    0.05,
-    "app_rating":                 0.10,
-    "reddit_sentiment":           0.15,
-    "glassdoor_overall":          0.15,
-    "glassdoor_ceo_approval":     0.10,
-    "glassdoor_recommend":        0.10,
+    "app_rating":                 0.15,
+    "glassdoor_overall":          0.20,
+    "glassdoor_ceo_approval":     0.13,
+    "glassdoor_recommend":        0.12,
 }
 
 # Google Trends settings
