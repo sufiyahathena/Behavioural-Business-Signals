@@ -316,7 +316,7 @@
                 </thead>
                 <tbody>
                     {% for m in beh_metrics %}
-                    <tr{% if m.key == 'app_rating' and m.raw == '—' %} class="metric-row-muted"{% endif %}>
+                    <tr{% if m.raw == '—' %} class="metric-row-muted"{% endif %}>
                         <td>{{ m.label }}</td>
                         <td class="metric-raw">{{ m.raw }}</td>
                         <td class="metric-norm">
@@ -351,7 +351,11 @@
                             {% elif m.key == 'glassdoor_overall' %}
                                 <span class="metric-quirk">⚑ Overall employee rating on Glassdoor (1–5).</span>
                             {% elif m.key == 'glassdoor_ceo_approval' %}
-                                <span class="metric-quirk">⚑ % of employees who approve of the CEO.</span>
+                                {% if m.raw == '—' %}
+                                    <span class="metric-quirk">⚑ Insufficient data on Glassdoor — not included in behavioural score weighting.</span>
+                                {% else %}
+                                    <span class="metric-quirk">⚑ % of employees who approve of the CEO.</span>
+                                {% endif %}
                             {% elif m.key == 'glassdoor_recommend' %}
                                 <span class="metric-quirk">⚑ % of employees who would recommend the company to a friend.</span>
                             {% endif %}

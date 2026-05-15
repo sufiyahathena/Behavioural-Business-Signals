@@ -2121,3 +2121,9 @@ html {
     opacity: 0.45;
     font-style: italic;
 }
+
+.metrics-table td:first-child,
+.metrics-table th:first-child {
+    white-space: nowrap;
+    min-width: 220px;
+}
