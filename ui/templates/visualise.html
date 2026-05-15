@@ -16,23 +16,29 @@
 
     <!-- Quadrant guide: horizontal row below chart -->
     <div class="vis-guide-row">
-        <div class="vis-quad-card vis-quad-ws">
+        <div class="vis-quad-card vis-quad-ws" onclick="zoomToQuadrant('ws')" style="cursor:pointer;">
             <div class="vis-quad-card-title">↖ Hidden Momentum</div>
             <div class="vis-quad-card-desc">Financially weaker but behaviourally strong. These companies show positive signals in consumer perception, brand trust, or employee culture that may not yet be fully reflected in the financials.</div>
         </div>
-        <div class="vis-quad-card vis-quad-ww">
+        <div class="vis-quad-card vis-quad-ww" onclick="zoomToQuadrant('ww')" style="cursor:pointer;">
             <div class="vis-quad-card-title">↙ Under Pressure</div>
             <div class="vis-quad-card-desc">Financially weaker and behaviourally weaker. These companies show limited positive signals in consumer perception, brand trust, or employee culture — reflected across both dimensions.</div>
         </div>
-        <div class="vis-quad-card vis-quad-ss">
+        <div class="vis-quad-card vis-quad-ss" onclick="zoomToQuadrant('ss')" style="cursor:pointer;">
             <div class="vis-quad-card-title">↗ Dual Strength</div>
             <div class="vis-quad-card-desc">Financially strong and behaviourally strong. These companies show positive signals in consumer perception, brand trust, and employee culture — fully reflected in the financials.</div>
         </div>
-        <div class="vis-quad-card vis-quad-sw">
+        <div class="vis-quad-card vis-quad-sw" onclick="zoomToQuadrant('sw')" style="cursor:pointer;">
             <div class="vis-quad-card-title">↘ Financial Leader</div>
             <div class="vis-quad-card-desc">Financially strong but behaviourally weaker. Solid margins and growth metrics, but consumer sentiment, brand trust, or internal culture may not yet be fully reflected in the financials.</div>
         </div>
     </div>
+    <p style="text-align:center; font-size:0.78rem; color:#9ca3af; margin-top:8px;">
+        Click a quadrant card to zoom in · Double-click the chart or use the reset button to zoom out
+    </p>
+    <p style="text-align:center; font-size:0.72rem; color:#9ca3af; margin-top:4px;">
+        Bubble size represents market capitalisation on a square root scale to improve differentiation across companies of varying size.
+    </p>
 
     <!-- Quick view panel -->
     <div class="qv-overlay" id="qv-overlay"></div>
@@ -144,7 +150,7 @@ function renderChart(companies) {
 // Bubble size scaled from market cap
 const minMCap = Math.min(...companies.map(c => c.market_cap));
 const maxMCap = Math.max(...companies.map(c => c.market_cap));
-const scaleSize = (mc) => 16 + ((mc - minMCap) / (maxMCap - minMCap)) * 64;
+const scaleSize = (mc) => 18 + (Math.sqrt(mc) / Math.sqrt(maxMCap)) * 78;
 
 // Quadrant colours
 const getColour = (fin, beh) => {
@@ -160,17 +166,17 @@ const trace = {
     mode: 'markers+text',
     type: 'scatter',
     text: companies.map(c => c.ticker),
-    textposition: 'top center',
-    textfont: { size: 11, color: '#1a1f36', family: 'system-ui, sans-serif' },
+    textposition: companies.map(c => 'middle center'),
+    textfont: { size: 9, color: '#ffffff', family: 'system-ui, sans-serif' },
     marker: {
         size: companies.map(c => scaleSize(c.market_cap)),
         color: companies.map(c => getColour(c.fin, c.beh)),
         line: { width: 1.5, color: companies.map(c => getColour(c.fin, c.beh).replace('0.75', '1')) }
     },
     cliponaxis: false,
-    customdata: companies.map(c => [c.name, c.fin, c.beh, c.market_cap]),
+    customdata: companies.map(c => [c.name, c.fin, c.beh, c.market_cap, c.ticker]),
     hovertemplate:
-        '<b>%{customdata[0]}</b><br>' +
+        '<b>%{customdata[0]}</b> (%{customdata[4]})<br>' +
         'Financial Score: %{customdata[1]}/100<br>' +
         'Behavioural Score: %{customdata[2]}/100<br>' +
         'Market Cap: $%{customdata[3]}B<br>' +
@@ -252,7 +258,14 @@ const layout = {
     showlegend: false,
 };
 
-Plotly.newPlot('bubble-chart', [trace], layout, { responsive: true, displayModeBar: false });
+Plotly.newPlot('bubble-chart', [trace], layout, {
+    responsive: true,
+    displayModeBar: true,
+    modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+    modeBarButtonsToAdd: [],
+    displaylogo: false,
+    scrollZoom: true,
+});
 
 document.getElementById('bubble-chart').on('plotly_click', function(data) {
     const idx = data.points[0].pointIndex;
@@ -260,6 +273,42 @@ document.getElementById('bubble-chart').on('plotly_click', function(data) {
 });
 
 } // end renderChart
+
+// Zoom to a specific quadrant when guide card is clicked
+function zoomToQuadrant(quadrant) {
+    const padding = 8;
+    let xRange, yRange;
+
+    switch(quadrant) {
+        case 'ss': // Dual Strength — top right
+            xRange = [50 - padding, 100];
+            yRange = [50 - padding, 100];
+            break;
+        case 'sw': // Financial Leader — bottom right
+            xRange = [50 - padding, 100];
+            yRange = [0, 50 + padding];
+            break;
+        case 'ws': // Hidden Momentum — top left
+            xRange = [0, 50 + padding];
+            yRange = [50 - padding, 100];
+            break;
+        case 'ww': // Under Pressure — bottom left
+            xRange = [0, 50 + padding];
+            yRange = [0, 50 + padding];
+            break;
+        default:
+            xRange = [0, 100];
+            yRange = [0, 100];
+    }
+
+    Plotly.relayout('bubble-chart', {
+        'xaxis.range': xRange,
+        'yaxis.range': yRange,
+    });
+
+    // Scroll to chart
+    document.getElementById('bubble-chart').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
 // Quick view panel logic
 const panel = document.getElementById('qv-panel');

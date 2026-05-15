@@ -316,7 +316,7 @@
                 </thead>
                 <tbody>
                     {% for m in beh_metrics %}
-                    <tr{% if m.raw == '—' %} class="metric-row-muted"{% endif %}>
+                    <tr{% if m.raw == '—' or m.excluded %} class="metric-row-muted"{% endif %}>
                         <td>{{ m.label }}</td>
                         <td class="metric-raw">{{ m.raw }}</td>
                         <td class="metric-norm">
@@ -331,9 +331,21 @@
                         </td>
                         <td class="metric-note">
                             {% if m.key == 'google_trends_score_us' %}
-                                <span class="metric-quirk">⚑ Average US search interest score (0–100) over the past 12 months.</span>
+                                {% if m.excluded %}
+                                    <span class="metric-quirk">⚑ Reported for reference only — this company is classified as primarily global, so US search interest is not included in its behavioural score weighting.</span>
+                                {% elif m.raw == '—' %}
+                                    <span class="metric-quirk">⚑ No data available — not included in behavioural score weighting.</span>
+                                {% else %}
+                                    <span class="metric-quirk">⚑ Average US search interest score (0–100) over the past 12 months.</span>
+                                {% endif %}
                             {% elif m.key == 'google_trends_score_global' %}
-                                <span class="metric-quirk">⚑ Average worldwide search interest score (0–100) over the past 12 months.</span>
+                                {% if m.excluded %}
+                                    <span class="metric-quirk">⚑ Reported for reference only — this company is classified as primarily US-focused, so global search interest is not included in its behavioural score weighting.</span>
+                                {% elif m.raw == '—' %}
+                                    <span class="metric-quirk">⚑ No data available — not included in behavioural score weighting.</span>
+                                {% else %}
+                                    <span class="metric-quirk">⚑ Average worldwide search interest score (0–100) over the past 12 months.</span>
+                                {% endif %}
                             {% elif m.key == 'trustpilot_rating' %}
                                 <span class="metric-quirk">⚑ Customer star rating on Trustpilot (1–5).</span>
                             {% elif m.key == 'app_rating' %}
@@ -375,6 +387,18 @@
             </div>
             {% endif %}
             </div><!-- /beh-metrics-body -->
+
+            <p class="gd-note" style="margin-top: 12px;">
+                {% if beh_geography == 'us' %}
+                    Google Trends weighting reflects this company's primarily US-focused market presence, with the Global Trends score shown for reference only.
+                {% elif beh_geography == 'global' %}
+                    Google Trends weighting reflects this company's primarily global market presence, with the US Trends score shown for reference only.
+                {% else %}
+                    Google Trends weighting is split equally between US and Global scores, reflecting this company's mixed domestic and international market presence.
+                {% endif %}
+                Some behavioural data is manually collected. Last updated: {{ beh_last_updated }}.
+            </p>
+
             {% if company.ticker == 'COTY' %}
             <div class="fin-note" style="margin-top: 12px;">
                 <span class="fin-note-icon">ℹ</span>
@@ -383,10 +407,29 @@
             {% endif %}
         </div>
 
+        <!-- 6b ── Dual Radar Charts ─────────────────────────────────── -->
+        <div class="detail-card">
+            <h3 class="card-title">Signal Profiles Spider Map</h3>
+            <span class="card-subtitle" style="display:block; margin-bottom:16px;">Normalised scores across financial and behavioural signals (0–1 scale)</span>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+                <div>
+                    <p style="text-align:center; font-size:0.78rem; font-weight:600; color:#1a1f36; margin-bottom:4px;">Financial</p>
+                    <div id="fin-radar-chart" style="width:100%; height:340px;"></div>
+                </div>
+                <div>
+                    <p style="text-align:center; font-size:0.78rem; font-weight:600; color:#1a1f36; margin-bottom:4px;">Behavioural</p>
+                    <div id="beh-radar-chart" style="width:100%; height:340px;"></div>
+                </div>
+            </div>
+    <p class="card-subtitle" style="margin-top: 16px; border-top: 1px solid #f0f0f0; padding-top: 12px;">
+        Each axis represents one signal. Points closer to the outer edge indicate stronger performance relative to peers — a larger, fuller shape means stronger overall signal quality. Points near the centre indicate weaker relative performance on that metric. All values are normalised relative to the 19-company fashion and beauty peer group within the BrandSignals universe.
+    </p>
+</div>
+
         <!-- 7 ── Glassdoor Snapshot ─────────────────────────────── -->
         <div class="detail-card glassdoor-card">
             <h3 class="card-title">Glassdoor Snapshot</h3>
-            <div class="glassdoor-grid">
+            <div class="glassdoor-grid glassdoor-grid-7">
                 <div class="gd-item">
                     <span class="gd-label">Overall Rating</span>
                     <span class="gd-value">{{ glassdoor.overall_rating }}</span>
@@ -406,6 +449,18 @@
                 <div class="gd-item">
                     <span class="gd-label">Work / Life Balance</span>
                     <span class="gd-value">{{ glassdoor.work_life_balance_rating }}</span>
+                </div>
+                <div class="gd-item">
+                    <span class="gd-label">Diversity &amp; Inclusion</span>
+                    <span class="gd-value">{{ glassdoor.diversity_rating }}</span>
+                </div>
+                <div class="gd-item">
+                    <span class="gd-label">Senior Management</span>
+                    <span class="gd-value">{{ glassdoor.senior_management_rating }}</span>
+                </div>
+                <div class="gd-item">
+                    <span class="gd-label">Compensation &amp; Benefits</span>
+                    <span class="gd-value">{{ glassdoor.compensation_rating }}</span>
                 </div>
             </div>
             <p class="gd-note">Glassdoor data is manually collected. Last updated: {{ glassdoor.last_updated }}</p>
@@ -464,4 +519,103 @@
         {% endif %}
 
 </div>
+
+{% if fin_metrics or beh_metrics %}
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script>
+(function() {
+
+    function buildRadar(containerId, metricsData, colour) {
+        const metrics = metricsData.filter(m => m.norm !== '—' && !m.excluded);
+        if (metrics.length < 3) {
+            document.getElementById(containerId).innerHTML =
+                '<p style="text-align:center;color:#9ca3af;padding:40px;font-size:0.82rem;">Insufficient data for chart</p>';
+            return;
+        }
+
+        const labels = metrics.map(m => m.label
+            .replace('Google Trends Score (US)', 'Trends US')
+            .replace('Google Trends Score (Global)', 'Trends Global')
+            .replace('Glassdoor Overall Rating', 'GD Overall')
+            .replace('Glassdoor CEO Approval %', 'GD CEO')
+            .replace('Glassdoor Recommend %', 'GD Recommend')
+            .replace('Trustpilot Rating', 'Trustpilot')
+            .replace('YouTube Subscribers', 'YouTube')
+            .replace('App Rating', 'App')
+            .replace('Revenue Growth', 'Rev Growth')
+            .replace('Operating Margin', 'Op Margin')
+            .replace('Net Profit Margin', 'Net Margin')
+            .replace('Free Cash Flow Margin', 'FCF Margin')
+            .replace('Return on Equity (ROE)', 'ROE')
+            .replace('Return on Assets (ROA)', 'ROA')
+            .replace('Debt to Equity', 'D/E')
+            .replace('Current Ratio', 'Curr Ratio')
+            .replace('Interest Coverage Ratio', 'Int Coverage')
+            .replace('Gross Margin', 'Gross Margin')
+        );
+        const values = metrics.map(m => parseFloat(m.norm));
+
+        const closedLabels = [...labels, labels[0]];
+        const closedValues = [...values, values[0]];
+
+        const trace = {
+            type: 'scatterpolar',
+            r: closedValues,
+            theta: closedLabels,
+            fill: 'toself',
+            fillcolor: colour.fill,
+            line: { color: colour.line, width: 2 },
+            mode: 'lines+markers',
+            marker: { color: colour.marker, size: 4 },
+            hovertemplate: '<b>%{theta}</b><br>Score: %{r:.3f}<extra></extra>',
+        };
+
+        const layout = {
+            polar: {
+                radialaxis: {
+                    visible: true,
+                    range: [0, 1],
+                    tickfont: { size: 8, color: '#9ca3af' },
+                    gridcolor: '#e5e7eb',
+                    linecolor: '#e5e7eb',
+                    tickvals: [0.25, 0.5, 0.75, 1.0],
+                    ticktext: ['', '0.5', '', '1'],
+                },
+                angularaxis: {
+                    tickfont: { size: 9, color: '#1a1f36' },
+                    linecolor: '#e5e7eb',
+                    gridcolor: '#e5e7eb',
+                },
+                bgcolor: '#fafafa',
+            },
+            paper_bgcolor: '#ffffff',
+            margin: { t: 20, r: 50, b: 20, l: 50 },
+            showlegend: false,
+        };
+
+        Plotly.newPlot(containerId, [trace], layout, {
+            responsive: true,
+            displayModeBar: false,
+        });
+    }
+
+    // Financial radar — blue
+    const finMetrics = {{ fin_metrics | tojson }};
+    buildRadar('fin-radar-chart', finMetrics, {
+        fill: 'rgba(59,130,246,0.15)',
+        line: '#3b82f6',
+        marker: '#1d4ed8',
+    });
+
+    // Behavioural radar — pink
+    const behMetrics = {{ beh_metrics | tojson }};
+    buildRadar('beh-radar-chart', behMetrics, {
+        fill: 'rgba(237,205,212,0.35)',
+        line: '#EDCDD4',
+        marker: '#c08090',
+    });
+
+})();
+</script>
+{% endif %}
 {% endblock %}

@@ -50,6 +50,9 @@ _EMPTY_GLASSDOOR = {
     "recommend_to_friend_pct": "—",
     "culture_rating": "—",
     "work_life_balance_rating": "—",
+    "diversity_rating": "—",
+    "senior_management_rating": "—",
+    "compensation_rating": "—",
     "last_updated": "—",
 }
 
@@ -394,6 +397,7 @@ def create_app() -> Flask:
         # ── Behavioural data ──────────────────────────────────────
         beh_score = None
         beh_metrics = []
+        geo = config.COMPANY_GEOGRAPHY.get(ticker, "mixed")
         beh_path = Path(config.SCORES_DIR) / "behavioural_scores.csv"
         if beh_path.exists():
             beh_df = pd.read_csv(beh_path)
@@ -402,12 +406,26 @@ def create_app() -> Flask:
                 beh_row = beh_match.iloc[0]
                 raw_beh = beh_row.get("behavioural_score")
                 beh_score = float(raw_beh) if pd.notna(raw_beh) else None
+
+                # Determine which Google Trends metric is zero-weighted for this company
+                zero_weight_trends = set()
+                if geo == "us":
+                    zero_weight_trends.add("google_trends_score_global")
+                elif geo == "global":
+                    zero_weight_trends.add("google_trends_score_us")
+                # mixed — both are used, nothing is zero-weighted
+
                 for key, label in _BEHAVIOURAL_METRIC_LABELS.items():
+                    raw_val = beh_row.get(key)
+                    norm_val = beh_row.get(f"{key}_norm")
+                    # Mark zero-weight Trends metrics as excluded (not used in scoring)
+                    excluded = key in zero_weight_trends
                     beh_metrics.append({
                         "label": label,
                         "key": key,
-                        "raw": _fmt_beh_metric(key, beh_row.get(key)),
-                        "norm": _fmt_norm(beh_row.get(f"{key}_norm")),
+                        "raw": _fmt_beh_metric(key, raw_val),
+                        "norm": _fmt_norm(norm_val) if not excluded else "—",
+                        "excluded": excluded,
                     })
 
         # ── Glassdoor data ────────────────────────────────────────
@@ -425,6 +443,9 @@ def create_app() -> Flask:
                     "recommend_to_friend_pct": _gd_display_val(gd_row, "recommend_to_friend_pct", "pct"),
                     "culture_rating": _gd_display_val(gd_row, "culture_rating"),
                     "work_life_balance_rating": _gd_display_val(gd_row, "work_life_balance_rating"),
+                    "diversity_rating": _gd_display_val(gd_row, "diversity_rating"),
+                    "senior_management_rating": _gd_display_val(gd_row, "senior_management_rating"),
+                    "compensation_rating": _gd_display_val(gd_row, "compensation_rating"),
                     "last_updated": str(lu) if pd.notna(lu) else "—",
                 }
 
@@ -452,6 +473,8 @@ def create_app() -> Flask:
             beh_score_colour=_score_bar_colour(beh_score),
             beh_score_pct=int(beh_score) if beh_score is not None else 0,
             beh_metrics=beh_metrics,
+            beh_geography=geo,
+            beh_last_updated="2026-05-14",
             glassdoor=glassdoor,
             news_articles=news_articles,
             active_page="companies",

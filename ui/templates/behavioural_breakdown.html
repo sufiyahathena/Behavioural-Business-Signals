@@ -1,8 +1,267 @@
 {% extends "base.html" %}
 {% block title %}Behavioural Breakdown — BrandSignals{% endblock %}
 {% block content %}
-<div class="placeholder-page">
-    <h1>Behavioural Breakdown</h1>
-    <p class="placeholder-note">This page will detail the behavioural scoring methodology — which signals are used, how consumer, employee, and market attention data is collected and weighted, and what the scores represent.</p>
+
+<div class="about-page fb-page">
+
+    <!-- PAGE TITLE -->
+    <div class="fb-hero">
+        <h1 class="fb-title">How the Behavioural Score Works</h1>
+        <p class="fb-intro">The BrandSignals Behavioural Score provides a structured view of behavioural business quality across publicly traded consumer companies. Each company is evaluated through signals grouped into three core dimensions: Consumer Experience and Trust, Employee Culture and Leadership, and Brand Momentum. Scores range from 0 to 100 and are comparative — calculated relative to the other companies in the BrandSignals universe, not against an absolute benchmark.</p>
+    </div>
+
+    <!-- THREE BUCKET NAVIGATION CARDS -->
+    <div class="fb-buckets" style="grid-template-columns: repeat(3, 1fr); width: 100%;">
+        <a href="#consumer" class="fb-bucket-card bb-bucket-consumer">
+            <div class="fb-bucket-icon">★</div>
+            <div class="fb-bucket-label">Consumer Experience and Trust</div>
+            <div class="fb-bucket-weight">42%</div>
+        </a>
+        <a href="#employee" class="fb-bucket-card bb-bucket-employee">
+            <div class="fb-bucket-icon">♥</div>
+            <div class="fb-bucket-label">Employee Culture and Leadership</div>
+            <div class="fb-bucket-weight">30%</div>
+        </a>
+        <a href="#momentum" class="fb-bucket-card bb-bucket-momentum">
+            <div class="fb-bucket-icon">◈</div>
+            <div class="fb-bucket-label">Brand Momentum</div>
+            <div class="fb-bucket-weight">28%</div>
+        </a>
+    </div>
+
+    <!-- INTRO NOTE -->
+    <div class="about-section">
+        <p>The Behavioural Score does not measure whether a company is absolutely good or bad. A score of 50 means the company sits around the middle of this specific peer group. A score of 70 means it outperforms most peers across behavioural signals. A score of 25 means it scores below most peers. The score says nothing about financial performance, which is captured separately in the Financial Score. The most analytically interesting cases are often the mismatches between the two.</p>
+    </div>
+
+    <!-- HOW SCORES ARE CALCULATED -->
+    <div class="about-section">
+        <h2>How Scores Are Calculated</h2>
+        <p>Behavioural data is drawn from a mix of automated and manually collected public sources. These include customer review platforms, employee review platforms, Google Trends, app ratings, and brand-owned YouTube channels. Because these sources update on different cycles and not all signals exist for every company, behavioural scoring is designed to reflect genuine available information only.</p>
+        <p>Each signal is normalised using min-max normalisation across the BrandSignals universe. This means every company is scored relative to its peers on each metric. All behavioural signals are directionally positive — higher is always better. There are no inverted behavioural metrics. Each normalised metric is then multiplied by its assigned weight. The weighted values are summed to produce a final Behavioural Score out of 100.</p>
+        <p>Unlike the Financial Score, the Behavioural Score uses conditional weighting rules in two places: Google Trends weighting changes depending on whether a company is primarily US-focused, primarily global, or mixed; and the Consumer Experience and Trust bucket changes depending on Trustpilot review count and App Rating availability. These rules are designed to make the behavioural framework more representative of how consumer-facing brands actually operate.</p>
+    </div>
+
+    <!-- BUCKET 1: CONSUMER -->
+    <div class="about-section fb-bucket-section" id="consumer">
+        <div class="fb-bucket-tag bb-tag-consumer">Consumer Experience and Trust — 42%</div>
+        <h2>1. Consumer Experience and Trust</h2>
+        <p>This is the largest behavioural dimension. It captures how consumers experience the brand directly, particularly through post-purchase satisfaction and digital product experience.</p>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Trustpilot Rating <span class="fb-metric-w">20% / 12%</span></div>
+            <p>Trustpilot Rating captures consumer satisfaction with the brand's products, customer service, and shopping experience. It is useful because it reflects post-purchase sentiment from real customers rather than passive awareness alone.</p>
+            <p>However, Trustpilot must be interpreted carefully. Retail and beauty brands tend to attract disproportionately negative reviews, because dissatisfied customers are more likely to leave public feedback than satisfied ones. For this reason, Trustpilot is most useful comparatively within the peer group, not as an absolute measure of quality.</p>
+        </div>
+
+        <div class="bb-confidence-bubble">
+            <div class="bb-confidence-title">Trustpilot Reviews as Confidence Modifier</div>
+            <p>Trustpilot review count is not treated as a standalone weighted metric. Instead, it acts as a confidence modifier on the Trustpilot Rating. A rating based on very few reviews is less reliable than one based on broader consumer participation. If the review count is 100 or more, Trustpilot Rating carries 20%. If the review count is under 100, it carries 12%.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">App Rating <span class="fb-metric-w">22% / 30%</span></div>
+            <p>App Rating captures the quality of the company's consumer-facing mobile commerce or brand experience. It is a strong signal because it reflects not only sentiment, but the quality of digital execution. In modern consumer businesses, particularly in beauty, fashion, and retail, the mobile experience is often a meaningful part of brand performance.</p>
+            <p>When Trustpilot review volume is low, App Rating becomes more important because it is often the stronger consumer-quality signal available. If the review count is 100 or more, App Rating carries 22%. If the review count is under 100, it carries 30%.</p>
+        </div>
+    </div>
+
+    <!-- BUCKET 2: EMPLOYEE -->
+    <div class="about-section fb-bucket-section" id="employee">
+        <div class="fb-bucket-tag bb-tag-employee">Employee Culture and Leadership — 30%</div>
+        <h2>2. Employee Culture and Leadership</h2>
+        <p>This dimension measures how employees experience the organisation internally. For consumer-facing businesses, internal culture is not separate from external performance; it often shapes customer experience, execution quality, and the company's ability to sustain standards over time.</p>
+        <p>Although all three employee metrics come from Glassdoor, they capture different aspects of internal organisational quality. Even so, the total employee bucket is kept below the consumer bucket so that one platform does not dominate the behavioural score.</p>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Glassdoor Overall Rating <span class="fb-metric-w">10%</span></div>
+            <p>This is the broadest employee culture metric in the framework. It captures general employee sentiment and internal workplace quality, reflecting employee assessments across culture and values, work-life balance, compensation and benefits, senior management, and diversity and inclusion. The underlying company-specific values can be viewed on each individual company page.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Glassdoor CEO Approval <span class="fb-metric-w">8%</span></div>
+            <p>CEO Approval captures employee confidence in leadership. It is relevant because strategic direction and leadership credibility often shape how well an organisation executes over time.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Glassdoor Recommend % <span class="fb-metric-w">12%</span></div>
+            <p>This is the strongest employee metric in the framework. It reflects whether employees would actively recommend the company as a place to work, making it a more deliberate endorsement than a star rating alone.</p>
+        </div>
+    </div>
+
+    <!-- BUCKET 3: MOMENTUM -->
+    <div class="about-section fb-bucket-section" id="momentum">
+        <div class="fb-bucket-tag bb-tag-momentum">Brand Momentum — 28%</div>
+        <h2>3. Brand Momentum</h2>
+        <p>This dimension captures attention, relevance, and chosen brand followership. It is designed to measure not just whether a company is liked, but whether it remains present, searched, followed, and culturally active.</p>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Google Trends US <span class="fb-metric-w">15% / 7.5% / 0%</span></div>
+            <p>Google Trends measures search interest for the brand name over time. It captures awareness, curiosity, and momentum. For primarily US-focused brands, Google Trends US carries 15%. For mixed brands, it carries 7.5%. For primarily global brands, it carries 0% — the Global score is used instead.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Google Trends Global <span class="fb-metric-w">15% / 7.5% / 0%</span></div>
+            <p>Global search interest captures worldwide brand awareness and momentum. For primarily global brands, Google Trends Global carries 15%. For mixed brands, it carries 7.5%. For primarily US-focused brands, it carries 0% — the US score is used instead. Both Trends scores are reported on company pages, but only the applicable one is included in the score calculation.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">YouTube Subscribers <span class="fb-metric-w">13%</span></div>
+            <p>YouTube Subscribers measure chosen, ongoing brand followership. This is treated as more meaningful than passive reach alone because subscribing reflects a deliberate act of continued interest. In beauty and fashion, brand storytelling, tutorials, launches, and campaign content often contribute materially to consumer attention and cultural presence.</p>
+        </div>
+    </div>
+
+    <!-- BRAND MOMENTUM GEOGRAPHY LOGIC -->
+    <div class="about-section">
+        <h2>Brand Momentum Geography Logic</h2>
+        <p>Because some companies in the BrandSignals universe are primarily domestic while others are clearly global, US and Global Trends are not weighted equally for every company. This avoids overstating the relevance of US search interest for truly global companies, or global search interest for overwhelmingly domestic ones.</p>
+
+        <div class="bb-geo-grid">
+            <div class="bb-geo-card bb-geo-us">
+                <div class="bb-geo-card-title">US-focused</div>
+                <div class="bb-geo-card-weights">Trends US 15% · Trends Global 0%</div>
+                <div class="bb-geo-pills">
+                    <span class="bb-geo-pill">Ulta Beauty</span>
+                    <span class="bb-geo-pill">Sally Beauty</span>
+                    <span class="bb-geo-pill">American Eagle</span>
+                    <span class="bb-geo-pill">Abercrombie &amp; Fitch</span>
+                    <span class="bb-geo-pill">Gap Inc.</span>
+                    <span class="bb-geo-pill">Revolve</span>
+                    <span class="bb-geo-pill">e.l.f. Beauty</span>
+                </div>
+            </div>
+            <div class="bb-geo-card bb-geo-global">
+                <div class="bb-geo-card-title">Global</div>
+                <div class="bb-geo-card-weights">Trends US 0% · Trends Global 15%</div>
+                <div class="bb-geo-pills">
+                    <span class="bb-geo-pill">L'Oréal</span>
+                    <span class="bb-geo-pill">Birkenstock</span>
+                    <span class="bb-geo-pill">On Holding</span>
+                    <span class="bb-geo-pill">Olaplex</span>
+                    <span class="bb-geo-pill">Coty Inc.</span>
+                </div>
+            </div>
+            <div class="bb-geo-card bb-geo-mixed">
+                <div class="bb-geo-card-title">Mixed</div>
+                <div class="bb-geo-card-weights">Trends US 7.5% · Trends Global 7.5%</div>
+                <div class="bb-geo-pills">
+                    <span class="bb-geo-pill">Estée Lauder</span>
+                    <span class="bb-geo-pill">Lululemon</span>
+                    <span class="bb-geo-pill">Ralph Lauren</span>
+                    <span class="bb-geo-pill">Levi Strauss</span>
+                    <span class="bb-geo-pill">Oddity Tech</span>
+                    <span class="bb-geo-pill">Urban Outfitters</span>
+                    <span class="bb-geo-pill">Columbia Sportswear</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- METRIC WEIGHTS -->
+    <div class="about-section">
+        <h2>Metric Weights</h2>
+
+        <div class="fb-bucket-tag bb-tag-consumer" style="margin-bottom: 12px;">Consumer Experience and Trust</div>
+        <div class="fb-weights-layout" style="width: 100%; margin-bottom: 24px;">
+            <table class="fb-weights-table" style="width: 100%;">
+                <thead>
+                    <tr><th>Metric</th><th>Trustpilot Reviews ≥ 100</th><th>Trustpilot Reviews &lt; 100</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Trustpilot Rating</td><td>20%</td><td>12%</td></tr>
+                    <tr><td>App Rating</td><td>22%</td><td>30%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="fb-bucket-tag bb-tag-employee" style="margin-bottom: 12px;">Employee Culture and Leadership</div>
+        <div class="fb-weights-layout" style="width: 100%; margin-bottom: 24px;">
+            <table class="fb-weights-table" style="width: 100%;">
+                <thead>
+                    <tr><th>Metric</th><th>Weight</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Glassdoor Overall Rating</td><td>10%</td></tr>
+                    <tr><td>Glassdoor CEO Approval</td><td>8%</td></tr>
+                    <tr><td>Glassdoor Recommend %</td><td>12%</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="fb-bucket-tag bb-tag-momentum" style="margin-bottom: 12px;">Brand Momentum</div>
+        <div class="fb-weights-layout" style="width: 100%; margin-bottom: 24px;">
+            <table class="fb-weights-table" style="width: 100%;">
+                <thead>
+                    <tr><th>Metric</th><th>US-focused</th><th>Global</th><th>Mixed</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Google Trends US</td><td>15%</td><td>0%</td><td>7.5%</td></tr>
+                    <tr><td>Google Trends Global</td><td>0%</td><td>15%</td><td>7.5%</td></tr>
+                    <tr><td>YouTube Subscribers</td><td>13%</td><td>13%</td><td>13%</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MISSING DATA POLICY -->
+    <div class="about-section">
+        <h2>Missing Data Policy</h2>
+        <p>BrandSignals does not fabricate behavioural values. If a signal is unavailable for a company because the data genuinely does not exist or cannot be collected, that metric is excluded and its weight is redistributed within its own bucket only. This means missing data does not distort the total score across unrelated dimensions.</p>
+        <p>If a metric is missing, its weight is split equally across the other available metrics in the same bucket. For example, if Glassdoor CEO Approval is missing, its weight is split equally between Glassdoor Overall Rating and Glassdoor Recommend %. If one Google Trends metric is missing for a mixed brand, that weight is redistributed within Brand Momentum.</p>
+        <p>In the current dataset, 11 of 19 companies are scored on all 8 metrics. The remaining 8 companies have one or more signals excluded — most commonly App Rating, where no meaningful consumer-facing app exists.</p>
+    </div>
+
+    <!-- SPECIAL RULE: CONSUMER BUCKET COLLAPSE -->
+    <div class="about-section">
+        <h2>Special Rule: Consumer Bucket Collapse</h2>
+        <p>One additional rule applies in the Consumer Experience and Trust bucket. If a company has no App Rating and fewer than 100 Trustpilot reviews, then Trustpilot Rating remains fixed at its low-confidence weight of 12%, and the missing App Rating weight is not redistributed onto Trustpilot. Instead, that missing weight is redistributed across the Employee Culture and Leadership and Brand Momentum buckets in proportion to their relative totals.</p>
+        <p>This rule exists to prevent a low-confidence Trustpilot rating from absorbing the full consumer bucket simply because no app signal exists. Without this rule, weak review data could be given too much influence over the final score.</p>
+    </div>
+
+    <!-- PROXY-BASED YOUTUBE CHANNELS -->
+    <div class="about-section">
+        <h2>Proxy-Based YouTube Channels</h2>
+        <p>Some companies do not have a direct company-level YouTube channel that is sufficiently representative of the scored entity. In those cases, a major consumer-facing subsidiary brand channel is used as a proxy.</p>
+        <p>Current proxy-based YouTube channels: Coty Inc. uses the CoverGirl channel; Oddity Tech uses the IL MAKIAGE channel.</p>
+        <p>For proxy-based channels, the YouTube metric receives a modest confidence discount in the scoring calculation. This reflects the fact that a subsidiary brand channel may not perfectly represent the behavioural reach of the wider holding company. This adjustment is not intended to suppress the signal, but to reduce distortion in peer comparisons where one brand may overrepresent the broader organisation.</p>
+    </div>
+
+    <!-- WHAT THE BEHAVIOURAL SCORE MEANS -->
+    <div class="about-section">
+        <h2>What the Behavioural Score Means</h2>
+        <p>The Behavioural Score summarises how a company performs across three dimensions: consumer experience and trust, employee culture and leadership, and brand momentum. A higher score indicates stronger behavioural performance relative to the other companies in this framework.</p>
+        <p>The score does not measure: financial performance; ESG or sustainability performance; direct product quality beyond what is indirectly reflected in reviews; broader social media engagement beyond YouTube; press coverage or media sentiment; or customer loyalty metrics such as repeat purchase rate or NPS.</p>
+        <p>These limitations are acknowledged. The Behavioural Score should therefore be interpreted as a structured view of public-facing and employee-facing business signals, not as a complete picture of overall company quality. As with the Financial Score, the most analytically interesting cases are often the mismatches — companies that score very differently across financial and behavioural dimensions.</p>
+    </div>
+
+    <!-- INTERPRETATION NOTE: COTY -->
+    <div class="about-section">
+        <h2>Interpretation Note: Coty</h2>
+        <p>Coty's behavioural score should be interpreted with caution. Some consumer-facing signals are drawn from a major subsidiary brand rather than a corporate-level source. In particular, the YouTube signal is based on the CoverGirl channel, which may overstate the behavioural reach of the broader holding company relative to more directly comparable single-brand peers. The score is reported as calculated, with explicit disclosure of the proxy-based nature of these inputs.</p>
+    </div>
+
+    <!-- DATA SOURCES -->
+    <div class="about-section">
+        <h2>Data Sources</h2>
+        <div class="fb-weights-layout" style="width: 100%;">
+            <table class="fb-weights-table" style="width: 100%;">
+                <thead>
+                    <tr><th>Signal</th><th>Source</th><th>Collection</th><th>Refresh</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Trustpilot Rating</td><td>Trustpilot</td><td>Manual</td><td>Quarterly</td></tr>
+                    <tr><td>App Rating</td><td>Google Play Store</td><td>Automated + manual</td><td>Quarterly</td></tr>
+                    <tr><td>Glassdoor Overall Rating</td><td>Glassdoor</td><td>Manual</td><td>Every 3–6 months</td></tr>
+                    <tr><td>Glassdoor CEO Approval</td><td>Glassdoor</td><td>Manual</td><td>Every 3–6 months</td></tr>
+                    <tr><td>Glassdoor Recommend %</td><td>Glassdoor</td><td>Manual</td><td>Every 3–6 months</td></tr>
+                    <tr><td>Google Trends US</td><td>Google Trends</td><td>Automated</td><td>Quarterly</td></tr>
+                    <tr><td>Google Trends Global</td><td>Google Trends</td><td>Automated</td><td>Quarterly</td></tr>
+                    <tr><td>YouTube Subscribers</td><td>YouTube Data API v3</td><td>Automated</td><td>Quarterly</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
+
 {% endblock %}

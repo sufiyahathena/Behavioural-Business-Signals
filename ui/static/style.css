@@ -757,6 +757,10 @@ table.scoreboard td a:hover {
     margin-bottom: 16px;
 }
 
+.glassdoor-grid-7 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
 .gd-item {
     background: #f7f8fc;
     border: 1px solid #e2e6f0;
@@ -1887,7 +1891,6 @@ table.scoreboard td a:hover {
 /* Weights table */
 .fb-weights-table {
     width: 100%;
-    max-width: 600px;
     border-collapse: collapse;
     font-size: 0.88rem;
 }
@@ -2193,3 +2196,128 @@ html {
 }
 
 .scoreboard-guide-row .vis-quad-ww .vis-quad-card-title { color: #8a2020; }
+
+/* ── Behavioural Breakdown page ─────────────────────────────── */
+
+.bb-bucket-consumer { background: rgba(239,68,68,0.08);   border: 1.5px solid rgba(239,68,68,0.25);   color: #dc2626; }
+.bb-bucket-employee { background: rgba(249,115,22,0.08);  border: 1.5px solid rgba(249,115,22,0.25);  color: #c2410c; }
+.bb-bucket-momentum { background: rgba(234,179,8,0.08);   border: 1.5px solid rgba(234,179,8,0.25);   color: #a16207; }
+
+.bb-tag-consumer { background: rgba(239,68,68,0.10);  color: #dc2626; }
+.bb-tag-employee { background: rgba(249,115,22,0.10); color: #c2410c; }
+.bb-tag-momentum { background: rgba(234,179,8,0.10);  color: #a16207; }
+
+.bb-badge-consumer { background: rgba(239,68,68,0.10);  color: #dc2626; }
+.bb-badge-employee { background: rgba(249,115,22,0.10); color: #c2410c; }
+.bb-badge-momentum { background: rgba(234,179,8,0.10);  color: #a16207; }
+
+.fb-metric-block p + p {
+    margin-top: 1em;
+}
+
+/* ── Behavioural breakdown geography cards ───────────────────── */
+
+.bb-geo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.bb-geo-card {
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.bb-geo-us {
+    background: rgba(239,68,68,0.06);
+    border: 1.5px solid rgba(239,68,68,0.20);
+}
+
+.bb-geo-global {
+    background: rgba(234,179,8,0.06);
+    border: 1.5px solid rgba(234,179,8,0.25);
+}
+
+.bb-geo-mixed {
+    background: rgba(249,115,22,0.06);
+    border: 1.5px solid rgba(249,115,22,0.20);
+}
+
+.bb-geo-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a1f36;
+    margin-bottom: 4px;
+}
+
+.bb-geo-card-weights {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 14px;
+    font-weight: 500;
+}
+
+.bb-geo-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bb-geo-pill {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* ── Trustpilot confidence modifier bubble ───────────────────── */
+.bb-confidence-bubble {
+    background: linear-gradient(135deg, rgba(180,120,80,0.08) 0%, rgba(150,90,50,0.08) 100%);
+    border: 1.5px solid rgba(180,120,80,0.30);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin: 24px 0;
+}
+
+.bb-confidence-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #92400e;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.bb-confidence-bubble p {
+    font-size: 0.9rem;
+    color: #374151;
+    line-height: 1.7;
+    margin: 0;
+    text-align: justify;
+}
+
+/* ── Home page visualise button ─────────────────────────────── */
+.hp-visualise-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 7px 16px;
+    background: #EDCDD4;
+    color: #1a1f36;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border-radius: 999px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: background 0.15s ease, transform 0.15s ease;
+    width: fit-content;
+}
+
+.hp-visualise-btn:hover {
+    background: #e0b8c1;
+    transform: translateX(3px);
+}
