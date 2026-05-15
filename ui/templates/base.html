@@ -18,14 +18,284 @@
                 <a href="/about" class="{{ 'nav-active' if active_page == 'about' }}">About</a>
                 <a href="/ethics" class="{{ 'nav-active' if active_page == 'ethics' }}">Ethics</a>
                 <a href="/purpose" class="{{ 'nav-active' if active_page == 'purpose' }}">Purpose</a>
+                <button class="nav-chat-btn" onclick="toggleChat()" id="chat-nav-btn">✦ Ask</button>
             </div>
         </div>
     </nav>
+
+    <!-- Chat Panel -->
+    <div class="bs-chat-panel" id="bs-chat-panel">
+        <div class="bs-chat-header">
+            <div class="bs-chat-header-left">
+                <span class="bs-chat-title">✦ Ask BrandSignals</span>
+                <span class="bs-chat-subtitle">Ask anything about scores, methodology, or companies</span>
+            </div>
+            <button class="bs-chat-close" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="bs-chat-messages" id="bs-chat-messages">
+            <div class="bs-msg bs-msg-assistant">
+                <p>Hi! I'm the BrandSignals assistant. Ask me anything about the platform — scores, methodology, companies, data sources, or how to interpret the results.</p>
+            </div>
+        </div>
+        <div class="bs-chat-input-row">
+            <input type="text" class="bs-chat-input" id="bs-chat-input" placeholder="Ask about a score, metric, or company..." onkeydown="if(event.key==='Enter') sendMessage()"/>
+            <button class="bs-chat-send" onclick="sendMessage()">→</button>
+        </div>
+    </div>
+
     <main style="margin:0;padding:0;">
         {% block content %}{% endblock %}
     </main>
     <footer class="site-footer">
         <p>BrandSignals — Data for internal research use only</p>
     </footer>
+
+<script>
+// ── BrandSignals Chat Assistant ───────────────────────────────────
+const SYSTEM_PROMPT = `You are the BrandSignals assistant — an expert on the BrandSignals platform, its methodology, data, and the 19 consumer companies it covers.
+
+BrandSignals is a dual-score intelligence platform evaluating publicly traded consumer companies (beauty, fashion, apparel, performance lifestyle) through two scores:
+1. Financial Score (0-100) — peer-relative, based on 10 financial metrics
+2. Behavioural Score (0-100) — peer-relative, based on 8 behavioural signals
+
+Both scores are comparative — calculated relative to the 19-company peer group, not absolute benchmarks. A score of 50 = middle of the peer group.
+
+## THE 19 COMPANIES AND CURRENT SCORES
+
+| Ticker | Company | Financial Score | Behavioural Score | Quadrant |
+|--------|---------|----------------|-------------------|----------|
+| LRLCY | L'Oréal | 67.71 | 47.48 | Financial Leader |
+| BIRK | Birkenstock | 65.95 | 43.72 | Financial Leader |
+| LULU | Lululemon | 63.77 | 46.51 | Financial Leader |
+| ELF | e.l.f. Beauty | 63.75 | 50.86 | Dual Strength |
+| ODD | Oddity Tech | 61.84 | 45.62 | Financial Leader |
+| ULTA | Ulta Beauty | 60.90 | 43.54 | Financial Leader |
+| ONON | On Holding | 60.79 | 44.42 | Financial Leader |
+| RL | Ralph Lauren | 60.14 | 61.00 | Dual Strength |
+| ANF | Abercrombie & Fitch | 58.39 | 52.39 | Dual Strength |
+| RVLV | Revolve | 48.47 | 40.09 | Under Pressure |
+| URBN | Urban Outfitters | 45.78 | 44.91 | Under Pressure |
+| LEVI | Levi Strauss | 44.79 | 65.25 | Hidden Momentum |
+| OLPX | Olaplex | 41.08 | 21.80 | Under Pressure |
+| COLM | Columbia Sportswear | 37.65 | 34.53 | Under Pressure |
+| SBH | Sally Beauty | 35.00 | 47.68 | Under Pressure |
+| GAP | Gap Inc. | 34.36 | 61.80 | Hidden Momentum |
+| AEO | American Eagle | 31.63 | 35.67 | Under Pressure |
+| COTY | Coty Inc. | 25.33 | 79.66 | Hidden Momentum |
+| EL | Estée Lauder | 12.35 | 32.56 | Under Pressure |
+
+## QUADRANT DEFINITIONS
+- Dual Strength (fin ≥50, beh ≥50): Strong financially and behaviourally
+- Financial Leader (fin ≥50, beh <50): Strong financially, behaviourally weaker
+- Hidden Momentum (fin <50, beh ≥50): Financially weaker but behaviourally strong
+- Under Pressure (fin <50, beh <50): Weaker on both dimensions
+
+## FINANCIAL SCORE METHODOLOGY
+10 metrics across 4 buckets:
+- Growth (15%): Revenue Growth
+- Profitability (39%): Gross Margin, Operating Margin, Net Profit Margin, FCF Margin
+- Financial Health (21%): Debt to Equity (inverted), Current Ratio, Interest Coverage
+- Returns (25%): ROE, ROA
+
+Data sources: Financial Modeling Prep (primary), yfinance (fallback). Annual statements only.
+Normalisation: min-max across 19 companies. Debt-to-Equity is inverted (lower = better).
+Missing data: proportional reweighting — no median imputation.
+Special rule: Debt-light companies (D/E < 0.5, no interest expense) assigned Interest Coverage = 25.0.
+Data freshness: refreshed quarterly.
+
+## BEHAVIOURAL SCORE METHODOLOGY
+8 signals across 3 buckets:
+
+Consumer Experience and Trust (42%):
+- Trustpilot Rating: 20% if ≥100 reviews, 12% if <100 reviews
+- App Rating: 22% if ≥100 Trustpilot reviews, 30% if <100
+
+Employee Culture and Leadership (30%):
+- Glassdoor Overall Rating: 10%
+- Glassdoor CEO Approval %: 8%
+- Glassdoor Recommend %: 12%
+
+Brand Momentum (28%):
+- Google Trends US: 15% (US-focused), 7.5% (mixed), 0% (global)
+- Google Trends Global: 15% (global), 7.5% (mixed), 0% (US-focused)
+- YouTube Subscribers: 13% always
+
+Geography classifications:
+- US-focused: ULTA, SBH, AEO, ANF, GAP, RVLV, ELF
+- Global: LRLCY, BIRK, ONON, OLPX, COTY
+- Mixed: EL, LULU, RL, LEVI, ODD, URBN, COLM
+
+Special rules:
+- Consumer Bucket Collapse: If no App Rating AND Trustpilot reviews <100, the missing App Rating weight goes to Employee and Momentum buckets proportionally (not to Trustpilot)
+- Proxy YouTube discount: COTY (CoverGirl) and ODD (IL MAKIAGE) receive 85% of normal YouTube weight
+- Missing metric weight redistributed equally within same bucket only
+
+Data sources and freshness:
+- Glassdoor: manually collected, refreshed every 3-6 months (last updated May 2026)
+- Trustpilot: manually collected, refreshed quarterly (last updated May 2026)
+- App Ratings: automated via Google Play Store + manual, refreshed quarterly (last updated May 2026)
+- Google Trends: automated via pytrends, refreshed quarterly (last updated May 2026)
+- YouTube: automated via YouTube Data API v3, refreshed quarterly (last updated May 2026)
+
+## NOTABLE METHODOLOGY NOTES
+- COTY's behavioural score (79.66) should be interpreted with caution — it uses CoverGirl's YouTube channel as a proxy, which may overstate behavioural reach of the broader holding company
+- EL (Estée Lauder) has negative revenue growth, scoring 0.00 on that metric
+- LEVI and COTY have fewer than 100 Trustpilot reviews — low confidence weighting applies
+- LEVI (65.25 behavioural) and GAP (61.80 behavioural) are the strongest Hidden Momentum companies
+- All scores are peer-relative — a high score means strong relative to these 19 peers, not absolutely
+
+## SITE PAGES
+- /home — landing page with platform overview
+- /companies — scoreboard table with all 19 companies, their scores and quadrant classification
+- /visualise — interactive bubble chart, zoom, quadrant click-to-zoom
+- /company/<ticker> — individual company page with financial metrics table, behavioural signals table, spider map, Glassdoor snapshot, news feed
+- /financial-breakdown — full financial methodology with bucket navigation
+- /behavioural-breakdown — full behavioural methodology with bucket navigation, geography logic, special rules
+- /about — platform overview, companies covered, methodology summary
+- /purpose — why BrandSignals was built, personal context
+- /ethics — ethical framework
+
+## HOW TO RESPOND
+- Be concise and direct
+- Always tell users which page to visit for more detail (e.g. "You can see this on the Financial Breakdown page" or "Visit the Lululemon company page for the full breakdown")
+- If asked about a specific company, reference their actual scores
+- If asked about methodology, explain clearly and point to the relevant breakdown page
+- Keep a warm, professional tone consistent with the BrandSignals brand`;
+
+let chatHistory = [];
+let chatOpen = false;
+
+function toggleChat() {
+    chatOpen = !chatOpen;
+    const panel = document.getElementById('bs-chat-panel');
+    const btn = document.getElementById('chat-nav-btn');
+    if (chatOpen) {
+        panel.classList.add('bs-chat-open');
+        btn.classList.add('nav-chat-btn--active');
+        document.getElementById('bs-chat-input').focus();
+    } else {
+        panel.classList.remove('bs-chat-open');
+        btn.classList.remove('nav-chat-btn--active');
+    }
+}
+
+async function sendMessage() {
+    const input = document.getElementById('bs-chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    input.value = '';
+    appendMessage('user', msg);
+    chatHistory.push({ role: 'user', content: msg });
+
+    const thinkingEl = appendMessage('assistant', 'Thinking...');
+
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                system: SYSTEM_PROMPT,
+                messages: chatHistory,
+            }),
+        });
+
+        const data = await response.json();
+        const reply = data.reply || 'Sorry, I could not get a response.';
+
+        thinkingEl.querySelector('p').innerHTML = formatChatReply(reply);
+        chatHistory.push({ role: 'assistant', content: reply });
+
+    } catch (err) {
+        thinkingEl.querySelector('p').textContent = 'Sorry, something went wrong. Please try again.';
+    }
+
+    const messages = document.getElementById('bs-chat-messages');
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function formatChatReply(text) {
+    // Step 1: Remove ALL backticks from text (Gemini uses them for emphasis we don't want)
+    text = text.replace(/`/g, '');
+
+    // Step 2: Convert markdown links [text](url) to HTML links
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#EDCDD4;text-decoration:underline;">$1</a>');
+
+    // Step 3: Bold
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Step 4: Clean up excessive blank lines (more than one consecutive blank line -> single break)
+    text = text.replace(/\n{3,}/g, '\n\n');
+
+    // Step 5: Bullet points — handle nested bullets by flattening them
+    const lines = text.split('\n');
+    const result = [];
+    let inList = false;
+
+    for (let line of lines) {
+        // Match bullets with any leading whitespace (handles nested)
+        const bulletMatch = line.match(/^\s*[\*\-]\s+(.+)$/);
+        if (bulletMatch) {
+            if (!inList) { result.push('<ul style="margin:6px 0;padding-left:18px;">'); inList = true; }
+            result.push('<li style="margin:2px 0;">' + bulletMatch[1] + '</li>');
+        } else {
+            if (inList) { result.push('</ul>'); inList = false; }
+            // Skip empty lines inside what was a list context
+            if (line.trim() === '' && inList) continue;
+            result.push(line);
+        }
+    }
+    if (inList) result.push('</ul>');
+    text = result.join('\n');
+
+    // Step 6: Replace known page name references with clean titled hyperlinks
+    const pageLinks = [
+        ['Behavioural Breakdown page', '/behavioural-breakdown', 'Behavioural Breakdown'],
+        ['Behavioural Breakdown', '/behavioural-breakdown', 'Behavioural Breakdown'],
+        ['Financial Breakdown page', '/financial-breakdown', 'Financial Breakdown'],
+        ['Financial Breakdown', '/financial-breakdown', 'Financial Breakdown'],
+        ['/behavioural-breakdown', '/behavioural-breakdown', 'Behavioural Breakdown'],
+        ['/financial-breakdown', '/financial-breakdown', 'Financial Breakdown'],
+        ['Visualise page', '/visualise', 'Visualise'],
+        ['/visualise', '/visualise', 'Visualise'],
+        ['Companies page', '/companies', 'Companies'],
+        ['/companies', '/companies', 'Companies'],
+        ['Purpose page', '/purpose', 'Purpose'],
+        ['/purpose', '/purpose', 'Purpose'],
+        ['About page', '/about', 'About'],
+        ['/about', '/about', 'About'],
+        ['Ethics page', '/ethics', 'Ethics'],
+        ['/ethics', '/ethics', 'Ethics'],
+    ];
+
+    pageLinks.forEach(([phrase, path, label]) => {
+        const re = new RegExp('(?<!href=["\'/])' + phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+        text = text.replace(re, `<a href="${path}" style="color:#EDCDD4;text-decoration:underline;">${label}</a>`);
+    });
+
+    // Step 7: Double newlines to paragraph break, single to <br>
+    text = text.replace(/\n\n/g, '<br><br>');
+    text = text.replace(/\n/g, '<br>');
+
+    return text;
+}
+
+function appendMessage(role, text) {
+    const messages = document.getElementById('bs-chat-messages');
+    const div = document.createElement('div');
+    div.className = `bs-msg bs-msg-${role}`;
+    const p = document.createElement('p');
+    if (role === 'assistant') {
+        p.innerHTML = formatChatReply(text);
+    } else {
+        p.textContent = text;
+    }
+    div.appendChild(p);
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+}
+</script>
+
 </body>
 </html>

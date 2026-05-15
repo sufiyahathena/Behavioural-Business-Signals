@@ -184,6 +184,8 @@
                                 <span class="metric-quirk">⚑ Highest gross margin in peer group — exceptional pricing power.</span>
                             {% elif peer_context and peer_context.get('gross_margin_min_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Lowest gross margin in peer group — reflects thin-margin retail or distribution model.</span>
+                            {% elif company.ticker == 'EL' %}
+                                <span class="metric-quirk">⚑ Gross profit as a percentage of revenue. Estée Lauder's high gross margin reflects the premium pricing power of its prestige beauty portfolio, including brands such as La Mer, Jo Malone, and MAC.</span>
                             {% endif %}
 
                         {% elif key == 'operating_margin' %}

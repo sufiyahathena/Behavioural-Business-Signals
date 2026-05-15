@@ -13,7 +13,8 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
-from flask import Flask, jsonify, redirect, render_template, url_for
+import requests as http_requests
+from flask import Flask, jsonify, redirect, render_template, request, url_for
 
 import config
 from collectors.news_collector import fetch_company_news
@@ -530,6 +531,51 @@ def create_app() -> Flask:
                 "quadrant": _quadrant_label(fin, beh),
             })
         return jsonify(records)
+
+    @app.route("/api/chat", methods=["POST"])
+    def chat_proxy():
+        """Proxy chat requests to Gemini API keeping the key server-side."""
+        try:
+            data = request.get_json()
+            messages = data.get("messages", [])
+            system_prompt = data.get("system", "")
+
+            # Convert messages to Gemini format
+            gemini_contents = []
+            for msg in messages:
+                role = "user" if msg["role"] == "user" else "model"
+                gemini_contents.append({
+                    "role": role,
+                    "parts": [{"text": msg["content"]}]
+                })
+
+            response = http_requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key={config.GEMINI_API_KEY}",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "system_instruction": {
+                        "parts": [{"text": system_prompt}]
+                    },
+                    "contents": gemini_contents,
+                    "generationConfig": {
+                        "maxOutputTokens": 1000,
+                        "temperature": 0.7,
+                    }
+                },
+                timeout=30,
+            )
+
+            result = response.json()
+            logger.warning("Gemini raw response: %s", result)
+            if "candidates" not in result:
+                error_msg = result.get("error", {}).get("message", "Unknown error from Gemini")
+                return jsonify({"reply": f"Gemini error: {error_msg}"}), 200
+            reply = result["candidates"][0]["content"]["parts"][0]["text"]
+            return jsonify({"reply": reply}), 200
+
+        except Exception as e:
+            logger.error("Chat proxy error: %s", e)
+            return jsonify({"error": str(e)}), 500
 
     @app.route("/api/company/<ticker>")
     def api_company(ticker: str):
