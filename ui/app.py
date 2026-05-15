@@ -550,7 +550,7 @@ def create_app() -> Flask:
                 })
 
             response = http_requests.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key={config.GEMINI_API_KEY}",
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={config.GEMINI_API_KEY}",
                 headers={"Content-Type": "application/json"},
                 json={
                     "system_instruction": {
