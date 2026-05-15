@@ -5,6 +5,7 @@ FMP_API_KEY = os.environ.get("FMP_API_KEY", "")
 REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID", "")
 REDDIT_CLIENT_SECRET = os.environ.get("REDDIT_CLIENT_SECRET", "")
 REDDIT_USER_AGENT = "behavioural-business-signals/1.0"
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", "")
 
 # Paths
 DATA_DIR = "data"
@@ -29,14 +30,15 @@ FINANCIAL_WEIGHTS = {
 # Scoring weights — Behavioural (must sum to 1.0)
 # google_trends_score split into US and global — weighting TBD once all data collected
 BEHAVIOURAL_WEIGHTS = {
-    "google_trends_score_us":     0.10,
-    "google_trends_score_global": 0.10,
-    "trustpilot_rating":          0.15,
-    "trustpilot_review_count":    0.05,
-    "app_rating":                 0.15,
-    "glassdoor_overall":          0.20,
-    "glassdoor_ceo_approval":     0.13,
-    "glassdoor_recommend":        0.12,
+    "google_trends_score_us":     0.08,
+    "google_trends_score_global": 0.08,
+    "trustpilot_rating":          0.13,
+    "trustpilot_review_count":    0.04,
+    "app_rating":                 0.12,
+    "youtube_subscribers":        0.10,
+    "glassdoor_overall":          0.18,
+    "glassdoor_ceo_approval":     0.12,
+    "glassdoor_recommend":        0.15,
 }
 
 # Google Trends settings

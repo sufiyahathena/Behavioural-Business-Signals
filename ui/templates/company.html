@@ -348,6 +348,12 @@
                                 {% else %}
                                     <span class="metric-quirk">⚑ Google Play Store rating (1–5).</span>
                                 {% endif %}
+                            {% elif m.key == 'youtube_subscribers' %}
+                                {% if m.raw == '—' %}
+                                    <span class="metric-quirk">⚑ No significant YouTube channel found — not included in behavioural score weighting.</span>
+                                {% else %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — proxy for brand cultural reach and content engagement.</span>
+                                {% endif %}
                             {% elif m.key == 'glassdoor_overall' %}
                                 <span class="metric-quirk">⚑ Overall employee rating on Glassdoor (1–5).</span>
                             {% elif m.key == 'glassdoor_ceo_approval' %}

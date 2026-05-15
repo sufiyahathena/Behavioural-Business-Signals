@@ -22,6 +22,7 @@ BEHAVIOURAL_METRICS = [
     "trustpilot_rating",
     "trustpilot_review_count",
     "app_rating",
+    "youtube_subscribers",
     "glassdoor_overall",
     "glassdoor_ceo_approval",
     "glassdoor_recommend",
@@ -106,6 +107,7 @@ def load_collector_outputs(behavioural_dir: str = config.BEHAVIOURAL_DIR) -> pd.
     collector_files = {
         "trends.csv":   ["google_trends_score_us", "google_trends_score_global"],
         "appstore.csv": ["app_rating"],
+        "youtube.csv":  ["youtube_subscribers"],
     }
 
     merged: pd.DataFrame | None = None

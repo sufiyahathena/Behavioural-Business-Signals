@@ -39,6 +39,7 @@ _BEHAVIOURAL_METRIC_LABELS = {
     "trustpilot_rating": "Trustpilot Rating",
     "trustpilot_review_count": "Trustpilot Review Count",
     "app_rating": "App Rating",
+    "youtube_subscribers": "YouTube Subscribers",
     "glassdoor_overall": "Glassdoor Overall Rating",
     "glassdoor_ceo_approval": "Glassdoor CEO Approval %",
     "glassdoor_recommend": "Glassdoor Recommend %",
@@ -217,8 +218,8 @@ def _fmt_beh_metric(key: str, val) -> str:
     except (ValueError, TypeError):
         return "—"
 
-    # Integer fields — review counts
-    if key in ("trustpilot_review_count",):
+    # Integer fields — review counts and subscriber counts
+    if key in ("trustpilot_review_count", "youtube_subscribers"):
         return f"{int(fv):,}"
 
     # Percentage fields — stored as 0–1 after conversion
