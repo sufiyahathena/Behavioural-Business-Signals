@@ -336,8 +336,6 @@
                                 <span class="metric-quirk">⚑ Average worldwide search interest score (0–100) over the past 12 months.</span>
                             {% elif m.key == 'trustpilot_rating' %}
                                 <span class="metric-quirk">⚑ Customer star rating on Trustpilot (1–5).</span>
-                            {% elif m.key == 'trustpilot_review_count' %}
-                                <span class="metric-quirk">⚑ Total number of customer reviews on Trustpilot.</span>
                             {% elif m.key == 'app_rating' %}
                                 {% if m.raw == '—' %}
                                     <span class="metric-quirk">⚑ No consumer app available or insufficient ratings data — not included in behavioural score weighting.</span>
@@ -377,6 +375,12 @@
             </div>
             {% endif %}
             </div><!-- /beh-metrics-body -->
+            {% if company.ticker == 'COTY' %}
+            <div class="fin-note" style="margin-top: 12px;">
+                <span class="fin-note-icon">ℹ</span>
+                <span>Coty's behavioural score should be interpreted with caution. Some consumer-facing signals are drawn from a major subsidiary brand rather than a corporate-level source. In particular, the YouTube signal is based on the CoverGirl channel, which may overstate the behavioural reach of the broader holding company relative to more directly comparable single-brand peers. The score is reported as calculated, with explicit disclosure of the proxy-based nature of these inputs.</span>
+            </div>
+            {% endif %}
         </div>
 
         <!-- 7 ── Glassdoor Snapshot ─────────────────────────────── -->

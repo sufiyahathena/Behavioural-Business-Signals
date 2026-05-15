@@ -20,13 +20,17 @@ BEHAVIOURAL_METRICS = [
     "google_trends_score_us",
     "google_trends_score_global",
     "trustpilot_rating",
-    "trustpilot_review_count",
     "app_rating",
     "youtube_subscribers",
     "glassdoor_overall",
     "glassdoor_ceo_approval",
     "glassdoor_recommend",
 ]
+
+# Bucket membership — used for intra-bucket weight redistribution
+CONSUMER_METRICS = ["trustpilot_rating", "app_rating"]
+EMPLOYEE_METRICS = ["glassdoor_overall", "glassdoor_ceo_approval", "glassdoor_recommend"]
+MOMENTUM_METRICS = ["google_trends_score_us", "google_trends_score_global", "youtube_subscribers"]
 
 GLASSDOOR_COL_MAP = {
     "overall_rating": "glassdoor_overall",
@@ -134,23 +138,109 @@ def load_collector_outputs(behavioural_dir: str = config.BEHAVIOURAL_DIR) -> pd.
     return merged if merged is not None else pd.DataFrame()
 
 
-def compute_behavioural_scores(df: pd.DataFrame) -> pd.DataFrame:
-    """Compute weighted behavioural scores for all companies.
+def _build_company_weights(ticker: str, trustpilot_review_count) -> dict:
+    """Build per-company metric weights based on geography and Trustpilot confidence.
 
-    Missing metrics are excluded per company and weights are rebalanced
-    proportionally — no median imputation. This mirrors the financial scorer
-    approach: companies are not penalised for lacking a metric (e.g. no app),
-    they are simply scored on what is genuinely available.
+    Rules:
+    - Consumer bucket: Trustpilot weight depends on review count (>=100 = high confidence)
+    - Employee bucket: fixed weights always
+    - Momentum bucket: Google Trends weights depend on company geography
+    - Missing metrics: weight redistributed equally within same bucket only
+
+    Args:
+        ticker: Company ticker symbol.
+        trustpilot_review_count: Raw review count from data (float or NaN).
+
+    Returns:
+        Dict of metric -> weight (all weights sum to 1.0 across available metrics).
+    """
+    # ── Consumer bucket weights ───────────────────────────────────────
+    try:
+        review_count = float(trustpilot_review_count)
+        high_confidence = pd.notna(review_count) and review_count >= config.TRUSTPILOT_CONFIDENCE_THRESHOLD
+    except (ValueError, TypeError):
+        high_confidence = False
+
+    consumer_weights = dict(
+        config.CONSUMER_WEIGHTS_HIGH_CONFIDENCE if high_confidence
+        else config.CONSUMER_WEIGHTS_LOW_CONFIDENCE
+    )
+
+    # ── Employee bucket weights ───────────────────────────────────────
+    employee_weights = dict(config.EMPLOYEE_WEIGHTS)
+
+    # ── Momentum bucket weights ───────────────────────────────────────
+    geo = config.COMPANY_GEOGRAPHY.get(ticker, "mixed")
+    if geo == "us":
+        momentum_weights = dict(config.MOMENTUM_WEIGHTS_US)
+    elif geo == "global":
+        momentum_weights = dict(config.MOMENTUM_WEIGHTS_GLOBAL)
+    else:
+        momentum_weights = dict(config.MOMENTUM_WEIGHTS_MIXED)
+
+    # Apply proxy discount to YouTube if company uses a subsidiary channel
+    if ticker in config.YOUTUBE_PROXY_TICKERS:
+        momentum_weights["youtube_subscribers"] = (
+            momentum_weights["youtube_subscribers"] * config.YOUTUBE_PROXY_DISCOUNT
+        )
+
+    return {**consumer_weights, **employee_weights, **momentum_weights}
+
+
+def _redistribute_within_bucket(
+    weights: dict,
+    bucket_metrics: list,
+    available_metrics: set,
+) -> dict:
+    """Redistribute missing metric weights equally within the same bucket.
+
+    If a metric is missing (not in available_metrics), its weight is split
+    equally across the other available metrics in the same bucket.
+    Other buckets are not affected.
+
+    Args:
+        weights: Current weight dict for all metrics.
+        bucket_metrics: All metrics belonging to this bucket.
+        available_metrics: Set of metrics that have real data for this company.
+
+    Returns:
+        Updated weights dict with redistributed weights within this bucket.
+    """
+    weights = dict(weights)
+
+    bucket_available = [m for m in bucket_metrics if m in available_metrics]
+    bucket_missing   = [m for m in bucket_metrics if m not in available_metrics]
+
+    for missing in bucket_missing:
+        missing_weight = weights.get(missing, 0.0)
+        if missing_weight == 0.0 or not bucket_available:
+            weights[missing] = 0.0
+            continue
+        share = missing_weight / len(bucket_available)
+        for m in bucket_available:
+            weights[m] = weights.get(m, 0.0) + share
+        weights[missing] = 0.0
+
+    return weights
+
+
+def compute_behavioural_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """Compute weighted behavioural scores using per-company dynamic weights.
+
+    Each company gets weights based on:
+    - Geography (US/global/mixed) for Google Trends
+    - Trustpilot review count for Consumer bucket confidence
+    - Missing metrics redistributed equally within their bucket only
 
     Args:
         df: DataFrame with one row per company containing raw behavioural metrics.
 
     Returns:
-        DataFrame with normalised metric columns and behavioural_score (0–100).
+        DataFrame with normalised metric columns and behavioural_score (0-100).
     """
     df = df.copy()
 
-    # Normalise each metric across all companies (ignoring NaNs)
+    # ── Step 1: Normalise each metric across all companies ────────────
     for metric in BEHAVIOURAL_METRICS:
         if metric not in df.columns:
             df[metric] = np.nan
@@ -165,21 +255,19 @@ def compute_behavioural_scores(df: pd.DataFrame) -> pd.DataFrame:
         norm = (col - valid.min()) / (valid.max() - valid.min())
         df[f"{metric}_norm"] = norm.round(3)
 
-    # Score each company using only available metrics with proportional reweighting
-    weights = config.BEHAVIOURAL_WEIGHTS
+    # ── Step 2: Score each company ────────────────────────────────────
     scores = []
     completeness_list = []
     missing_list = []
 
     for i, row in df.iterrows():
-        available = [
+        ticker = row.get("ticker", "")
+
+        available = {
             m for m in BEHAVIOURAL_METRICS
             if pd.notna(row.get(f"{m}_norm"))
-        ]
-        missing = [
-            m for m in BEHAVIOURAL_METRICS
-            if pd.isna(row.get(f"{m}_norm", np.nan))
-        ]
+        }
+        missing = [m for m in BEHAVIOURAL_METRICS if m not in available]
 
         if not available:
             scores.append(np.nan)
@@ -187,17 +275,54 @@ def compute_behavioural_scores(df: pd.DataFrame) -> pd.DataFrame:
             missing_list.append(", ".join(BEHAVIOURAL_METRICS))
             continue
 
-        total_weight = sum(weights[m] for m in available if m in weights)
-        if total_weight == 0:
-            scores.append(np.nan)
-            completeness_list.append(f"0/{len(BEHAVIOURAL_METRICS)}")
-            missing_list.append(", ".join(missing))
-            continue
+        trustpilot_count = row.get("trustpilot_review_count", np.nan)
+        weights = _build_company_weights(ticker, trustpilot_count)
+
+        # ── Special case: low-confidence Trustpilot + missing App Rating ──
+        # If both conditions are true, do not let the missing App Rating weight
+        # collapse onto a weak Trustpilot signal. Instead redistribute the
+        # App Rating weight proportionally across Employee and Momentum buckets.
+        try:
+            review_count = float(trustpilot_count) if pd.notna(trustpilot_count) else 0
+        except (ValueError, TypeError):
+            review_count = 0
+
+        app_missing = "app_rating" not in available
+        low_confidence = review_count < config.TRUSTPILOT_CONFIDENCE_THRESHOLD
+
+        if app_missing and low_confidence:
+            app_weight = weights.get("app_rating", 0.0)
+            weights["app_rating"] = 0.0
+
+            # Redistribute app_weight proportionally across Employee and Momentum
+            # Employee bucket total = 30%, Momentum bucket total = 28%
+            employee_share = app_weight * (30 / 58)
+            momentum_share = app_weight * (28 / 58)
+
+            available_employee = [m for m in EMPLOYEE_METRICS if m in available]
+            if available_employee:
+                per_employee = employee_share / len(available_employee)
+                for m in available_employee:
+                    weights[m] = weights.get(m, 0.0) + per_employee
+
+            available_momentum = [m for m in MOMENTUM_METRICS if m in available]
+            if available_momentum:
+                per_momentum = momentum_share / len(available_momentum)
+                for m in available_momentum:
+                    weights[m] = weights.get(m, 0.0) + per_momentum
+
+            weights = _redistribute_within_bucket(weights, EMPLOYEE_METRICS, available)
+            weights = _redistribute_within_bucket(weights, MOMENTUM_METRICS, available)
+
+        else:
+            weights = _redistribute_within_bucket(weights, CONSUMER_METRICS, available)
+            weights = _redistribute_within_bucket(weights, EMPLOYEE_METRICS, available)
+            weights = _redistribute_within_bucket(weights, MOMENTUM_METRICS, available)
 
         weighted_score = sum(
-            row[f"{m}_norm"] * (weights[m] / total_weight)
+            row[f"{m}_norm"] * weights.get(m, 0.0)
             for m in available
-            if m in weights
+            if weights.get(m, 0.0) > 0
         )
 
         scores.append(round(weighted_score * 100, 2))

@@ -5,10 +5,10 @@
             <div class="section-header">
                 <h2>Company Scoreboard</h2>
                 <span class="legend">
-                    <span class="chip strong-strong">Strong / Strong</span>
-                    <span class="chip strong-weak">Strong / Weak</span>
-                    <span class="chip weak-strong">Weak / Strong</span>
-                    <span class="chip weak-weak">Weak / Weak</span>
+                    <span class="chip dual-strength">↗ Dual Strength</span>
+                    <span class="chip financial-leader">↘ Financial Leader</span>
+                    <span class="chip hidden-momentum">↖ Hidden Momentum</span>
+                    <span class="chip under-pressure">↙ Under Pressure</span>
                     <span class="chip pending">Pending Data</span>
                 </span>
             </div>
@@ -34,7 +34,7 @@
                             <td class="score">{{ row.financial_score }}</td>
                             <td class="score">{{ row.behavioural_score }}</td>
                             <td>
-                                <span class="chip {{ row.quadrant | lower | replace(' ', '-') | replace('/', '') }}">
+                                <span class="chip {{ row.quadrant | lower | replace(' ', '-') | replace('↗ ', '') | replace('↘ ', '') | replace('↖ ', '') | replace('↙ ', '') }}">
                                     {{ row.quadrant }}
                                 </span>
                             </td>
@@ -43,6 +43,26 @@
                     </tbody>
                 </table>
             </div>
+
+        <!-- Quadrant guide cards -->
+        <div class="vis-guide-row scoreboard-guide-row">
+            <div class="vis-quad-card vis-quad-ws">
+                <div class="vis-quad-card-title">↖ Hidden Momentum</div>
+                <div class="vis-quad-card-desc">Financially weaker but behaviourally strong. These companies show positive signals in consumer perception, brand trust, or employee culture that may not yet be fully reflected in the financials.</div>
+            </div>
+            <div class="vis-quad-card vis-quad-ww">
+                <div class="vis-quad-card-title">↙ Under Pressure</div>
+                <div class="vis-quad-card-desc">Financially weaker and behaviourally weaker. These companies show limited positive signals in consumer perception, brand trust, or employee culture — reflected across both dimensions.</div>
+            </div>
+            <div class="vis-quad-card vis-quad-ss">
+                <div class="vis-quad-card-title">↗ Dual Strength</div>
+                <div class="vis-quad-card-desc">Financially strong and behaviourally strong. These companies show positive signals in consumer perception, brand trust, and employee culture — fully reflected in the financials.</div>
+            </div>
+            <div class="vis-quad-card vis-quad-sw">
+                <div class="vis-quad-card-title">↘ Financial Leader</div>
+                <div class="vis-quad-card-desc">Financially strong but behaviourally weaker. Solid margins and growth metrics, but consumer sentiment, brand trust, or internal culture may not yet be fully reflected in the financials.</div>
+            </div>
+        </div>
         </section>
 
         <section class="chart-section">

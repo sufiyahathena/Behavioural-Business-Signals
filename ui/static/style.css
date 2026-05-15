@@ -2127,3 +2127,69 @@ html {
     white-space: nowrap;
     min-width: 220px;
 }
+
+/* Quadrant chips — companies scoreboard */
+.chip.dual-strength {
+    background: rgba(109, 212, 160, 0.15);
+    color: #2d8a5e;
+    border: 1px solid rgba(109, 212, 160, 0.4);
+}
+
+.chip.financial-leader {
+    background: rgba(244, 184, 112, 0.15);
+    color: #a06b1a;
+    border: 1px solid rgba(244, 184, 112, 0.4);
+}
+
+.chip.hidden-momentum {
+    background: rgba(122, 184, 232, 0.15);
+    color: #1a5f8a;
+    border: 1px solid rgba(122, 184, 232, 0.4);
+}
+
+.chip.under-pressure {
+    background: rgba(232, 120, 120, 0.15);
+    color: #8a2020;
+    border: 1px solid rgba(232, 120, 120, 0.4);
+}
+
+/* Guide row on white background (scoreboard page) */
+.scoreboard-guide-row {
+    margin-top: 32px;
+}
+
+.scoreboard-guide-row .vis-quad-card-title {
+    color: #1a1f36;
+}
+
+.scoreboard-guide-row .vis-quad-card-desc {
+    color: #4a5568;
+}
+
+.scoreboard-guide-row .vis-quad-ss {
+    background: rgba(109, 212, 160, 0.08);
+    border: 1px solid rgba(109, 212, 160, 0.3);
+}
+
+.scoreboard-guide-row .vis-quad-ss .vis-quad-card-title { color: #2d8a5e; }
+
+.scoreboard-guide-row .vis-quad-ws {
+    background: rgba(122, 184, 232, 0.08);
+    border: 1px solid rgba(122, 184, 232, 0.3);
+}
+
+.scoreboard-guide-row .vis-quad-ws .vis-quad-card-title { color: #1a5f8a; }
+
+.scoreboard-guide-row .vis-quad-sw {
+    background: rgba(244, 184, 112, 0.08);
+    border: 1px solid rgba(244, 184, 112, 0.3);
+}
+
+.scoreboard-guide-row .vis-quad-sw .vis-quad-card-title { color: #a06b1a; }
+
+.scoreboard-guide-row .vis-quad-ww {
+    background: rgba(232, 120, 120, 0.08);
+    border: 1px solid rgba(232, 120, 120, 0.3);
+}
+
+.scoreboard-guide-row .vis-quad-ww .vis-quad-card-title { color: #8a2020; }

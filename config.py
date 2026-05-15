@@ -27,19 +27,60 @@ FINANCIAL_WEIGHTS = {
     "interest_coverage": 0.06,
 }
 
-# Scoring weights — Behavioural (must sum to 1.0)
-# google_trends_score split into US and global — weighting TBD once all data collected
-BEHAVIOURAL_WEIGHTS = {
-    "google_trends_score_us":     0.08,
-    "google_trends_score_global": 0.08,
-    "trustpilot_rating":          0.13,
-    "trustpilot_review_count":    0.04,
-    "app_rating":                 0.12,
-    "youtube_subscribers":        0.10,
-    "glassdoor_overall":          0.18,
-    "glassdoor_ceo_approval":     0.12,
-    "glassdoor_recommend":        0.15,
+# Behavioural scoring — bucket base weights (computed dynamically per company)
+
+# Consumer Experience and Trust bucket (total = 42%)
+CONSUMER_WEIGHTS_HIGH_CONFIDENCE = {
+    "trustpilot_rating": 0.20,
+    "app_rating":        0.22,
 }
+CONSUMER_WEIGHTS_LOW_CONFIDENCE = {
+    "trustpilot_rating": 0.12,
+    "app_rating":        0.30,
+}
+TRUSTPILOT_CONFIDENCE_THRESHOLD = 100  # reviews
+
+# Employee Culture and Leadership bucket (total = 30%)
+EMPLOYEE_WEIGHTS = {
+    "glassdoor_overall":      0.10,
+    "glassdoor_ceo_approval": 0.08,
+    "glassdoor_recommend":    0.12,
+}
+
+# Brand Momentum bucket (total = 28%)
+MOMENTUM_WEIGHTS_US = {
+    "google_trends_score_us":     0.15,
+    "google_trends_score_global": 0.00,
+    "youtube_subscribers":        0.13,
+}
+MOMENTUM_WEIGHTS_GLOBAL = {
+    "google_trends_score_us":     0.00,
+    "google_trends_score_global": 0.15,
+    "youtube_subscribers":        0.13,
+}
+MOMENTUM_WEIGHTS_MIXED = {
+    "google_trends_score_us":     0.075,
+    "google_trends_score_global": 0.075,
+    "youtube_subscribers":        0.13,
+}
+
+# Company geography classification for Google Trends weighting
+COMPANY_GEOGRAPHY = {
+    # Primarily US-focused
+    "ULTA": "us", "SBH": "us", "AEO": "us", "ANF": "us",
+    "GAP":  "us", "RVLV": "us", "ELF": "us",
+    # Primarily global
+    "LRLCY": "global", "BIRK": "global", "ONON": "global",
+    "OLPX":  "global", "COTY": "global",
+    # Mixed
+    "EL": "mixed", "LULU": "mixed", "RL": "mixed", "LEVI": "mixed",
+    "ODD": "mixed", "URBN": "mixed", "COLM": "mixed",
+}
+
+# YouTube proxy companies — channel represents a subsidiary brand, not the full company
+# These receive a modest confidence discount on their YouTube weight
+YOUTUBE_PROXY_TICKERS = {"COTY", "ODD"}
+YOUTUBE_PROXY_DISCOUNT = 0.85  # 85% of normal YouTube weight
 
 # Google Trends settings
 TRENDS_TIMEFRAME = "today 12-m"

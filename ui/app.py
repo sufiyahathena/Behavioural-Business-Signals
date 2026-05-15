@@ -37,7 +37,6 @@ _BEHAVIOURAL_METRIC_LABELS = {
     "google_trends_score_us": "Google Trends Score (US)",
     "google_trends_score_global": "Google Trends Score (Global)",
     "trustpilot_rating": "Trustpilot Rating",
-    "trustpilot_review_count": "Trustpilot Review Count",
     "app_rating": "App Rating",
     "youtube_subscribers": "YouTube Subscribers",
     "glassdoor_overall": "Glassdoor Overall Rating",
@@ -105,20 +104,20 @@ def _quadrant_label(fin_score, beh_score) -> str:
         beh_score: Behavioural score (0–100) or None.
 
     Returns:
-        One of: "Strong / Strong", "Strong / Weak", "Weak / Strong",
-        "Weak / Weak", or "Pending Data".
+        One of: "Dual Strength", "Financial Leader", "Hidden Momentum",
+        "Under Pressure", or "Pending Data".
     """
     if fin_score is None or beh_score is None or pd.isna(fin_score) or pd.isna(beh_score):
         return "Pending Data"
     fin_strong = float(fin_score) >= 50
     beh_strong = float(beh_score) >= 50
     if fin_strong and beh_strong:
-        return "Strong / Strong"
+        return "Dual Strength"
     if fin_strong and not beh_strong:
-        return "Strong / Weak"
+        return "Financial Leader"
     if not fin_strong and beh_strong:
-        return "Weak / Strong"
-    return "Weak / Weak"
+        return "Hidden Momentum"
+    return "Under Pressure"
 
 
 def _score_bar_colour(score) -> str:
