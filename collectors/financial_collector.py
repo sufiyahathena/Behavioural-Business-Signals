@@ -56,15 +56,24 @@ COMPANY_NAMES = {
 # ─────────────────────────────────────────────
 
 def fmp_get(endpoint: str) -> list:
-    """Call FMP API and return JSON list, or empty list on failure."""
+    """Call FMP v3 API and return JSON list, or empty list on failure.
+
+    Note: FMP deprecated v3 endpoints for new accounts after August 2025.
+    This function is kept in place for future compatibility but will return []
+    gracefully, allowing the yfinance waterfall fallback to handle all metrics.
+    """
     if not config.FMP_API_KEY:
         return []
     url = f"https://financialmodelingprep.com/api/v3/{endpoint}&apikey={config.FMP_API_KEY}"
     try:
-        r = requests.get(url, timeout=10)
-        if r.status_code == 200:
-            data = r.json()
-            return data if isinstance(data, list) else []
+        resp = requests.get(url, timeout=10)
+        if resp.status_code != 200:
+            return []
+        data = resp.json()
+        if isinstance(data, dict) and "Error Message" in data:
+            logger.warning(f"FMP error: {data['Error Message']}")
+            return []
+        return data if isinstance(data, list) else []
     except Exception as e:
         logger.warning(f"FMP request failed: {e}")
     return []

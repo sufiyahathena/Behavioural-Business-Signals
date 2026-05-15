@@ -166,8 +166,31 @@ const trace = {
     mode: 'markers+text',
     type: 'scatter',
     text: companies.map(c => c.ticker),
-    textposition: companies.map(c => 'middle center'),
-    textfont: { size: 9, color: '#ffffff', family: 'system-ui, sans-serif' },
+    textposition: companies.map(c => {
+        const positions = {
+            'LRLCY': 'bottom center',
+            'BIRK':  'middle left',
+            'LULU':  'middle right',
+            'ELF':   'middle right',
+            'ODD':   'middle left',
+            'ULTA':  'middle right',
+            'ONON':  'middle left',
+            'RL':    'top right',
+            'ANF':   'middle right',
+            'RVLV':  'bottom right',
+            'URBN':  'middle right',
+            'LEVI':  'middle right',
+            'OLPX':  'middle right',
+            'COLM':  'bottom center',
+            'SBH':   'middle right',
+            'GAP':   'middle right',
+            'AEO':   'bottom center',
+            'COTY':  'top center',
+            'EL':    'middle right',
+        };
+        return positions[c.ticker] || 'top center';
+    }),
+    textfont: { size: 9, color: '#1a1f36', family: 'system-ui, sans-serif' },
     marker: {
         size: companies.map(c => scaleSize(c.market_cap)),
         color: companies.map(c => getColour(c.fin, c.beh)),

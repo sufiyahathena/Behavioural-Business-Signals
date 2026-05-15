@@ -30,7 +30,7 @@ BRAND_SEARCH_TERMS = {
     "AEO":   "American Eagle",
     "URBN":  "Urban Outfitters",
     "GAP":   "Gap",
-    "LEVI":  "Levis",
+    "LEVI":  "Levi's",
     "RVLV":  "Revolve",
     "LULU":  "Lululemon",
     "ONON":  "On Running",
