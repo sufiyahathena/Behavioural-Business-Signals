@@ -29,9 +29,77 @@
         <p>Third, they operate in sectors where the relationship between financial performance and experiential quality is especially interesting. In beauty and fashion, business quality is shaped not only by revenue growth, margins, and cash flow, but also by trust, loyalty, perception, and execution at the customer and employee level. These characteristics make them especially well suited to a dual-score framework.</p>
     </div>
 
-    <div class="about-section about-section--muted">
+    <div class="about-section">
         <h2>Data Sources</h2>
-        <p class="placeholder-note">Data sources will be detailed here.</p>
+        <p>BrandSignals draws on a combination of automated and manually collected public data sources. Financial data is refreshed quarterly. Behavioural data is refreshed quarterly for automated sources and every three to six months for manually collected sources.</p>
+
+        <div class="ds-cards">
+
+            <div class="ds-card ds-card--platform">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">Gemini API (Google)</span>
+                    <span class="ds-badge ds-badge--platform">Platform</span>
+                </div>
+                <p class="ds-card-body">Powers the BrandSignals chat assistant ✦ Ask using the Gemini 2.0 Flash-Lite model via Google's Generative Language API. Current usage limit: 1,500 requests per day.</p>
+            </div>
+
+            <div class="ds-card ds-card--financial">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">yfinance</span>
+                    <span class="ds-badge ds-badge--financial">Financial — Primary Active Source</span>
+                </div>
+                <p class="ds-card-body">yfinance is an open-source Python library that provides access to Yahoo Finance data, including annual income statements, balance sheets, and cash flow statements. It is currently used to collect all 10 financial metrics for the 19 companies in the BrandSignals universe. All companies are scored on their most recently available FY2025 annual filing, collected in May 2026. Fiscal year-end dates vary across the universe; full detail is provided on the <a href="/financial-breakdown" class="ds-link">Financial Breakdown</a> page.</p>
+            </div>
+
+            <div class="ds-card ds-card--financial">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">Financial Modeling Prep (FMP)</span>
+                    <span class="ds-badge ds-badge--financial">Financial — Currently Inactive</span>
+                </div>
+                <p class="ds-card-body">FMP remains configured as the primary source in the financial data waterfall, with yfinance as fallback. It is currently inactive due to API changes. The waterfall structure is preserved so FMP can reactivate automatically if access is restored and to support future expansion of the company universe.</p>
+            </div>
+
+            <div class="ds-card ds-card--behavioural">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">Glassdoor</span>
+                    <span class="ds-badge ds-badge--behavioural">Behavioural — Manual Collection</span>
+                </div>
+                <p class="ds-card-body">Glassdoor is used to collect employee sentiment data for each company. Eight fields are collected: Overall Rating, CEO Approval, Recommend to a Friend, Culture and Values, Work-Life Balance, Diversity and Inclusion, Senior Management, and Compensation and Benefits. Three are used directly in the Behavioural Score: Overall Rating, CEO Approval, and Recommend to a Friend. The remaining fields are shown on individual company pages for context. Data is collected manually and refreshed every three to six months. Last updated May 2026.</p>
+            </div>
+
+            <div class="ds-card ds-card--behavioural">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">Trustpilot</span>
+                    <span class="ds-badge ds-badge--behavioural">Behavioural — Manual Collection</span>
+                </div>
+                <p class="ds-card-body">Trustpilot is used to collect consumer satisfaction data for each company's primary consumer brand page. Two fields are collected: overall star rating and total review count. The rating is used directly in the Behavioural Score, while review count acts as a confidence modifier rather than a standalone metric. Trustpilot tends to skew negative in retail and beauty because dissatisfied customers are more likely to leave reviews, so it is most useful as a relative peer signal rather than an absolute quality measure. Data is collected manually and refreshed quarterly. Last updated May 2026.</p>
+            </div>
+
+            <div class="ds-card ds-card--behavioural">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">Google Play Store</span>
+                    <span class="ds-badge ds-badge--behavioural">Behavioural — Automated and Manual</span>
+                </div>
+                <p class="ds-card-body">App ratings are collected from the Google Play Store for each company's primary consumer-facing mobile app. Data is gathered through automated scraping with manual fallback where automation is blocked. Companies without a meaningful consumer app are excluded from this signal, and the weight is redistributed within the Consumer Experience and Trust bucket. Data is refreshed quarterly. Last updated May 2026.</p>
+            </div>
+
+            <div class="ds-card ds-card--behavioural">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">Google Trends</span>
+                    <span class="ds-badge ds-badge--behavioural">Behavioural — Automated</span>
+                </div>
+                <p class="ds-card-body">Google Trends data is collected via pytrends, an unofficial Python interface for Google Trends. Two scores are collected for each company: a US search interest score and a global search interest score, each based on average weekly search interest over the past 12 months. Which score is used in the Behavioural Score depends on the company's geographic classification: US-focused, global, or mixed. Full detail is provided on the <a href="/behavioural-breakdown" class="ds-link">Behavioural Breakdown</a> page. Data is refreshed quarterly. Last updated May 2026.</p>
+            </div>
+
+            <div class="ds-card ds-card--behavioural">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">YouTube Data API v3</span>
+                    <span class="ds-badge ds-badge--behavioural">Behavioural — Automated</span>
+                </div>
+                <p class="ds-card-body">YouTube subscriber counts are collected via the YouTube Data API v3, Google's official API for channel data. Each company's primary consumer-facing YouTube channel is used where available. For Coty and Oddity Tech, a major subsidiary brand channel is used as a proxy, with a modest confidence discount applied to the metric weight. Data is refreshed quarterly. Last updated May 2026.</p>
+            </div>
+
+        </div>
     </div>
 
 </div>

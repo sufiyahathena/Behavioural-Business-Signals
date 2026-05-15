@@ -2574,3 +2574,208 @@ html {
 .bs-chat-send:hover {
     background: #e0b8c1;
 }
+
+/* ── About page — Data Source Cards ─────────────────────── */
+.ds-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.ds-card {
+    border-radius: 12px;
+    padding: 20px 24px;
+    border-left: 4px solid transparent;
+    background: #fafafa;
+    border: 1px solid #e5e7eb;
+    border-left-width: 4px;
+}
+
+.ds-card--platform {
+    border-left-color: #2dd4bf;
+    background: rgba(45,212,191,0.04);
+}
+
+.ds-card--financial {
+    border-left-color: #ec4899;
+    background: rgba(236,72,153,0.04);
+}
+
+.ds-card--behavioural {
+    border-left-color: #a855f7;
+    background: rgba(168,85,247,0.04);
+}
+
+.ds-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.ds-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a1f36;
+}
+
+.ds-badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ds-badge--platform {
+    background: rgba(45,212,191,0.12);
+    color: #0d9488;
+    border: 1px solid rgba(45,212,191,0.30);
+}
+
+.ds-badge--financial {
+    background: rgba(236,72,153,0.10);
+    color: #be185d;
+    border: 1px solid rgba(236,72,153,0.25);
+}
+
+.ds-badge--behavioural {
+    background: rgba(168,85,247,0.10);
+    color: #7c3aed;
+    border: 1px solid rgba(168,85,247,0.25);
+}
+
+.ds-card-body {
+    font-size: 0.88rem;
+    color: #4b5563;
+    line-height: 1.7;
+    margin: 0;
+    text-align: justify;
+}
+
+.ds-link {
+    color: #7c3aed;
+    text-decoration: underline;
+}
+
+.ds-link:hover {
+    color: #6d28d9;
+}
+
+/* ── Ethics page ─────────────────────────────────────────── */
+
+.ethics-link {
+    color: #be185d;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.15s ease;
+}
+
+.ethics-link:hover {
+    color: #9d174d;
+}
+
+.ethics-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.ethics-pillar {
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+.ethics-pillar--pink {
+    background: rgba(236,72,153,0.07);
+    border-color: rgba(236,72,153,0.25);
+}
+
+.ethics-pillar--pink .ethics-pillar-label { color: #be185d; }
+
+.ethics-pillar--green {
+    background: rgba(34,197,94,0.07);
+    border-color: rgba(34,197,94,0.25);
+}
+
+.ethics-pillar--green .ethics-pillar-label { color: #15803d; }
+
+.ethics-pillar--purple {
+    background: rgba(168,85,247,0.07);
+    border-color: rgba(168,85,247,0.25);
+}
+
+.ethics-pillar--purple .ethics-pillar-label { color: #7c3aed; }
+
+.ethics-pillar-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+    color: #374151;
+}
+
+.ethics-pillar-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.ethics-pillar-desc {
+    font-size: 0.82rem;
+    color: #4b5563;
+    line-height: 1.6;
+    margin: 0;
+    text-align: center !important;
+}
+
+.ethics-disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: rgba(236,72,153,0.04);
+    border: 1px solid rgba(236,72,153,0.20);
+    border-left: 4px solid #ec4899;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.ethics-disclaimer-icon {
+    font-size: 1.4rem;
+    color: #be185d;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.ethics-disclaimer h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.ethics-disclaimer p {
+    margin-bottom: 6px;
+}
+
+@media (max-width: 640px) {
+    .ethics-pillars {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Ethics intro statement ──────────────────────────────── */
+.ethics-intro-statement {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #be185d;
+    line-height: 1.6;
+    margin: 0;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}

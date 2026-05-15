@@ -568,8 +568,14 @@ def create_app() -> Flask:
             result = response.json()
             logger.warning("Gemini raw response: %s", result)
             if "candidates" not in result:
-                error_msg = result.get("error", {}).get("message", "Unknown error from Gemini")
-                return jsonify({"reply": f"Gemini error: {error_msg}"}), 200
+                error = result.get("error", {})
+                error_msg = error.get("message", "")
+                status_code = error.get("code", 0)
+                # Handle quota exceeded gracefully
+                if status_code == 429 or "quota" in error_msg.lower() or "exceeded" in error_msg.lower():
+                    return jsonify({"reply": "The assistant has reached its daily request limit and will be back tomorrow. In the meantime, you can explore the Financial Breakdown and Behavioural Breakdown pages for full methodology details."}), 200
+                # Handle other errors
+                return jsonify({"reply": "Sorry, the assistant is temporarily unavailable. Please try again in a moment."}), 200
             reply = result["candidates"][0]["content"]["parts"][0]["text"]
             return jsonify({"reply": reply}), 200
 
