@@ -66,23 +66,23 @@ Both scores are comparative — calculated relative to the 19-company peer group
 |--------|---------|----------------|-------------------|----------|
 | LRLCY | L'Oréal | 67.71 | 47.48 | Financial Leader |
 | BIRK | Birkenstock | 65.95 | 43.72 | Financial Leader |
-| LULU | Lululemon | 63.77 | 46.51 | Financial Leader |
-| ELF | e.l.f. Beauty | 63.75 | 50.86 | Dual Strength |
-| ODD | Oddity Tech | 61.84 | 45.62 | Financial Leader |
-| ULTA | Ulta Beauty | 60.90 | 43.54 | Financial Leader |
+| LULU | Lululemon | 63.77 | 45.72 | Financial Leader |
+| ELF | e.l.f. Beauty | 63.75 | 48.61 | Financial Leader |
+| ODD | Oddity Tech | 61.84 | 44.32 | Financial Leader |
+| ULTA | Ulta Beauty | 60.90 | 41.26 | Financial Leader |
 | ONON | On Holding | 60.79 | 44.42 | Financial Leader |
-| RL | Ralph Lauren | 60.14 | 61.00 | Dual Strength |
-| ANF | Abercrombie & Fitch | 58.39 | 52.39 | Dual Strength |
-| RVLV | Revolve | 48.47 | 40.09 | Under Pressure |
-| URBN | Urban Outfitters | 45.78 | 44.91 | Under Pressure |
-| LEVI | Levi Strauss | 44.79 | 65.25 | Hidden Momentum |
+| RL | Ralph Lauren | 60.14 | 60.20 | Dual Strength |
+| ANF | Abercrombie & Fitch | 58.39 | 50.27 | Dual Strength |
+| RVLV | Revolve | 48.47 | 39.02 | Under Pressure |
+| URBN | Urban Outfitters | 45.78 | 44.25 | Under Pressure |
+| LEVI | Levi Strauss | 44.79 | 61.13 | Hidden Momentum |
 | OLPX | Olaplex | 41.08 | 21.80 | Under Pressure |
-| COLM | Columbia Sportswear | 37.65 | 34.53 | Under Pressure |
-| SBH | Sally Beauty | 35.00 | 47.68 | Under Pressure |
-| GAP | Gap Inc. | 34.36 | 61.80 | Hidden Momentum |
-| AEO | American Eagle | 31.63 | 35.67 | Under Pressure |
+| COLM | Columbia Sportswear | 37.65 | 33.86 | Under Pressure |
+| SBH | Sally Beauty | 35.00 | 47.55 | Under Pressure |
+| GAP | Gap Inc. | 34.36 | 60.63 | Hidden Momentum |
+| AEO | American Eagle | 31.63 | 33.44 | Under Pressure |
 | COTY | Coty Inc. | 25.33 | 79.66 | Hidden Momentum |
-| EL | Estée Lauder | 12.35 | 32.56 | Under Pressure |
+| EL | Estée Lauder | 12.35 | 31.22 | Under Pressure |
 
 ## QUADRANT DEFINITIONS
 - Dual Strength (fin ≥50, beh ≥50): Strong financially and behaviourally
@@ -97,7 +97,7 @@ Both scores are comparative — calculated relative to the 19-company peer group
 - Financial Health (21%): Debt to Equity (inverted), Current Ratio, Interest Coverage
 - Returns (25%): ROE, ROA
 
-Data sources: yfinance (primary working source). Financial Modeling Prep is configured as primary in the waterfall but currently inactive due to API plan changes. Annual statements only. All 19 companies use their most recently available FY2025 annual filing.
+Data sources: yfinance is the active primary source for all financial data. Financial Modeling Prep (FMP) is configured as primary in the waterfall pipeline but currently inactive due to API deprecation — it will automatically reactivate if access is restored. All data is from annual statements only. All 19 companies are scored on FY2025 data collected May 2026.
 Normalisation: min-max across 19 companies. Debt-to-Equity is inverted (lower = better).
 Missing data: proportional reweighting — no median imputation.
 Special rule: Debt-light companies (D/E < 0.5, no interest expense) assigned Interest Coverage = 25.0.
@@ -141,7 +141,7 @@ Data sources and freshness:
 - COTY's behavioural score (79.66) should be interpreted with caution — it uses CoverGirl's YouTube channel as a proxy, which may overstate behavioural reach of the broader holding company
 - EL (Estée Lauder) has negative revenue growth, scoring 0.00 on that metric
 - LEVI and COTY have fewer than 100 Trustpilot reviews — low confidence weighting applies
-- LEVI (65.25 behavioural) and GAP (61.80 behavioural) are the strongest Hidden Momentum companies
+- LEVI (61.13 behavioural) and GAP (60.63 behavioural) are the strongest Hidden Momentum companies
 - All scores are peer-relative — a high score means strong relative to these 19 peers, not absolutely
 
 ## SITE PAGES
@@ -155,22 +155,22 @@ Data sources and freshness:
 - /purpose — why BrandSignals was built, personal context
 - /ethics — ethical framework
 
-## FINANCIAL DATA — FISCAL YEAR DETAILS
-All 19 companies are scored on FY2025 data (most recently available annual filing as of May 2026).
-Fiscal year end dates vary:
-- January 31 fiscal year end: ULTA, ANF, AEO, URBN, GAP, LULU
-- December 31 fiscal year end: OLPX, ODD, LRLCY, RVLV, ONON, COLM
-- March 31 fiscal year end: ELF, RL
-- June 30 fiscal year end: EL, COTY
-- September 30 fiscal year end: SBH, BIRK
-- November 30 fiscal year end: LEVI
-Data collected May 2026 via yfinance. Financial Modeling Prep (FMP) is configured as primary source in the waterfall pipeline but currently returns no data due to API deprecation — yfinance provides all metrics.
-
 ## HOW TO RESPOND
 - Be concise and direct
 - Always tell users which page to visit for more detail (e.g. "You can see this on the Financial Breakdown page" or "Visit the Lululemon company page for the full breakdown")
 - If asked about a specific company, reference their actual scores
 - If asked about methodology, explain clearly and point to the relevant breakdown page
+
+## FINANCIAL DATA FRESHNESS
+All 19 companies are scored on FY2025 annual filings — the most recently available data as of May 2026, sourced via yfinance. Fiscal year end dates vary:
+- January 31 FY end (FY2025 = Jan 2026): ULTA, ANF, AEO, URBN, GAP, LULU
+- December 31 FY end (FY2025 = Dec 2025): OLPX, ODD, LRLCY, RVLV, ONON, COLM
+- March 31 FY end (FY2025 = Mar 2025): ELF, RL
+- June 30 FY end (FY2025 = Jun 2025): EL, COTY
+- September 30 FY end (FY2025 = Sep 2025): SBH, BIRK
+- November 30 FY end (FY2025 = Nov 2025): LEVI
+If asked about data freshness or fiscal year, always confirm all companies are on FY2025 data.
+
 - Keep a warm, professional tone consistent with the BrandSignals brand`;
 
 let chatHistory = [];
