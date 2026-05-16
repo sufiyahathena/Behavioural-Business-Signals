@@ -6,7 +6,7 @@
 
     <div class="vis-header">
         <h1 class="vis-title">BrandSignals Dual-Score Visualisation</h1>
-        <p class="vis-subtitle">A visual map of consumer companies by financial and behavioural scores, with bubble size representing market capitalisation</p>
+        <p class="vis-subtitle">A visual map of consumer companies by financial and behavioural scores, with bubble size representing market capitalisation (square root scale, updated daily)</p>
     </div>
 
     <!-- Chart full width -->
@@ -89,9 +89,14 @@
 
             <!-- Stock price -->
             <div class="qv-stock">
-                <div class="qv-stock-label">Live Market Cap</div>
-                <div class="qv-stock-value" id="qv-price">—</div>
-                <div class="qv-stock-note">Live market cap via API — coming soon</div>
+                <div class="qv-stock-header">
+                    <div class="qv-stock-label">Stock Price</div>
+                    <div class="qv-stock-note">15-min delayed · Yahoo Finance</div>
+                </div>
+                <div class="qv-stock-body">
+                    <div class="qv-stock-value" id="qv-price">—</div>
+                    <div class="qv-stock-change" id="qv-change"></div>
+                </div>
             </div>
             <a class="qv-explore-btn" id="qv-explore" href="#">Explore →</a>
         </div>
@@ -136,7 +141,8 @@ fetch('/api/scores')
                 fin:      d.financial_score,
                 beh:      d.behavioural_score,
                 quadrant: d.quadrant,
-                ...(companyMeta[d.ticker] || { hq: '—', founded: '—', market_cap: 1, brands: [], desc: '' }),
+                ...(companyMeta[d.ticker] || { hq: '—', founded: '—', brands: [], desc: '' }),
+                market_cap: d.market_cap_b || 1,
             }));
         renderChart(companies);
     })
@@ -346,7 +352,7 @@ function openPanel(company) {
     document.getElementById('qv-desc').textContent = company.desc;
     document.getElementById('qv-founded').textContent = company.founded;
     document.getElementById('qv-hq').textContent = company.hq;
-    document.getElementById('qv-mktcap').textContent = company.market_cap;
+    document.getElementById('qv-mktcap').textContent = company.market_cap ? '$' + company.market_cap.toFixed(1) + 'B' : '—';
 
     // Quadrant label
     const fin = company.fin;
@@ -368,6 +374,31 @@ function openPanel(company) {
 
     panel.classList.add('qv-open');
     overlay.classList.add('qv-open');
+
+    // Reset stock price while loading
+    document.getElementById('qv-price').textContent = '...';
+    document.getElementById('qv-change').textContent = '';
+
+    // Fetch live stock price
+    fetch(`/api/stock/${company.ticker}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.price) {
+                const symbol = data.currency === 'USD' ? '$' : data.currency + ' ';
+                document.getElementById('qv-price').textContent = symbol + data.price.toFixed(2);
+                if (data.change_pct !== null) {
+                    const changeEl = document.getElementById('qv-change');
+                    const sign = data.change_pct >= 0 ? '+' : '';
+                    changeEl.textContent = sign + data.change_pct + '%';
+                    changeEl.style.color = data.change_pct >= 0 ? '#16a34a' : '#dc2626';
+                }
+            } else {
+                document.getElementById('qv-price').textContent = '—';
+            }
+        })
+        .catch(() => {
+            document.getElementById('qv-price').textContent = '—';
+        });
 }
 
 function closePanel() {

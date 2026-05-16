@@ -1636,28 +1636,45 @@ table.scoreboard td a:hover {
     background: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 12px 16px;
+    margin-top: 4px;
+}
+
+.qv-stock-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
 }
 
 .qv-stock-label {
-    font-size: 0.85rem;
+    font-size: 0.68rem;
     font-weight: 600;
     color: #9ca3af;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 8px;
-}
-
-.qv-stock-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #1a1f36;
-    margin-bottom: 6px;
 }
 
 .qv-stock-note {
-    font-size: 0.85rem;
+    font-size: 0.65rem;
     color: #9ca3af;
+}
+
+.qv-stock-body {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.qv-stock-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1f36;
+}
+
+.qv-stock-change {
+    font-size: 0.82rem;
+    font-weight: 600;
 }
 
 .qv-explore-btn {
@@ -1696,7 +1713,7 @@ table.scoreboard td a:hover {
 /* Company facts row */
 .qv-facts {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 0.7fr 1.3fr 1fr;
     gap: 10px;
 }
 
@@ -2778,4 +2795,89 @@ html {
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+}
+
+/* ── Company page — About + Stock Price row ──────────────── */
+.about-stock-row {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 16px;
+    margin-bottom: 20px;
+    align-items: stretch;
+}
+
+.about-card--narrow {
+    margin-bottom: 0;
+    width: auto;
+    display: flex;
+    align-items: center;
+}
+
+.about-card--narrow p {
+    margin: 0;
+    text-align: justify;
+}
+
+.stock-price-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 180px;
+}
+
+.stock-price-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stock-price-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1f36;
+    line-height: 1.2;
+    margin-top: 4px;
+}
+
+.stock-price-change {
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.stock-price-ticker {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.stock-price-note {
+    font-size: 0.70rem;
+    color: #9ca3af;
+    line-height: 1.5;
+    margin: 0;
+    margin-top: auto;
+    text-align: left !important;
+}
+
+@media (max-width: 640px) {
+    .about-stock-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Financial metric definitions ────────────────────────── */
+.metric-def {
+    display: block;
+    font-size: 0.72rem;
+    color: #9ca3af;
+    margin-top: 3px;
+    line-height: 1.4;
 }

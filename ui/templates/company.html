@@ -54,9 +54,18 @@
             </div>
         </section>
 
-        <!-- 3 ── About ──────────────────────────────────────────── -->
-        <div class="about-card">
-            <p>{{ company.business_model }}</p>
+        <!-- 3 ── About + Stock Price ────────────────────────────── -->
+        <div class="about-stock-row">
+            <div class="about-card about-card--narrow">
+                <p>{{ company.business_model }}</p>
+            </div>
+            <div class="stock-price-card" id="stock-price-card">
+                <div class="stock-price-label">Stock Price</div>
+                <div class="stock-price-value" id="cp-price">...</div>
+                <div class="stock-price-change" id="cp-change"></div>
+                <div class="stock-price-ticker">{{ company.ticker }}</div>
+                <p class="stock-price-note">15-minute delay via Yahoo Finance. Percentage change shown reflects movement relative to the previous trading day's close.</p>
+            </div>
         </div>
 
         <!-- 4 ── Score Summary Cards ────────────────────────────── -->
@@ -176,6 +185,7 @@
                             {% elif peer_context and peer_context.get('revenue_growth_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest revenue growth in peer group.</span>
                             {% endif %}
+                            <span class="metric-def">Year-over-year change in total revenue.</span>
 
                         {% elif key == 'gross_margin' %}
                             {% if financial_data and financial_data.get('gross_margin', 0) < 0 %}
@@ -187,6 +197,7 @@
                             {% elif company.ticker == 'EL' %}
                                 <span class="metric-quirk">⚑ Gross profit as a percentage of revenue. Estée Lauder's high gross margin reflects the premium pricing power of its prestige beauty portfolio, including brands such as La Mer, Jo Malone, and MAC.</span>
                             {% endif %}
+                            <span class="metric-def">Gross profit as a percentage of revenue — how much revenue remains after direct production costs.</span>
 
                         {% elif key == 'operating_margin' %}
                             {% if financial_data and financial_data.get('operating_margin', 0) < 0 %}
@@ -194,6 +205,7 @@
                             {% elif peer_context and peer_context.get('operating_margin_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest operating margin in peer group — strongest operational efficiency.</span>
                             {% endif %}
+                            <span class="metric-def">Operating income as a percentage of revenue — efficiency after all operating costs including SG&amp;A.</span>
 
                         {% elif key == 'net_profit_margin' %}
                             {% if financial_data and financial_data.get('net_profit_margin', 0) < 0 %}
@@ -201,6 +213,7 @@
                             {% elif peer_context and peer_context.get('net_profit_margin_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest net profit margin in peer group.</span>
                             {% endif %}
+                            <span class="metric-def">Net income as a percentage of revenue — bottom-line profitability after all costs, taxes, and interest.</span>
 
                         {% elif key == 'fcf_margin' %}
                             {% if financial_data and financial_data.get('fcf_margin', 0) < 0 %}
@@ -208,6 +221,7 @@
                             {% elif peer_context and peer_context.get('fcf_margin_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest free cash flow margin in peer group.</span>
                             {% endif %}
+                            <span class="metric-def">Free cash flow as a percentage of revenue — cash actually generated after capital expenditure.</span>
 
                         {% elif key == 'current_ratio' %}
                             {% if financial_data and financial_data.get('current_ratio', 1) < 1.0 %}
@@ -215,6 +229,7 @@
                             {% elif peer_context and peer_context.get('current_ratio_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest current ratio in peer group — strongest short-term liquidity position.</span>
                             {% endif %}
+                            <span class="metric-def">Current assets divided by current liabilities — ability to meet short-term obligations.</span>
 
                         {% elif key == 'roe' %}
                             {% if financial_data and financial_data.get('roe', 0) < 0 %}
@@ -222,6 +237,7 @@
                             {% elif peer_context and peer_context.get('roe_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest ROE in peer group.</span>
                             {% endif %}
+                            <span class="metric-def">Net income divided by shareholder equity — profit generated per dollar of shareholder capital.</span>
 
                         {% elif key == 'roa' %}
                             {% if financial_data and financial_data.get('roa', 0) < 0 %}
@@ -229,6 +245,7 @@
                             {% elif peer_context and peer_context.get('roa_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest ROA in peer group — most efficient use of assets to generate profit.</span>
                             {% endif %}
+                            <span class="metric-def">Net income divided by total assets — profit generated per dollar of total assets held.</span>
 
                         {% elif key == 'debt_to_equity' %}
                             {% if financial_data and financial_data.get('debt_to_equity', 1) < 0.1 %}
@@ -236,6 +253,7 @@
                             {% elif peer_context and peer_context.get('debt_to_equity_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest leverage in peer group — greatest reliance on debt financing.</span>
                             {% endif %}
+                            <span class="metric-def">Total debt divided by shareholder equity — degree of financial leverage. Lower is stronger; this metric is inverted in scoring.</span>
 
                         {% elif key == 'interest_coverage' %}
                             {% if financial_data and financial_data.get('interest_coverage') == 25.0 and financial_data.get('debt_to_equity', 1) < 0.5 %}
@@ -245,6 +263,7 @@
                             {% elif peer_context and peer_context.get('interest_coverage_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest in peer group — exceptionally low interest burden relative to operating earnings.</span>
                             {% endif %}
+                            <span class="metric-def">EBIT divided by interest expense — how comfortably operating earnings cover interest obligations.</span>
                         {% endif %}
                         </td>
                     </tr>
@@ -620,4 +639,42 @@
 })();
 </script>
 {% endif %}
+<script>
+(function() {
+    // Scale description font size to fill the box
+    const descEl = document.querySelector('.about-card--narrow p');
+    if (descEl) {
+        const len = descEl.textContent.trim().length;
+        let fontSize;
+        if (len < 98)        fontSize = '1.45rem';
+        else if (len < 102)  fontSize = '1.38rem';
+        else if (len < 106)  fontSize = '1.32rem';
+        else if (len < 110)  fontSize = '1.26rem';
+        else                 fontSize = '1.20rem';
+        descEl.style.fontSize = fontSize;
+        descEl.style.lineHeight = '1.7';
+    }
+
+    const ticker = "{{ company.ticker }}";
+    fetch(`/api/stock/${ticker}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.price) {
+                const symbol = data.currency === 'USD' ? '$' : data.currency + ' ';
+                document.getElementById('cp-price').textContent = symbol + data.price.toFixed(2);
+                if (data.change_pct !== null) {
+                    const changeEl = document.getElementById('cp-change');
+                    const sign = data.change_pct >= 0 ? '+' : '';
+                    changeEl.textContent = sign + data.change_pct + '%';
+                    changeEl.style.color = data.change_pct >= 0 ? '#16a34a' : '#dc2626';
+                }
+            } else {
+                document.getElementById('cp-price').textContent = '—';
+            }
+        })
+        .catch(() => {
+            document.getElementById('cp-price').textContent = '—';
+        });
+})();
+</script>
 {% endblock %}

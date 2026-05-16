@@ -9,7 +9,7 @@ Routes:
 
 import json
 import logging
-from datetime import date
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -17,6 +17,51 @@ import requests as http_requests
 from flask import Flask, jsonify, redirect, render_template, request, url_for
 
 import config
+
+
+def _get_market_caps() -> dict:
+    """Fetch current market caps from yfinance for all companies.
+
+    Caches results in data/financial/market_caps.csv and refreshes
+    if the cache is older than 24 hours.
+
+    Returns:
+        Dict of ticker -> market_cap_billions (float)
+    """
+    import yfinance as yf
+
+    cache_path = Path(config.DATA_DIR) / "financial" / "market_caps.csv"
+
+    # Check if cache exists and is fresh (less than 24 hours old)
+    if cache_path.exists():
+        cache_age = datetime.now() - datetime.fromtimestamp(cache_path.stat().st_mtime)
+        if cache_age < timedelta(hours=24):
+            df = pd.read_csv(cache_path)
+            return dict(zip(df["ticker"], df["market_cap_b"]))
+
+    # Fetch from yfinance
+    tickers = [
+        "EL", "ULTA", "ELF", "COTY", "OLPX", "SBH", "ODD", "LRLCY",
+        "ANF", "AEO", "URBN", "GAP", "LEVI", "RVLV", "LULU", "ONON",
+        "RL", "COLM", "BIRK"
+    ]
+
+    market_caps = {}
+    for ticker in tickers:
+        try:
+            info = yf.Ticker(ticker).info
+            mc = info.get("marketCap") or info.get("market_cap")
+            market_caps[ticker] = round(mc / 1e9, 1) if mc else None
+        except Exception:
+            market_caps[ticker] = None
+
+    # Save cache
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame([
+        {"ticker": t, "market_cap_b": v} for t, v in market_caps.items()
+    ]).to_csv(cache_path, index=False)
+
+    return market_caps
 from collectors.news_collector import fetch_company_news
 
 logger = logging.getLogger(__name__)
@@ -518,17 +563,34 @@ def create_app() -> Flask:
     def api_scores():
         """Return combined scores for all companies as JSON."""
         df = _load_scores()
+
+        # Hardcoded fallback market caps (in $B) in case yfinance is unavailable
+        fallback_caps = {
+            "EL": 16, "ULTA": 17, "ELF": 7, "COTY": 5, "OLPX": 1,
+            "SBH": 1, "ODD": 3, "LRLCY": 220, "ANF": 4, "AEO": 2,
+            "URBN": 4, "GAP": 3, "LEVI": 6, "RVLV": 1, "LULU": 38,
+            "ONON": 18, "RL": 14, "COLM": 4, "BIRK": 9,
+        }
+
+        try:
+            live_caps = _get_market_caps()
+        except Exception:
+            live_caps = {}
+
         records = []
         for _, row in df.iterrows():
+            ticker = row["ticker"]
             fin = row.get("financial_score")
             beh = row.get("behavioural_score")
+            mc = live_caps.get(ticker) or fallback_caps.get(ticker, 1)
             records.append({
-                "ticker": row["ticker"],
+                "ticker": ticker,
                 "company_name": row["company_name"],
                 "sector": row["sector"],
                 "financial_score": float(fin) if pd.notna(fin) and fin is not None else None,
                 "behavioural_score": float(beh) if pd.notna(beh) and beh is not None else None,
                 "quadrant": _quadrant_label(fin, beh),
+                "market_cap_b": mc,
             })
         return jsonify(records)
 
@@ -620,5 +682,30 @@ def create_app() -> Flask:
                 result["behavioural_data"] = match.iloc[0].dropna().to_dict()
 
         return jsonify(result)
+
+    @app.route("/api/stock/<ticker>")
+    def api_stock(ticker: str):
+        """Return current stock price for a ticker via yfinance."""
+        try:
+            import yfinance as yf
+            t = yf.Ticker(ticker)
+            info = t.info
+            price = info.get("currentPrice") or info.get("regularMarketPrice")
+            currency = info.get("currency", "USD")
+            exchange = info.get("exchange", "")
+            prev_close = info.get("previousClose")
+            change_pct = None
+            if price and prev_close:
+                change_pct = round(((price - prev_close) / prev_close) * 100, 2)
+            return jsonify({
+                "ticker": ticker,
+                "price": round(float(price), 2) if price else None,
+                "currency": currency,
+                "exchange": exchange,
+                "change_pct": change_pct,
+            })
+        except Exception as e:
+            logger.error("Stock price fetch error for %s: %s", ticker, e)
+            return jsonify({"ticker": ticker, "price": None, "error": str(e)}), 200
 
     return app
