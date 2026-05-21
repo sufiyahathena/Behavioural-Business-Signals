@@ -835,4 +835,137 @@ def create_app() -> Flask:
     def insights():
         return render_template("insights.html", active_page="insights")
 
+    @app.route("/api/insights_data")
+    def api_insights_data():
+        """Return sentiment + valuation data for all companies, cached for 24 hours."""
+        import yfinance as yf
+        import json
+
+        cache_path = Path(config.DATA_DIR) / "financial" / "insights_cache.json"
+
+        # Return cache if fresh (less than 24 hours old)
+        if cache_path.exists():
+            cache_age = datetime.now() - datetime.fromtimestamp(cache_path.stat().st_mtime)
+            if cache_age < timedelta(hours=24):
+                with open(cache_path) as f:
+                    return jsonify(json.load(f))
+
+        # Fetch fresh data for all tickers
+        tickers = [
+            "EL","ULTA","ELF","COTY","OLPX","SBH","ODD","LRLCY",
+            "ANF","AEO","URBN","GAP","LEVI","RVLV","LULU","ONON",
+            "RL","COLM","BIRK"
+        ]
+
+        peer_medians = {"pe_ratio": 15.0, "ev_ebitda": 10.4, "price_to_sales": 1.16}
+
+        def vs_median(val, median):
+            if val is None or median is None:
+                return None
+            diff_pct = ((val - median) / median) * 100
+            if diff_pct > 15:
+                return "above peer median"
+            elif diff_pct < -15:
+                return "below peer median"
+            else:
+                return "in line with peers"
+
+        end = datetime.today()
+        results = {}
+
+        # Fetch XLY and SPY once for all companies
+        xly_3m = spy_3m = None
+        try:
+            for sym, attr in [("XLY", "xly_3m"), ("SPY", "spy_3m")]:
+                b = yf.Ticker(sym)
+                bh = b.history(start=(end - timedelta(days=100)).strftime("%Y-%m-%d"),
+                               end=end.strftime("%Y-%m-%d"))
+                if not bh.empty:
+                    cutoff = end - timedelta(days=90)
+                    past = bh[bh.index <= cutoff.strftime("%Y-%m-%d")]
+                    if not past.empty:
+                        val = round(((float(bh["Close"].iloc[-1]) - float(past["Close"].iloc[-1])) /
+                                     float(past["Close"].iloc[-1])) * 100, 2)
+                        if sym == "XLY":
+                            xly_3m = val
+                        else:
+                            spy_3m = val
+        except Exception:
+            pass
+
+        for ticker in tickers:
+            try:
+                t = yf.Ticker(ticker)
+                info = t.info
+
+                # Valuation
+                pe = info.get("trailingPE") or info.get("forwardPE")
+                ev = info.get("enterpriseToEbitda")
+                ps = info.get("priceToSalesTrailing12Months")
+
+                # Price history
+                hist = t.history(start=(end - timedelta(days=370)).strftime("%Y-%m-%d"),
+                                 end=end.strftime("%Y-%m-%d"))
+
+                def get_return(days_ago):
+                    if hist.empty or len(hist) < 5:
+                        return None
+                    cutoff = end - timedelta(days=days_ago)
+                    past = hist[hist.index <= cutoff.strftime("%Y-%m-%d")]
+                    if past.empty:
+                        return None
+                    return round(((float(hist["Close"].iloc[-1]) - float(past["Close"].iloc[-1])) /
+                                   float(past["Close"].iloc[-1])) * 100, 2)
+
+                r1m = get_return(30)
+                r3m = get_return(90)
+
+                # 52-week position
+                w52h = info.get("fiftyTwoWeekHigh")
+                w52l = info.get("fiftyTwoWeekLow")
+                cp = info.get("currentPrice") or info.get("regularMarketPrice")
+                w52pos = None
+                if w52h and w52l and cp and (w52h - w52l) > 0:
+                    w52pos = round(((cp - w52l) / (w52h - w52l)) * 100, 1)
+
+                # Volatility
+                vol30 = None
+                if not hist.empty and len(hist) >= 20:
+                    recent = hist["Close"].tail(30)
+                    dr = recent.pct_change().dropna()
+                    vol30 = round(float(dr.std() * (252 ** 0.5) * 100), 1)
+
+                results[ticker] = {
+                    "valuation": {
+                        "pe_ratio": round(float(pe), 1) if pe else None,
+                        "pe_vs_peers": vs_median(pe, peer_medians["pe_ratio"]),
+                        "ev_ebitda": round(float(ev), 1) if ev else None,
+                        "ev_vs_peers": vs_median(ev, peer_medians["ev_ebitda"]),
+                        "price_to_sales": round(float(ps), 2) if ps else None,
+                        "ps_vs_peers": vs_median(ps, peer_medians["price_to_sales"]),
+                    },
+                    "sentiment": {
+                        "return_1m": r1m,
+                        "return_3m": r3m,
+                        "week52_position": w52pos,
+                        "week52_high": round(float(w52h), 2) if w52h else None,
+                        "week52_low": round(float(w52l), 2) if w52l else None,
+                        "volatility_30d": vol30,
+                        "vs_xly_3m": round(r3m - xly_3m, 2) if r3m is not None and xly_3m is not None else None,
+                        "vs_spy_3m": round(r3m - spy_3m, 2) if r3m is not None and spy_3m is not None else None,
+                        "xly_3m": xly_3m,
+                        "spy_3m": spy_3m,
+                    }
+                }
+            except Exception as e:
+                logger.error("Insights data error for %s: %s", ticker, e)
+                results[ticker] = {"valuation": {}, "sentiment": {}}
+
+        # Cache to disk
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(cache_path, "w") as f:
+            json.dump(results, f)
+
+        return jsonify(results)
+
     return app

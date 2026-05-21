@@ -12,7 +12,7 @@
       "founded": 1946,
       "founded_location": "New York City, NY, USA",
       "headquarters": "New York City, NY, USA",
-      "business_model": "Prestige multi-brand beauty conglomerate. Manufactures, markets, and sells skincare, makeup, fragrance, and haircare products through department stores, specialty retailers, e-commerce, and company-owned stores globally. Revenue is split across product categories and geographies, with heavy reliance on travel retail and Asia-Pacific markets.",
+      "business_model": "Prestige beauty holding company spanning skincare, makeup, fragrance, and haircare through one of the industry's deepest brand portfolios. The corporate entity is distinct from the Estée Lauder consumer brand. Its strength lies in global brand equity and premium positioning, though its scale also makes execution and regional exposure especially important. Revenue heavily reliant on travel retail and Asia-Pacific markets.",
       "products_and_categories": [
         "Skincare",
         "Makeup",
@@ -59,7 +59,7 @@
       "founded": 1990,
       "founded_location": "Bolingbrook, Illinois, USA",
       "headquarters": "Bolingbrook, Illinois, USA",
-      "business_model": "Specialty beauty retailer operating over 1,400 physical stores across the U.S., complemented by a growing e-commerce platform. Unique positioning as an all-price-point retailer offering both prestige and mass-market beauty brands under one roof, alongside in-store salon services. Revenue primarily from product sales; loyalty program (Ultamate Rewards) is central to retention strategy.",
+      "business_model": "The largest specialty beauty retailer in the US, combining prestige, mass-market, and salon offerings within a single destination. Its model is powerful because it sits at the intersection of beauty consumption, loyalty, and accessible premiumisation. Operates over 1,400 US stores alongside Space NK (UK and Ireland luxury beauty retailer, acquired July 2025). The Ultamate Rewards loyalty programme is central to its retention strategy.",
       "products_and_categories": [
         "Makeup",
         "Skincare",
@@ -86,7 +86,7 @@
       "founded": 2004,
       "founded_location": "Oakland, California, USA",
       "headquarters": "Oakland, California, USA",
-      "business_model": "Value-oriented beauty brand selling affordable cosmetics, skincare, and body care primarily through mass retail channels (Walmart, Target, CVS, Walgreens) and direct-to-consumer online. Known for rapid product development cycles, strong digital marketing, and manufacturing primarily in China at low cost. Operates lean and reinvests heavily in marketing.",
+      "business_model": "Fast-moving multi-brand beauty company known for affordable price points, rapid product development, and unusually strong digital relevance. It stands out as a brand that has translated cultural momentum into real commercial traction. Sells primarily through mass retail channels and direct-to-consumer online.",
       "products_and_categories": [
         "Makeup",
         "Skincare",
@@ -114,7 +114,7 @@
       "founded": 1904,
       "founded_location": "Paris, France",
       "headquarters": "Amsterdam, Netherlands (operational HQ in New York, USA)",
-      "business_model": "Global beauty company operating across two divisions: Prestige (fragrances, skincare under licensed luxury brands) and Consumer Beauty (mass-market cosmetics, haircare, body care). Licenses brand names from luxury fashion houses for fragrance lines. Revenue is global with strong European and Americas presence.",
+      "business_model": "Global beauty holding company with no single direct consumer-facing corporate identity. Operates across Prestige (fragrances and skincare under licensed luxury brands) and Consumer Beauty (mass-market cosmetics, haircare, body care). Its scale gives it international reach, though portfolio complexity makes brand-level performance especially important to watch.",
       "products_and_categories": [
         "Fragrance",
         "Skincare",
@@ -156,7 +156,7 @@
       "founded": 2014,
       "founded_location": "Santa Barbara, California, USA",
       "headquarters": "Santa Barbara, California, USA",
-      "business_model": "Single-brand, patent-protected professional haircare company. Products are built around a proprietary bond-building technology (Bis-Aminopropyl Diglycol Dimaleate). Sells through three channels: professional (salons), specialty retail (Sephora, Ulta), and direct-to-consumer. Asset-light model with third-party manufacturing.",
+      "business_model": "Science-led haircare brand built around bond-repair technology and professional credibility. Its appeal has historically come from product innovation and premium positioning, though sustaining momentum depends on defending both differentiation and trust. Sells through professional salons, specialty retail, and direct-to-consumer.",
       "products_and_categories": [
         "Bond-building haircare treatments",
         "Shampoo",
@@ -180,7 +180,7 @@
       "founded": 1964,
       "founded_location": "New Orleans, Louisiana, USA",
       "headquarters": "Denton, Texas, USA",
-      "business_model": "Specialty beauty retailer and distributor operating through two segments: Sally Beauty Supply (retail stores open to public and licensed professionals) and Beauty Systems Group (professional-only distribution, including Armstrong McDowell stores). Sells professional-grade hair colour, haircare, nail, and skincare products at accessible prices.",
+      "business_model": "Specialty beauty retailer and distributor serving both everyday consumers and licensed professionals. Its hybrid position between retail and professional supply gives it a distinctive place in the beauty ecosystem. Operates through Sally Beauty Supply (consumer and professional) and Beauty Systems Group (professional-only, including CosmoProf and Armstrong McCall).",
       "products_and_categories": [
         "Hair colour",
         "Haircare",
@@ -208,7 +208,7 @@
       "founded": 2018,
       "founded_location": "Tel Aviv, Israel",
       "headquarters": "New York City, NY, USA (with R&D in Tel Aviv)",
-      "business_model": "Digital-first, data-driven beauty and wellness company. Operates two direct-to-consumer brands online only, with no physical retail presence. Uses proprietary tech and data infrastructure to drive product development and personalisation. High gross margins due to DTC model. Invested heavily in AI-driven consumer matching and formulation.",
+      "business_model": "Digital-first beauty and wellness holding company built around data-driven personalisation and direct-to-consumer execution. It is distinctive for blending brand-building with a technology-oriented operating model. The Oddity Tech corporate entity has no direct consumer presence — IL MAKIAGE, SpoiledChild, and METHODIQ (telehealth dermatology, launched November 2025) are the consumer-facing brands. Operates with no physical retail and high gross margins.",
       "products_and_categories": [
         "Haircare",
         "Skincare",
@@ -232,7 +232,7 @@
       "founded": 1909,
       "founded_location": "Clichy, France",
       "headquarters": "Clichy, France",
-      "business_model": "Largest beauty company in the world by revenue. Operates across four divisions: Consumer Products (mass market), L'Oréal Luxe (prestige), Professional Products (salon), and Dermatological Beauty (pharmacy). Sells in 150+ countries. Business model is built on R&D investment, brand portfolio depth, and global distribution reach.",
+      "business_model": "The world's largest beauty company, spanning mass, luxury, professional, and dermatological beauty at global scale. Its breadth makes it one of the clearest examples of how portfolio diversification and brand power can coexist. Operates across four divisions and sells in 150+ countries, with business model built on R&D investment, brand portfolio depth, and global distribution reach.",
       "products_and_categories": [
         "Skincare",
         "Haircare",
@@ -283,7 +283,7 @@
       "founded": 1892,
       "founded_location": "New York City, New York, USA",
       "headquarters": "New Albany, Ohio, USA",
-      "business_model": "Global omnichannel specialty apparel retailer operating through two brand segments: Abercrombie (adult) and Hollister (teen). Sells through company-owned stores and e-commerce globally. Known for a significant brand turnaround in the 2020s, shifting from exclusionary positioning to inclusive lifestyle brand.",
+      "business_model": "Global apparel group that has repositioned itself through sharper brand strategy, cleaner execution, and stronger relevance with younger consumers. Its recent trajectory makes it one of the more compelling retail turnaround stories in the peer set. Operates Abercrombie & Fitch, Abercrombie Kids, Hollister, and Gilly Hicks across adult, youth, and teen lifestyle segments.",
       "products_and_categories": [
         "Casual apparel",
         "Denim",
@@ -310,7 +310,7 @@
       "founded": 1977,
       "founded_location": "Pittsburgh, Pennsylvania, USA",
       "headquarters": "Pittsburgh, Pennsylvania, USA",
-      "business_model": "Specialty apparel retailer operating American Eagle (casual denim and apparel) and Aerie (intimates, activewear, swimwear) brands through stores and e-commerce. Aerie has been a key growth driver, known for its body-positive marketing. Also operates Quiet Platforms, a supply chain and logistics business.",
+      "business_model": "Multi-brand specialty apparel retailer anchored by American Eagle and Aerie, with particular strength in denim, intimates, and youth-oriented lifestyle positioning. The business is especially interesting because brand perception and category relevance play such a large role in its performance. Also operates Todd Snyder (premium menswear) and Unsubscribed (slow fashion).",
       "products_and_categories": [
         "Denim",
         "Casual apparel",
@@ -340,7 +340,7 @@
       "founded": 1970,
       "founded_location": "Philadelphia, Pennsylvania, USA",
       "headquarters": "Philadelphia, Pennsylvania, USA",
-      "business_model": "Multi-brand lifestyle retail company operating through retail segment (Urban Outfitters, Free People, Anthropologie, Nuuly, Menus & Venues) and subscription/rental (Nuuly). Strong omnichannel presence. Each brand targets a distinct lifestyle consumer segment. Free People wholesale is a significant revenue contributor.",
+      "business_model": "Multi-brand lifestyle retailer spanning apparel, home, rental, and niche consumer concepts across a differentiated portfolio. Its strength lies in brand variety and cultural positioning rather than a single uniform retail identity. Operates Urban Outfitters, Anthropologie, Free People, FP Movement, Nuuly (rental subscription), Terrain, BHLDN, and Menus & Venues.",
       "products_and_categories": [
         "Apparel",
         "Accessories",
@@ -373,7 +373,7 @@
       "founded": 1969,
       "founded_location": "San Francisco, California, USA",
       "headquarters": "San Francisco, California, USA",
-      "business_model": "Global apparel retail company operating four distinct brands across different consumer segments. Revenue from company-owned stores, e-commerce, franchise partnerships, and licensing. Has divested international operations in some regions and closed underperforming stores. Now focused on brand stabilisation and margin recovery.",
+      "business_model": "Legacy apparel group operating Old Navy (value family apparel), Gap (casual lifestyle), Banana Republic (elevated casual), and Athleta (women's activewear). Its investment case often turns less on brand awareness itself and more on whether operational discipline can unlock the value of its portfolio. Sells through stores, e-commerce, franchise, and licensing.",
       "products_and_categories": [
         "Casual apparel",
         "Denim",
@@ -401,7 +401,7 @@
       "founded": 1853,
       "founded_location": "San Francisco, California, USA",
       "headquarters": "San Francisco, California, USA",
-      "business_model": "Global branded apparel company most closely associated with denim. Sells through wholesale (department stores, specialty retailers), company-owned stores, and growing DTC e-commerce. Three brands under portfolio. Iconic global brand with strong recognition across demographics. Revenue is globally distributed.",
+      "business_model": "Iconic global denim company with one of the most recognisable brand names in apparel. Its long-term strength comes from category leadership, heritage, and the ability to keep a legacy brand commercially relevant. Operates Levi's and Beyond Yoga, following the sale of Dockers (completed February 2026). Expanding DTC and growing beyond core jeans into denim lifestyle.",
       "products_and_categories": [
         "Denim jeans",
         "Casualwear",
@@ -428,7 +428,7 @@
       "founded": 2003,
       "founded_location": "Cerritos, California, USA",
       "headquarters": "Cerritos, California, USA",
-      "business_model": "Digital-first fashion retailer with no physical stores. Uses a data-driven, influencer-led marketing model to curate and sell apparel, footwear, beauty, and lifestyle products from hundreds of brands, alongside its own private labels. Revenue is almost entirely e-commerce. FORWARD is its higher-end luxury companion platform.",
+      "business_model": "Digital-first fashion platform built around influencer marketing, occasionwear, and trend-led online retail. It is a strong example of a business where brand curation, customer identity, and digital execution are tightly linked. Operates REVOLVE (core platform) and FWRD (luxury companion platform) with no physical stores, alongside a majority stake in Alexandre Vauthier (acquired June 2024).",
       "products_and_categories": [
         "Apparel",
         "Footwear",
@@ -456,7 +456,7 @@
       "founded": 1998,
       "founded_location": "Vancouver, British Columbia, Canada",
       "headquarters": "Vancouver, British Columbia, Canada",
-      "business_model": "Premium activewear and lifestyle apparel brand selling through company-owned stores and e-commerce globally. Known for community-based marketing, ambassador programmes, and in-store yoga/fitness events. DTC-heavy revenue model with very high brand loyalty and repeat purchase rates. Entered footwear and self-care categories.",
+      "business_model": "Premium activewear company with unusually strong brand loyalty, direct-to-consumer strength, and community-driven positioning. It is one of the clearest examples of how product, identity, and lifestyle branding can reinforce each other commercially. Sells through company-owned stores and e-commerce globally. Has entered footwear and self-care categories.",
       "products_and_categories": [
         "Activewear",
         "Yoga apparel",
@@ -483,7 +483,7 @@
       "founded": 2010,
       "founded_location": "Zürich, Switzerland",
       "headquarters": "Zürich, Switzerland",
-      "business_model": "Premium performance running and lifestyle footwear and apparel brand. Sells DTC via e-commerce and branded stores alongside selective wholesale (Foot Locker, Nordstrom, etc.). Known for proprietary CloudTec sole technology. Has entered apparel and accessories. Strong innovation and design positioning.",
+      "business_model": "Swiss performance and lifestyle brand that has scaled rapidly through product innovation, design clarity, and premium athletic positioning. Its momentum reflects both category growth and the success of building a modern global brand in performance footwear. Sells DTC via e-commerce and branded stores alongside selective wholesale. Known for proprietary CloudTec sole technology.",
       "products_and_categories": [
         "Running shoes",
         "Trail shoes",
@@ -507,7 +507,7 @@
       "founded": 1967,
       "founded_location": "New York City, NY, USA",
       "headquarters": "New York City, NY, USA",
-      "business_model": "Global premium lifestyle brand selling apparel, accessories, home, and fragrance through its own retail stores, e-commerce, and wholesale (department stores). Known for aspirational American luxury aesthetic. Multiple price-tier brands under portfolio. Strong brand equity and global recognition.",
+      "business_model": "Global premium lifestyle company built on one of the most durable brand identities in fashion. Its strength lies in turning a clear aesthetic universe into recurring demand across categories, price points, and geographies. Operates a multi-brand portfolio including Polo Ralph Lauren, Ralph Lauren Purple Label, Double RL, Lauren Ralph Lauren, and Chaps (licensed).",
       "products_and_categories": [
         "Apparel",
         "Accessories",
@@ -537,7 +537,7 @@
       "founded": 1938,
       "founded_location": "Portland, Oregon, USA",
       "headquarters": "Portland, Oregon, USA",
-      "business_model": "Multi-brand outdoor and active lifestyle apparel, footwear, and equipment company. Sells through wholesale (department stores, outdoor retailers), DTC stores, and e-commerce. Designs and markets products globally with manufacturing outsourced. Family-controlled company (Boyle family).",
+      "business_model": "Outdoor and active lifestyle group with a portfolio built around utility, performance, and accessible brand recognition. Compared with more fashion-led peers, its appeal is rooted more in product function and category durability. Operates Columbia, Sorel, Mountain Hardwear, and prAna through wholesale, DTC stores, and e-commerce.",
       "products_and_categories": [
         "Outerwear",
         "Sportswear",
@@ -564,7 +564,7 @@
       "founded": 1774,
       "founded_location": "Langenselbold, Germany",
       "headquarters": "Linz am Rhein, Germany",
-      "business_model": "Premium lifestyle footwear brand built around anatomical cork-latex footbed technology. Sells through selective wholesale (Nordstrom, specialty retailers), DTC stores, and e-commerce. Brand has repositioned from orthopaedic/functional into fashion-lifestyle crossover with premium pricing. Very selective distribution to protect brand equity.",
+      "business_model": "Footwear company that has transformed a heritage comfort brand into a premium lifestyle asset with global cultural relevance. Its success is especially notable because it combines functional product roots with strong contemporary brand positioning. Sells through selective wholesale, DTC stores, and e-commerce. Built around anatomical cork-latex footbed technology.",
       "products_and_categories": [
         "Sandals",
         "Clogs",

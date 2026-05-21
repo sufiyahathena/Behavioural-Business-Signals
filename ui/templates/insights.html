@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <p class="gd-note" style="margin-top:10px;">Live price performance relative to the BrandSignals universe. A company can appear among the top 3 performers over a period even if its return is negative, if peers performed worse. Valuation rankings are shown for context only and should be read alongside the full dashboard. Updated on page load via Yahoo Finance (15-minute delay).</p>
+        <p class="gd-note" style="margin-top:10px;">Price and valuation data cached daily — refreshed once every 24 hours on first page load. Live price performance relative to the BrandSignals universe. A company can appear among the top 3 performers over a period even if its return is negative, if peers performed worse. Valuation rankings are shown for context only and should be read alongside the full dashboard. Updated on page load via Yahoo Finance (15-minute delay).</p>
     </div>
 
     <!-- SECTION 2: VALUATION -->
@@ -221,13 +221,13 @@ const COMPANY_NAMES = {
 // Fetch scores + sentiment for all companies
 Promise.all([
     fetch('/api/scores').then(r => r.json()),
-    ...Object.keys(COMPANY_NAMES).map(t =>
-        fetch(`/api/sentiment/${t}`).then(r => r.json()).catch(() => ({ticker: t}))
-    )
-]).then(([scores, ...sentiments]) => {
+    fetch('/api/insights_data').then(r => r.json()).catch(() => ({}))
+]).then(([scores, insightsData]) => {
 
     const sentMap = {};
-    sentiments.forEach(s => { if (s.ticker) sentMap[s.ticker] = s; });
+    Object.keys(insightsData).forEach(ticker => {
+        sentMap[ticker] = { ticker, ...insightsData[ticker] };
+    });
 
     const scoreMap = {};
     scores.forEach(s => { scoreMap[s.ticker] = s; });
