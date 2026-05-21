@@ -23,27 +23,28 @@
         "Estée Lauder",
         "Clinique",
         "MAC",
-        "Bobbi Brown",
         "La Mer",
-        "Origins",
-        "Aveda",
         "Jo Malone London",
         "Tom Ford Beauty",
-        "Bumble and bumble",
-        "Smashbox",
+        "Aveda",
+        "Bobbi Brown",
         "Too Faced",
         "Dr.Jart+",
-        "The Ordinary",
-        "NIOD",
-        "BALMAIN Beauty",
-        "KILIAN PARIS",
-        "GLAMGLOW",
-        "Frédéric Malle",
+        "Origins",
+        "Bumble and bumble",
         "Le Labo",
         "AERIN Beauty",
+        "Smashbox",
+        "KILIAN PARIS",
+        "GLAMGLOW",
+        "NIOD",
+        "The Ordinary",
+        "BALMAIN Beauty",
+        "Frédéric Malle",
+        "Aramis",
         "Darphin Paris",
         "Lab Series",
-        "Aramis"
+        "DECIEM"
       ],
       "target_audience": "Women aged 25–65. Prestige and luxury beauty channels globally.",
       "market_cap_tier": "Large Cap",
@@ -68,12 +69,13 @@
         "Wellness"
       ],
       "subsidiaries_and_brands": [
-        "Ulta Beauty (retail)",
-        "Ulta Beauty at Target (shop-in-shop partnership)"
+        "Ulta Beauty",
+        "Space NK",
+        "Ulta Beauty Collection (private label)"
       ],
       "target_audience": "Women aged 18–45. ~44 million Ultamate Rewards active members (FY2024).",
       "market_cap_tier": "Large Cap",
-      "notes": "Largest specialty beauty retailer in the U.S. Known for combining prestige and mass beauty in one retail format. Partnership with Target expands reach significantly."
+      "notes": "Space NK acquired July 10, 2025. ULTA's fiscal year ends January 31 — Space NK is not included in FY2025 financial scoring data (which covers the year ended January 2025). Space NK will be reflected in FY2026 results."
     },
     {
       "id": 3,
@@ -93,14 +95,15 @@
       ],
       "subsidiaries_and_brands": [
         "e.l.f. Cosmetics",
-        "e.l.f. Skin",
+        "e.l.f. SKIN",
         "Well People",
         "Keys Soulcare",
-        "Naturium"
+        "Naturium",
+        "rhode"
       ],
       "target_audience": "Gen Z and Millennials aged 16–30. #1 mass cosmetics brand among teens (Piper Sandler, 2024).",
       "market_cap_tier": "Mid Cap",
-      "notes": "One of the fastest-growing beauty companies in the U.S. in recent years. Exceptionally strong TikTok and social media presence. Acquisitive growth strategy via brands like Naturium."
+      "notes": "rhode acquired August 5, 2025 for ~$800M. ELF's fiscal year ends March 31 — rhode is not included in FY2025 financial scoring data (which covers the year ended March 2025). rhode will be reflected in FY2026 results."
     },
     {
       "id": 4,
@@ -125,13 +128,20 @@
         "Sally Hansen",
         "Max Factor",
         "Bourjois",
-        "Kylie Cosmetics",
-        "Kylie Skin",
-        "Hugo Boss Fragrances (licensed)",
-        "Gucci Beauty (licensed)",
-        "Burberry Beauty (licensed)",
-        "Calvin Klein Fragrances (licensed)",
-        "Marc Jacobs Beauty (licensed)"
+        "philosophy",
+        "Lancaster",
+        "Orveda",
+        "Infiniment Coty Paris",
+        "Kylie Cosmetics (51% owned)",
+        "Kylie Skin (51% owned)",
+        "Burberry (licensed)",
+        "Calvin Klein (licensed)",
+        "Gucci (licensed)",
+        "Hugo Boss (licensed)",
+        "Marc Jacobs (licensed)",
+        "Tiffany & Co. (licensed)",
+        "Davidoff (licensed)",
+        "Chloé (licensed)"
       ],
       "target_audience": "Mass beauty consumers (Consumer division); fragrance buyers aged 25–55 (Prestige division).",
       "market_cap_tier": "Mid Cap",
@@ -181,8 +191,9 @@
       ],
       "subsidiaries_and_brands": [
         "Sally Beauty Supply",
+        "Beauty Systems Group",
         "CosmoProf",
-        "Armstrong McDowell"
+        "Armstrong McCall"
       ],
       "target_audience": "DIY beauty consumers and licensed professionals aged 25–55. 4,800+ stores across 12 countries.",
       "market_cap_tier": "Small Cap",
@@ -204,12 +215,13 @@
         "Wellness"
       ],
       "subsidiaries_and_brands": [
-        "IL MAKIAGE (makeup and skincare)",
-        "SpoiledChild (haircare and wellness)"
+        "IL MAKIAGE",
+        "SpoiledChild",
+        "METHODIQ"
       ],
       "target_audience": "Digitally native beauty consumers aged 20–40. 100% DTC, no physical retail.",
       "market_cap_tier": "Mid Cap",
-      "notes": "Unique as a tech-forward beauty operator. Strong unit economics and DTC model. Relatively recent IPO (2023). AI-powered shade matching quiz is a core acquisition tool."
+      "notes": "Holding company. METHODIQ launched November 2025 — partially included in FY2025 financial results (Q4 2025, year ending December 31 2025). Alexandre Vauthier not applicable to ODD."
     },
     {
       "id": 8,
@@ -233,18 +245,30 @@
         "Garnier",
         "Maybelline New York",
         "NYX Professional Makeup",
+        "Essie",
         "Lancôme",
         "Yves Saint Laurent Beauty",
         "Giorgio Armani Beauty",
         "Kiehl's",
         "Urban Decay",
         "IT Cosmetics",
+        "Youth To The People",
+        "Aesop",
+        "Biotherm",
+        "Helena Rubinstein",
+        "Valentino Beauty",
+        "Prada Beauty",
+        "Miu Miu Beauty",
         "La Roche-Posay",
         "CeraVe",
         "Vichy",
+        "SkinCeuticals",
         "Kérastase",
         "Redken",
-        "Matrix"
+        "Matrix",
+        "L'Oréal Professionnel",
+        "Pureology",
+        "Color Wow"
       ],
       "target_audience": "Global consumers across all demographics. Present in 150+ countries across four divisions.",
       "market_cap_tier": "Large Cap (Mega Cap)",
@@ -299,6 +323,8 @@
         "American Eagle",
         "Aerie",
         "Offline by Aerie",
+        "Todd Snyder",
+        "Unsubscribed",
         "Quiet Platforms"
       ],
       "target_audience": "Gen Z and Millennials aged 15–28. Aerie is one of the fastest-growing intimates brands in the US.",
@@ -325,12 +351,13 @@
       ],
       "subsidiaries_and_brands": [
         "Urban Outfitters",
+        "Anthropologie",
+        "Anthropologie Weddings",
         "Free People",
         "FP Movement",
-        "Anthropologie",
         "Terrain",
         "BHLDN",
-        "Nuuly (rental subscription)",
+        "Nuuly",
         "Menus & Venues"
       ],
       "target_audience": "Urban Outfitters: 18–28. Free People: 25–35. Anthropologie: 30–50. All women-skewed.",
@@ -385,7 +412,8 @@
       ],
       "subsidiaries_and_brands": [
         "Levi's",
-        "Beyond Yoga"
+        "Beyond Yoga",
+        "Levi Strauss Signature"
       ],
       "target_audience": "Broad demographic aged 18–45. Levi's sold in 110+ countries.",
       "market_cap_tier": "Mid Cap",
@@ -410,13 +438,14 @@
         "Lifestyle"
       ],
       "subsidiaries_and_brands": [
-        "REVOLVE (main platform)",
-        "FORWARD (luxury companion platform)",
-        "Alliance Apparel (owned brand group)"
+        "REVOLVE",
+        "FWRD",
+        "Alexandre Vauthier (majority stake)",
+        "Alliance Apparel"
       ],
       "target_audience": "Millennial and Gen Z women aged 18–35. ~2 million active customers (FY2024).",
       "market_cap_tier": "Small/Mid Cap",
-      "notes": "Pioneered influencer-driven e-commerce. REVOLVE Festival at Coachella is a signature brand moment. Has faced margin pressure and return rate challenges. Excellent behavioural signal candidate."
+      "notes": "Alexandre Vauthier majority stake acquired June 2024 — fully included in FY2025 financial results (year ending December 31 2025)."
     },
     {
       "id": 15,
@@ -488,12 +517,12 @@
         "Watches"
       ],
       "subsidiaries_and_brands": [
-        "Ralph Lauren (flagship)",
         "Polo Ralph Lauren",
-        "Double RL (RRL)",
         "Ralph Lauren Purple Label",
+        "Double RL (RRL)",
         "Lauren Ralph Lauren",
-        "Chaps (licensed)"
+        "Chaps (licensed)",
+        "Ralph Lauren Hospitality"
       ],
       "target_audience": "Premium consumers aged 25–65. Present in 55+ countries across all price tiers.",
       "market_cap_tier": "Large Cap",
@@ -546,8 +575,7 @@
       ],
       "subsidiaries_and_brands": [
         "Birkenstock",
-        "Papillio (fashion sub-line)",
-        "Betula"
+        "Papillio by Birkenstock"
       ],
       "target_audience": "Comfort and lifestyle consumers aged 20–65. Expanded into fashion demographics post-2023. Sold in 100+ countries.",
       "market_cap_tier": "Mid Cap",

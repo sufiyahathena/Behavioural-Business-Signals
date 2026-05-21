@@ -620,11 +620,11 @@ def create_app() -> Flask:
                     },
                     "contents": gemini_contents,
                     "generationConfig": {
-                        "maxOutputTokens": 1000,
-                        "temperature": 0.7,
+                        "maxOutputTokens": 500,
+                        "temperature": 0.3,
                     }
                 },
-                timeout=30,
+                timeout=60,
             )
 
             result = response.json()

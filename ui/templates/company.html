@@ -68,7 +68,17 @@
             </div>
         </div>
 
-        {% if company.ticker == 'COTY' %}
+        {% if company.ticker == 'ELF' %}
+        <div class="holding-company-note" style="border-left-color: #ec4899; background: rgba(236,72,153,0.04);">
+            <span class="holding-company-icon">ℹ</span>
+            <span><strong>rhode acquisition note:</strong> e.l.f. Beauty acquired rhode (founded by Hailey Bieber) on August 5, 2025 for approximately $800M. As e.l.f. Beauty's fiscal year ends March 31, the FY2025 financial scoring data covers the year ended March 2025 — before the rhode acquisition closed. rhode is not reflected in the current financial scores and will appear in FY2026 results.</span>
+        </div>
+        {% elif company.ticker == 'ULTA' %}
+        <div class="holding-company-note" style="border-left-color: #ec4899; background: rgba(236,72,153,0.04);">
+            <span class="holding-company-icon">ℹ</span>
+            <span><strong>Space NK acquisition note:</strong> Ulta Beauty acquired Space NK, a UK and Ireland luxury beauty retailer, on July 10, 2025. As Ulta Beauty's fiscal year ends January 31, the FY2025 financial scoring data covers the year ended January 2025 — before the Space NK acquisition closed. Space NK is not reflected in the current financial scores and will appear in FY2026 results.</span>
+        </div>
+        {% elif company.ticker == 'COTY' %}
         <div class="holding-company-note">
             <span class="holding-company-icon">🏢</span>
             <span>Coty Inc. is a holding company — it operates as a portfolio owner across prestige and consumer beauty divisions rather than as a single consumer-facing brand. Scores and signals are assessed at the corporate level where possible, with subsidiary proxies used where direct corporate-level data is unavailable.</span>
@@ -787,6 +797,15 @@
                 el.style.letterSpacing = '0.03em';
             }
             renderPeer('val-pe-peer', v.pe_vs_peers);
+
+            // ELF P/E note
+            if (ticker === 'ELF' && v.pe_ratio && v.pe_ratio > 50) {
+                const peDesc = document.querySelector('#val-pe').closest('.val-item').querySelector('.val-desc');
+                if (peDesc) {
+                    peDesc.textContent = 'How much investors pay per dollar of earnings. Peer median: 15.0x. ELF\'s elevated P/E (~115x) reflects compressed near-term earnings following the $600M cash outlay for the rhode acquisition in August 2025.';
+                }
+            }
+
             renderPeer('val-ev-peer', v.ev_vs_peers);
             renderPeer('val-ps-peer', v.ps_vs_peers);
 
