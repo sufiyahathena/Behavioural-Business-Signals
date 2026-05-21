@@ -1787,6 +1787,9 @@ table.scoreboard td a:hover {
     font-weight: 800;
     color: #1a1f36;
     margin: 0 0 16px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
 }
 
 .fb-intro {
@@ -2880,4 +2883,229 @@ html {
     color: #9ca3af;
     margin-top: 3px;
     line-height: 1.4;
+}
+
+/* ── Valuation multiples ─────────────────────────────────── */
+.valuation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.val-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.val-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+.val-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1f36;
+    margin-bottom: 4px;
+}
+
+.val-desc {
+    font-size: 0.70rem;
+    color: #9ca3af;
+    line-height: 1.4;
+}
+
+/* ── Market Sentiment ────────────────────────────────────── */
+.sentiment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.sent-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.sent-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+.sent-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1f36;
+    margin-bottom: 8px;
+}
+
+.sent-bar-wrap {
+    background: #e5e7eb;
+    border-radius: 999px;
+    height: 4px;
+    width: 100%;
+    margin-bottom: 4px;
+    overflow: hidden;
+}
+
+.sent-bar {
+    height: 4px;
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+.sent-range {
+    font-size: 0.68rem;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+.sent-desc {
+    font-size: 0.70rem;
+    color: #9ca3af;
+    line-height: 1.4;
+    margin-top: 4px;
+}
+
+.sent-peer {
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-top: 2px;
+    letter-spacing: 0.03em;
+    display: block;
+}
+
+/* ── Insights page ───────────────────────────────────────── */
+.insights-leaderboard-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.insights-lb-card {
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 1px solid #e5e7eb;
+}
+
+.insights-lb-top {
+    background: rgba(22,163,74,0.04);
+    border-color: rgba(22,163,74,0.20);
+}
+
+.insights-lb-bottom {
+    background: rgba(220,38,38,0.04);
+    border-color: rgba(220,38,38,0.20);
+}
+
+.insights-lb-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+.insights-lb-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.insights-lb-item:last-child {
+    border-bottom: none;
+}
+
+.insights-lb-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #1a1f36;
+}
+
+.insights-lb-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.insights-lb-loading {
+    font-size: 0.82rem;
+    color: #9ca3af;
+    padding: 8px 0;
+}
+
+/* ── Insights section colours ────────────────────────────── */
+.insights-section-valuation {
+    border-left: 4px solid #ec4899;
+    padding-left: 24px;
+}
+
+.insights-section-valuation h2 {
+    color: #be185d;
+}
+
+.insights-section-sentiment {
+    border-left: 4px solid #3b82f6;
+    padding-left: 24px;
+}
+
+.insights-section-sentiment h2 {
+    color: #1d4ed8;
+}
+
+.insights-section-scores {
+    border-left: 4px solid #8b5cf6;
+    padding-left: 24px;
+}
+
+.insights-section-scores h2 {
+    color: #6d28d9;
+}
+
+.insights-section-limits {
+    border-left: 4px solid #9ca3af;
+    padding-left: 24px;
+}
+
+.insights-section-limits h2 {
+    color: #4b5563;
+}
+
+/* ── Insights section metric name colours ────────────────── */
+.insights-section-valuation .fb-metric-name {
+    color: #be185d !important;
+}
+
+.insights-section-sentiment .fb-metric-name {
+    color: #1d4ed8 !important;
+}
+
+.insights-section-scores .fb-metric-name {
+    color: #6d28d9 !important;
+}
+
+.insights-section-limits .fb-metric-name {
+    color: #4b5563 !important;
+}
+
+/* ── Uppercase section titles ────────────────────────────── */
+.fb-page .about-section h2,
+.fb-page .fb-bucket-section h2 {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }

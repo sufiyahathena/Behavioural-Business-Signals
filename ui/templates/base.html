@@ -13,8 +13,9 @@
             <div class="nav-links">
                 <a href="/visualise" class="{{ 'nav-active' if active_page == 'visualise' }}">Visualise</a>
                 <a href="/companies" class="{{ 'nav-active' if active_page == 'companies' }}">Companies</a>
-                <a href="/financial-breakdown" class="{{ 'nav-active' if active_page == 'financial' }}">Financial Breakdown</a>
-                <a href="/behavioural-breakdown" class="{{ 'nav-active' if active_page == 'behavioural' }}">Behavioural Breakdown</a>
+                <a href="/financial-breakdown" class="{{ 'nav-active' if active_page == 'financial' }}">Financial</a>
+                <a href="/behavioural-breakdown" class="{{ 'nav-active' if active_page == 'behavioural' }}">Behavioural</a>
+                <a href="/insights" class="{{ 'nav-active' if active_page == 'insights' }}">Insights</a>
                 <a href="/about" class="{{ 'nav-active' if active_page == 'about' }}">About</a>
                 <a href="/ethics" class="{{ 'nav-active' if active_page == 'ethics' }}">Ethics</a>
                 <a href="/purpose" class="{{ 'nav-active' if active_page == 'purpose' }}">Purpose</a>
@@ -58,7 +59,7 @@ BrandSignals is a dual-score intelligence platform evaluating publicly traded co
 1. Financial Score (0-100) — peer-relative, based on 10 financial metrics
 2. Behavioural Score (0-100) — peer-relative, based on 8 behavioural signals
 
-Both scores are comparative — calculated relative to the 19-company peer group, not absolute benchmarks. A score of 50 = middle of the peer group.
+Both scores are comparative — calculated relative to the BrandSignals peer group, not absolute benchmarks. A score of 50 = middle of the peer group.
 
 ## THE 19 COMPANIES AND CURRENT SCORES
 
@@ -97,8 +98,8 @@ Both scores are comparative — calculated relative to the 19-company peer group
 - Financial Health (21%): Debt to Equity (inverted), Current Ratio, Interest Coverage
 - Returns (25%): ROE, ROA
 
-Data sources: yfinance is the active primary source for all financial data. Financial Modeling Prep (FMP) is configured as primary in the waterfall pipeline but currently inactive due to API deprecation — it will automatically reactivate if access is restored. All data is from annual statements only. All 19 companies are scored on FY2025 data collected May 2026.
-Normalisation: min-max across 19 companies. Debt-to-Equity is inverted (lower = better).
+Data sources: yfinance is the primary active data source serving multiple purposes — financial statement data (annual filings), live stock prices (15-min delayed), live market caps (24hr cache), valuation multiples (P/E, EV/EBITDA, P/S), and market sentiment data (returns, volatility, 52-week range). Financial Modeling Prep (FMP) is configured as the primary source in the waterfall pipeline and will automatically activate if access is restored — currently inactive due to API deprecation. All companies in the BrandSignals universe are scored on their most recently available FY2025 annual filing, collected May 2026.
+Normalisation: min-max across the BrandSignals universe. Debt-to-Equity is inverted (lower = better).
 Missing data: proportional reweighting — no median imputation.
 Special rule: Debt-light companies (D/E < 0.5, no interest expense) assigned Interest Coverage = 25.0.
 Data freshness: refreshed quarterly.
@@ -145,24 +146,25 @@ Data sources and freshness:
 - All scores are peer-relative — a high score means strong relative to these 19 peers, not absolutely
 
 ## SITE PAGES
-- /home — landing page with platform overview
-- /companies — scoreboard table with all 19 companies, their scores and quadrant classification
-- /visualise — interactive bubble chart, zoom, quadrant click-to-zoom; clicking a bubble opens a quick-view panel showing scores, description, brands, and live stock price (15-minute delayed via Yahoo Finance)
-- /company/<ticker> — individual company page with financial metrics table, behavioural signals table, spider map, Glassdoor snapshot, news feed, and live stock price (15-minute delayed via Yahoo Finance, showing current price and % change vs previous close)
-- /financial-breakdown — full financial methodology with bucket navigation
-- /behavioural-breakdown — full behavioural methodology with bucket navigation, geography logic, special rules
-- /about — platform overview, companies covered, methodology summary
-- /purpose — why BrandSignals was built, personal context
-- /ethics — ethics as a dimension of business quality; covers supply chain and labour (OECD due diligence guidance), environmental impact (UNEP, European Parliament), and animal and product ethics (EU framework on alternatives to animal testing). Ethics is not currently part of the BrandSignals score but is explored as a future third dimension alongside Financial and Behavioural scoring.
+- /home — landing page with platform overview and Visualise button
+- /companies — scoreboard table with all companies in the BrandSignals universe, scores, quadrant classification, and quadrant guide cards
+- /visualise — interactive bubble chart with zoom, quadrant click-to-zoom, live market caps (updated daily); clicking a bubble opens a quick-view panel with scores, description, brands, live stock price (15-min delayed), and live market cap
+- /company/<ticker> — individual company page with: live stock price (15-min delayed), valuation multiples (P/E, EV/EBITDA, Price/Sales with peer median comparisons; P/E not shown for loss-making companies), financial metrics table, behavioural signals table, Glassdoor snapshot, dual radar spider maps, market sentiment dashboard (1M return, 3M return, 52-week position, 30-day volatility, vs XLY and vs SPY), and news feed
+- /financial-breakdown — full financial methodology (navbar shows as "Financial")
+- /behavioural-breakdown — full behavioural methodology with bucket navigation, geography logic, special rules (navbar shows as "Behavioural")
+- /insights — market overview with live leaderboards (top/bottom performers by 1M and 3M return, cheapest/most expensive by EV/EBITDA), valuation scatter chart (P/E vs EV/EBITDA), and educational content covering valuation multiples, market sentiment indicators, BrandSignals scores, and limitations
+- /about — platform overview, companies covered, methodology summary, and full data sources section
+- /purpose — personal context, why beauty and fashion, why this project matters
+- /ethics — ethics as a future third dimension; covers supply chain, environmental impact, animal ethics
 
 ## HOW TO RESPOND
 - Be concise and direct
-- Always tell users which page to visit for more detail (e.g. "You can see this on the Financial Breakdown page" or "Visit the Lululemon company page for the full breakdown")
+- Always tell users which page to visit for more detail (e.g. "You can see this on the Financial page" or "Visit the Lululemon company page for the full breakdown")
 - If asked about a specific company, reference their actual scores
 - If asked about methodology, explain clearly and point to the relevant breakdown page
 
 ## FINANCIAL DATA FRESHNESS
-All 19 companies are scored on FY2025 annual filings — the most recently available data as of May 2026, sourced via yfinance. Fiscal year end dates vary:
+All companies in the BrandSignals universe are scored on FY2025 annual filings — the most recently available data as of May 2026, sourced via yfinance. Fiscal year end dates vary:
 - January 31 FY end (FY2025 = Jan 2026): ULTA, ANF, AEO, URBN, GAP, LULU
 - December 31 FY end (FY2025 = Dec 2025): OLPX, ODD, LRLCY, RVLV, ONON, COLM
 - March 31 FY end (FY2025 = Mar 2025): ELF, RL
@@ -170,6 +172,26 @@ All 19 companies are scored on FY2025 annual filings — the most recently avail
 - September 30 FY end (FY2025 = Sep 2025): SBH, BIRK
 - November 30 FY end (FY2025 = Nov 2025): LEVI
 If asked about data freshness or fiscal year, always confirm all companies are on FY2025 data.
+
+## VALUATION MULTIPLES (live via yfinance)
+Peer median multiples across the BrandSignals universe:
+- P/E Ratio peer median: 15.0x
+- EV/EBITDA peer median: 10.4x
+- Price/Sales peer median: 1.16x
+Above peer median = more expensive relative to peers (shown in red)
+Below peer median = cheaper relative to peers (shown in green)
+P/E and EV/EBITDA are NOT shown for loss-making companies: EL, COTY, OLPX currently report net losses so P/E is not applicable. Price/Sales is always shown.
+Note: ELF has an unusually high P/E (~115x) due to depressed earnings — it is excluded from the valuation scatter chart on the Insights page as an outlier.
+
+## MARKET SENTIMENT (live via yfinance, 15-min delayed)
+Each company page shows:
+- 1-month stock price return
+- 3-month stock price return
+- 52-week position (0% = at 52-week low, 100% = at 52-week high)
+- 30-day annualised volatility (peer median: 44%)
+- Performance vs XLY (Consumer Discretionary ETF) over 3 months
+- Performance vs SPY (S&P 500) over 3 months
+Returns are price returns only, excluding dividends.
 
 - Keep a warm, professional tone consistent with the BrandSignals brand`;
 
@@ -261,12 +283,12 @@ function formatChatReply(text) {
 
     // Step 6: Replace known page name references with clean titled hyperlinks
     const pageLinks = [
-        ['Behavioural Breakdown page', '/behavioural-breakdown', 'Behavioural Breakdown'],
-        ['Behavioural Breakdown', '/behavioural-breakdown', 'Behavioural Breakdown'],
-        ['Financial Breakdown page', '/financial-breakdown', 'Financial Breakdown'],
-        ['Financial Breakdown', '/financial-breakdown', 'Financial Breakdown'],
-        ['/behavioural-breakdown', '/behavioural-breakdown', 'Behavioural Breakdown'],
-        ['/financial-breakdown', '/financial-breakdown', 'Financial Breakdown'],
+        ['Behavioural Breakdown page', '/behavioural-breakdown', 'Behavioural'],
+        ['Behavioural Breakdown', '/behavioural-breakdown', 'Behavioural'],
+        ['Financial Breakdown page', '/financial-breakdown', 'Financial'],
+        ['Financial Breakdown', '/financial-breakdown', 'Financial'],
+        ['/behavioural-breakdown', '/behavioural-breakdown', 'Behavioural'],
+        ['/financial-breakdown', '/financial-breakdown', 'Financial'],
         ['Visualise page', '/visualise', 'Visualise'],
         ['/visualise', '/visualise', 'Visualise'],
         ['Companies page', '/companies', 'Companies'],

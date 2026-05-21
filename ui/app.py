@@ -708,4 +708,131 @@ def create_app() -> Flask:
             logger.error("Stock price fetch error for %s: %s", ticker, e)
             return jsonify({"ticker": ticker, "price": None, "error": str(e)}), 200
 
+    @app.route("/api/sentiment/<ticker>")
+    def api_sentiment(ticker: str):
+        """Return market sentiment and valuation metrics for a ticker via yfinance."""
+        try:
+            import yfinance as yf
+            from datetime import datetime, timedelta
+
+            t = yf.Ticker(ticker)
+            info = t.info
+
+            # ── Valuation multiples ───────────────────────────────────
+            pe_ratio = info.get("trailingPE") or info.get("forwardPE")
+            ev_ebitda = info.get("enterpriseToEbitda")
+            price_to_sales = info.get("priceToSalesTrailing12Months")
+
+            # Peer median multiples (static, refreshed quarterly)
+            peer_medians = {
+                "pe_ratio": 15.0,
+                "ev_ebitda": 10.4,
+                "price_to_sales": 1.16,
+            }
+
+            def vs_median(val, median):
+                if val is None or median is None:
+                    return None
+                diff_pct = ((val - median) / median) * 100
+                if diff_pct > 15:
+                    return "above peer median"
+                elif diff_pct < -15:
+                    return "below peer median"
+                else:
+                    return "in line with peers"
+
+            # ── Price history for returns ─────────────────────────────
+            end = datetime.today()
+            start_1y = end - timedelta(days=370)
+
+            hist = t.history(start=start_1y.strftime("%Y-%m-%d"), end=end.strftime("%Y-%m-%d"))
+
+            def get_return(days_ago):
+                if hist.empty or len(hist) < 5:
+                    return None
+                cutoff = end - timedelta(days=days_ago)
+                past = hist[hist.index <= cutoff.strftime("%Y-%m-%d")]
+                if past.empty:
+                    return None
+                past_price = float(past["Close"].iloc[-1])
+                current_price = float(hist["Close"].iloc[-1])
+                return round(((current_price - past_price) / past_price) * 100, 2)
+
+            return_1m = get_return(30)
+            return_3m = get_return(90)
+
+            # ── 52-week position ──────────────────────────────────────
+            week52_high = info.get("fiftyTwoWeekHigh")
+            week52_low = info.get("fiftyTwoWeekLow")
+            current_price = info.get("currentPrice") or info.get("regularMarketPrice")
+            week52_position = None
+            if week52_high and week52_low and current_price and (week52_high - week52_low) > 0:
+                week52_position = round(((current_price - week52_low) / (week52_high - week52_low)) * 100, 1)
+
+            # ── 30-day volatility ─────────────────────────────────────
+            volatility_30d = None
+            if not hist.empty and len(hist) >= 20:
+                recent = hist["Close"].tail(30)
+                daily_returns = recent.pct_change().dropna()
+                volatility_30d = round(float(daily_returns.std() * (252 ** 0.5) * 100), 1)
+
+            # ── Relative performance vs XLY ───────────────────────────
+            def get_benchmark_return(sym, days_ago):
+                try:
+                    b = yf.Ticker(sym)
+                    bh = b.history(start=(end - timedelta(days=days_ago+10)).strftime("%Y-%m-%d"),
+                                   end=end.strftime("%Y-%m-%d"))
+                    if bh.empty or len(bh) < 5:
+                        return None
+                    cutoff = end - timedelta(days=days_ago)
+                    past = bh[bh.index <= cutoff.strftime("%Y-%m-%d")]
+                    if past.empty:
+                        return None
+                    past_price = float(past["Close"].iloc[-1])
+                    current = float(bh["Close"].iloc[-1])
+                    return round(((current - past_price) / past_price) * 100, 2)
+                except Exception:
+                    return None
+
+            xly_3m = get_benchmark_return("XLY", 90)
+            spy_3m = get_benchmark_return("SPY", 90)
+
+            vs_xly_3m = round(return_3m - xly_3m, 2) if return_3m is not None and xly_3m is not None else None
+            vs_spy_3m = round(return_3m - spy_3m, 2) if return_3m is not None and spy_3m is not None else None
+
+            return jsonify({
+                "ticker": ticker,
+                "valuation": {
+                    "pe_ratio": round(float(pe_ratio), 1) if pe_ratio else None,
+                    "pe_vs_peers": vs_median(pe_ratio, peer_medians["pe_ratio"]),
+                    "ev_ebitda": round(float(ev_ebitda), 1) if ev_ebitda else None,
+                    "ev_vs_peers": vs_median(ev_ebitda, peer_medians["ev_ebitda"]),
+                    "price_to_sales": round(float(price_to_sales), 2) if price_to_sales else None,
+                    "ps_vs_peers": vs_median(price_to_sales, peer_medians["price_to_sales"]),
+                    "peer_median_pe": peer_medians["pe_ratio"],
+                    "peer_median_ev": peer_medians["ev_ebitda"],
+                    "peer_median_ps": peer_medians["price_to_sales"],
+                },
+                "sentiment": {
+                    "return_1m": return_1m,
+                    "return_3m": return_3m,
+                    "week52_position": week52_position,
+                    "week52_high": round(float(week52_high), 2) if week52_high else None,
+                    "week52_low": round(float(week52_low), 2) if week52_low else None,
+                    "volatility_30d": volatility_30d,
+                    "vs_xly_3m": vs_xly_3m,
+                    "vs_spy_3m": vs_spy_3m,
+                    "xly_3m": xly_3m,
+                    "spy_3m": spy_3m,
+                }
+            })
+
+        except Exception as e:
+            logger.error("Sentiment fetch error for %s: %s", ticker, e)
+            return jsonify({"ticker": ticker, "error": str(e)}), 200
+
+    @app.route("/insights")
+    def insights():
+        return render_template("insights.html", active_page="insights")
+
     return app

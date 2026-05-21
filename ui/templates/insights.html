@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+{% block title %}Insights — BrandSignals{% endblock %}
+{% block content %}
+
+<div class="about-page fb-page">
+
+    <!-- MARKET OVERVIEW -->
+    <div class="about-section">
+        <h2>Market Overview</h2>
+
+        <!-- 1M Return leaderboard -->
+        <div class="insights-leaderboard-row">
+            <div class="insights-lb-card insights-lb-top">
+                <div class="insights-lb-title">↑ Top Performers — 1 Month</div>
+                <div id="lb-1m-top" class="insights-lb-list">
+                    <div class="insights-lb-loading">Loading...</div>
+                </div>
+            </div>
+            <div class="insights-lb-card insights-lb-bottom">
+                <div class="insights-lb-title">↓ Bottom Performers — 1 Month</div>
+                <div id="lb-1m-bot" class="insights-lb-list">
+                    <div class="insights-lb-loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3M Return leaderboard -->
+        <div class="insights-leaderboard-row" style="margin-top:16px;">
+            <div class="insights-lb-card insights-lb-top">
+                <div class="insights-lb-title">↑ Top Performers — 3 Months</div>
+                <div id="lb-3m-top" class="insights-lb-list">
+                    <div class="insights-lb-loading">Loading...</div>
+                </div>
+            </div>
+            <div class="insights-lb-card insights-lb-bottom">
+                <div class="insights-lb-title">↓ Bottom Performers — 3 Months</div>
+                <div id="lb-3m-bot" class="insights-lb-list">
+                    <div class="insights-lb-loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EV/EBITDA leaderboard -->
+        <div class="insights-leaderboard-row" style="margin-top:16px;">
+            <div class="insights-lb-card insights-lb-top">
+                <div class="insights-lb-title">💰 Cheapest by EV/EBITDA</div>
+                <div id="lb-ev-cheap" class="insights-lb-list">
+                    <div class="insights-lb-loading">Loading...</div>
+                </div>
+            </div>
+            <div class="insights-lb-card insights-lb-bottom">
+                <div class="insights-lb-title">💸 Most Expensive by EV/EBITDA</div>
+                <div id="lb-ev-exp" class="insights-lb-list">
+                    <div class="insights-lb-loading">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="gd-note" style="margin-top:10px;">Live price performance relative to the BrandSignals universe. A company can appear among the top 3 performers over a period even if its return is negative, if peers performed worse. Valuation rankings are shown for context only and should be read alongside the full dashboard. Updated on page load via Yahoo Finance (15-minute delay).</p>
+    </div>
+
+    <!-- SECTION 2: VALUATION -->
+    <div class="about-section insights-section-valuation">
+        <h2>Valuation</h2>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">What Are Valuation Multiples?</div>
+            <p>Valuation multiples are ratios that compare a company's market price to a financial metric such as earnings, EBITDA, or revenue. They answer a simple question: how much is the market paying for this business relative to what it produces? Multiples are most useful when compared against peers. On their own, they say little; in context, they help show whether a company is trading at a premium or discount relative to similar businesses.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">P/E Ratio — Price to Earnings</div>
+            <p>The P/E ratio divides the current share price by earnings per share. It shows how many dollars investors are willing to pay for each dollar of profit the company generates. A P/E of 15x means investors are paying 15 dollars for every 1 dollar of annual earnings. A higher P/E usually reflects stronger growth expectations, premium positioning, or greater market confidence. A lower P/E can reflect weaker expectations, recent earnings pressure, or possible undervaluation. P/E cannot be calculated for companies reporting a net loss, which is why Price/Sales can be more useful in those cases. <strong>Peer median across the BrandSignals universe: 15.0x.</strong></p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">EV/EBITDA</div>
+            <p>EV/EBITDA compares a company's enterprise value — market cap plus net debt — to its earnings before interest, taxes, depreciation, and amortisation. Analysts often prefer it to P/E because it is less affected by capital structure and financing choices. Two companies with similar operations but different debt levels may look very different on P/E, but more comparable on EV/EBITDA. Lower EV/EBITDA generally suggests the company is trading more cheaply relative to its operating earnings. <strong>Peer median across the BrandSignals universe: 10.4x.</strong></p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Price/Sales — P/S Ratio</div>
+            <p>The P/S ratio divides market capitalisation by annual revenue. It is especially useful for companies that are not yet profitable or whose earnings are temporarily distorted, because revenue is usually more stable than net income. It also works well as a cross-check alongside P/E and EV/EBITDA. A high P/S ratio means investors are paying a large premium for each dollar of revenue, which is only justified if strong future margin expansion is expected. <strong>Peer median across the BrandSignals universe: 1.16x.</strong></p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">How to Use Multiples Together</div>
+            <p>No single multiple tells the full story. P/E captures profitability but fails for loss-making companies. EV/EBITDA adjusts better for debt and capital structure. P/S is broader and more universal, but also cruder. The best approach is to read them together and ask whether the picture is consistent. A company trading below peers on all three may represent genuine value. A company trading above peers on all three deserves closer scrutiny of whether the premium is justified.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Limitations</div>
+            <p>Multiples are backward-looking. They rely on historical earnings or revenue, not future projections. They are also peer-relative within the BrandSignals universe, not against the broader market. A company that appears cheap within this group may still be expensive relative to the wider market, or vice versa.</p>
+        </div>
+
+        <!-- Valuation Scatter Chart -->
+        <h3 style="margin-top:28px; margin-bottom:8px; font-size:1rem; color:#1a1f36; text-transform:uppercase; letter-spacing:0.04em;">Valuation Map — P/E vs EV/EBITDA</h3>
+        <p class="card-subtitle" style="margin-bottom:12px;" id="scatter-note">Bubble size represents market capitalisation. Colour indicates BrandSignals quadrant. Companies without a valid P/E (loss-making) or with P/E above 50x are excluded for chart readability. ELF (115x) is excluded on this basis. Loss-making companies (EL, COTY, OLPX) are excluded as P/E is not applicable.</p>
+        <div id="valuation-scatter" style="width:100%; height:420px;"></div>
+    </div>
+
+    <!-- SECTION 3: MARKET SENTIMENT -->
+    <div class="about-section insights-section-sentiment">
+        <h2>Market Sentiment</h2>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">What Is Market Sentiment?</div>
+            <p>Market sentiment captures how investors are currently pricing and reacting to a stock. Unlike financial fundamentals, which show what a business has produced, sentiment reflects what the market expects next. It can be observed through stock price movements, momentum, volatility, and relative performance. Sentiment often diverges from fundamentals, and those gaps are where some of the most interesting analytical questions arise.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">1-Month and 3-Month Price Returns</div>
+            <p>These measure the percentage change in a company's stock price over the past 30 and 90 days. They capture short- to medium-term price momentum. Persistent positive stock price returns can indicate improving investor confidence, stronger expectations, or a market re-rating. Persistent negative stock price returns can signal deteriorating expectations, sector rotation, or company-specific concerns. Returns shown are price returns only and do not include dividends. <strong>15-minute delay applies.</strong></p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">52-Week Position</div>
+            <p>The 52-week position shows where a company's current stock price sits within its 52-week trading range. A reading of 0% means the stock price is at its lowest point of the past year. A reading of 100% means it is at its highest. A level near the bottom of the range may reflect recent selling pressure, weak sentiment, or a possible value opportunity depending on the fundamentals. A level near the top may reflect strong momentum, optimism, or a stock approaching resistance.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">30-Day Volatility</div>
+            <p>Volatility measures how much a stock price fluctuates. The figure shown is annualised, meaning it represents the expected scale of stock price swings over a full year based on the past 30 days of daily returns. Higher volatility means larger and less predictable stock price movements. Lower volatility means a more stable price. Volatility is not inherently good or bad; it is a measure of risk and uncertainty. <strong>Peer median across the BrandSignals universe: 44%.</strong></p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Relative Performance vs XLY and SPY</div>
+            <p>Comparing a stock's price return to a benchmark helps separate company-specific performance from broader market movement. If a stock price falls 10% while the market falls 15%, it has still outperformed on a relative basis. BrandSignals uses two benchmarks. XLY is the Consumer Discretionary ETF, which broadly reflects the sector many of these companies operate in. SPY tracks the S&amp;P 500 and serves as a broader US equity benchmark. Positive relative performance means the stock has outperformed the benchmark over the selected period. Negative relative performance means it has underperformed.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">How to Read the Sentiment Dashboard</div>
+            <p>The strongest insights come from reading the indicators together rather than individually. A company with positive stock price returns, a strong 52-week position, relatively low volatility, and outperformance versus both benchmarks is showing clear positive momentum. A company with weak returns, a low 52-week position, high volatility, and benchmark underperformance deserves closer examination to determine whether the weakness is temporary or structural.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 4: BRANDSIGNALS SCORES -->
+    <div class="about-section insights-section-scores">
+        <h2>BrandSignals Scores</h2>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">The Financial Score</div>
+            <p>The BrandSignals Financial Score is a number between 0 and 100 that summarises a company's financial quality across four dimensions: growth, profitability, financial health, and capital efficiency. It is built from 10 metrics drawn from annual financial statements. Each metric is normalised relative to the other companies in the universe, so the score reflects peer-relative strength rather than an absolute benchmark. A score of 50 represents the middle of this peer group. A score of 70 means the company outperforms most peers financially. A score of 30 means it ranks below most peers. The score does not tell you whether a stock is cheap or expensive; that is captured separately in the valuation multiples.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">The Behavioural Score</div>
+            <p>The BrandSignals Behavioural Score captures how a company performs across consumer, employee, and brand signals. It is built from eight signals grouped into three buckets: Consumer Experience and Trust, Employee Culture and Leadership, and Brand Momentum. Like the Financial Score, it is peer-relative and ranges from 0 to 100. A high Behavioural Score suggests strong consumer satisfaction, employee sentiment, and brand momentum relative to peers. It does not directly measure financial performance, but in consumer-facing sectors these signals often help explain where the numbers may strengthen or weaken over time.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">The Four Quadrants</div>
+            <p>Companies are mapped into four quadrants based on their position across both scores.</p>
+            <ul class="about-list" style="margin-top:10px;">
+                <li><strong>↗ Dual Strength</strong> — above 50 on both Financial and Behavioural dimensions.</li>
+                <li><strong>↘ Financial Leader</strong> — above 50 financially, below 50 behaviourally.</li>
+                <li><strong>↖ Hidden Momentum</strong> — below 50 financially, above 50 behaviourally.</li>
+                <li><strong>↙ Under Pressure</strong> — below 50 on both dimensions.</li>
+            </ul>
+            <p style="margin-top:10px;">These quadrants are not predictions. They are a way of structuring comparison across the two scoring systems.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">How to Use Dual-Score Analysis</div>
+            <p>The most analytically interesting cases in BrandSignals are the mismatches. A Financial Leader with weak behavioural signals may be producing strong results today while building future pressure beneath the surface. A Hidden Momentum company may have weaker current financials but stronger consumer trust, employee sentiment, or brand energy that could matter later. These are hypotheses, not conclusions, but they are the kinds of structured questions BrandSignals is designed to surface.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 5: LIMITATIONS AND DISCLAIMERS -->
+    <div class="about-section insights-section-limits">
+        <h2>Limitations and Disclaimers</h2>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Not Investment Advice</div>
+            <p>BrandSignals is a research and analytics platform built for educational and analytical purposes. Nothing on this platform constitutes investment advice, a recommendation to buy or sell any security, or financial guidance of any kind. All data, scores, and analysis are provided for informational purposes only. Always conduct your own due diligence and consult a qualified financial adviser before making investment decisions.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Data Delays and Freshness</div>
+            <p>Live stock prices, market capitalisation, valuation multiples, and sentiment data are sourced from Yahoo Finance via yfinance and are subject to a 15-minute delay. Financial scoring data reflects the most recently available FY2025 annual filings, collected in May 2026. Behavioural data is refreshed quarterly for automated sources and every three to six months for manually collected sources. Market cap data is cached and refreshed every 24 hours.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">Peer-Relative Scoring</div>
+            <p>BrandSignals scores are calculated relative to the companies in this universe. A high score means strong performance within this peer group; it does not mean strong performance in absolute terms or relative to the broader market. Adding or removing companies from the universe would change individual scores.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">What BrandSignals Does Not Measure</div>
+            <p>The platform does not measure ESG or sustainability performance, direct product quality, social media engagement beyond YouTube, press or media sentiment, customer loyalty metrics such as NPS or repeat purchase rate, or forward-looking analyst estimates. Ethics is explored separately on the Ethics page but is not currently incorporated into either score.</p>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script>
+// ── Insights page — live data ─────────────────────────────
+const QUADRANT_COLOURS = {
+    'Dual Strength':    'rgba(74,179,120,0.80)',
+    'Financial Leader': 'rgba(255,160,80,0.80)',
+    'Hidden Momentum':  'rgba(100,160,220,0.80)',
+    'Under Pressure':   'rgba(220,80,80,0.80)',
+};
+
+const COMPANY_NAMES = {
+    "EL":"Estée Lauder","ULTA":"Ulta Beauty","ELF":"e.l.f. Beauty",
+    "COTY":"Coty Inc.","OLPX":"Olaplex","SBH":"Sally Beauty",
+    "ODD":"Oddity Tech","LRLCY":"L'Oréal","ANF":"Abercrombie & Fitch",
+    "AEO":"American Eagle","URBN":"Urban Outfitters","GAP":"Gap Inc.",
+    "LEVI":"Levi Strauss","RVLV":"Revolve","LULU":"Lululemon",
+    "ONON":"On Holding","RL":"Ralph Lauren","COLM":"Columbia Sportswear",
+    "BIRK":"Birkenstock"
+};
+
+// Fetch scores + sentiment for all companies
+Promise.all([
+    fetch('/api/scores').then(r => r.json()),
+    ...Object.keys(COMPANY_NAMES).map(t =>
+        fetch(`/api/sentiment/${t}`).then(r => r.json()).catch(() => ({ticker: t}))
+    )
+]).then(([scores, ...sentiments]) => {
+
+    const sentMap = {};
+    sentiments.forEach(s => { if (s.ticker) sentMap[s.ticker] = s; });
+
+    const scoreMap = {};
+    scores.forEach(s => { scoreMap[s.ticker] = s; });
+
+    // ── Leaderboard ───────────────────────────────────────
+    const returns1m = [], returns3m = [];
+    Object.keys(COMPANY_NAMES).forEach(t => {
+        const s = sentMap[t];
+        if (!s || !s.sentiment) return;
+        const name = COMPANY_NAMES[t];
+        if (s.sentiment.return_1m !== null && s.sentiment.return_1m !== undefined)
+            returns1m.push({ ticker: t, name, val: s.sentiment.return_1m });
+        if (s.sentiment.return_3m !== null && s.sentiment.return_3m !== undefined)
+            returns3m.push({ ticker: t, name, val: s.sentiment.return_3m });
+    });
+
+    returns1m.sort((a,b) => b.val - a.val);
+    returns3m.sort((a,b) => b.val - a.val);
+
+    function renderLB(elId, items) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.innerHTML = items.map(item => {
+            const sign = item.val >= 0 ? '+' : '';
+            const colour = item.val >= 0 ? '#16a34a' : '#dc2626';
+            return `<div class="insights-lb-item">
+                <span class="insights-lb-name"><a href="/company/${item.ticker}" style="color:#1a1f36;text-decoration:none;">${item.name}</a></span>
+                <span class="insights-lb-val" style="color:${colour};">${sign}${item.val.toFixed(1)}%</span>
+            </div>`;
+        }).join('');
+    }
+
+    renderLB('lb-1m-top', returns1m.slice(0, 3));
+    renderLB('lb-1m-bot', returns1m.slice(-3).reverse());
+    renderLB('lb-3m-top', returns3m.slice(0, 3));
+    renderLB('lb-3m-bot', returns3m.slice(-3).reverse());
+
+    // EV/EBITDA leaderboard
+    const evList = [];
+    Object.keys(COMPANY_NAMES).forEach(t => {
+        const s = sentMap[t];
+        if (!s || !s.valuation || !s.valuation.ev_ebitda || s.valuation.ev_ebitda <= 0) return;
+        evList.push({ ticker: t, name: COMPANY_NAMES[t], val: s.valuation.ev_ebitda });
+    });
+    evList.sort((a,b) => a.val - b.val);
+
+    function renderEV(elId, items, cheap) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.innerHTML = items.map(item => {
+            const colour = cheap ? '#16a34a' : '#dc2626';
+            return `<div class="insights-lb-item">
+                <span class="insights-lb-name"><a href="/company/${item.ticker}" style="color:#1a1f36;text-decoration:none;">${item.name}</a></span>
+                <span class="insights-lb-val" style="color:${colour};">${item.val.toFixed(1)}x</span>
+            </div>`;
+        }).join('');
+    }
+
+    renderEV('lb-ev-cheap', evList.slice(0, 3), true);
+    renderEV('lb-ev-exp', evList.slice(-3).reverse(), false);
+
+    // ── Valuation Scatter ────────────────────────────────
+    const PE_CAP = 50;
+    const valData = [], valDataOutliers = [];
+    Object.keys(COMPANY_NAMES).forEach(t => {
+        const s = sentMap[t];
+        const sc = scoreMap[t];
+        if (!s || !s.valuation) return;
+        const pe = s.valuation.pe_ratio;
+        const ev = s.valuation.ev_ebitda;
+        const mc = sc ? sc.market_cap_b : 5;
+        const quad = sc ? sc.quadrant : 'Under Pressure';
+        if (!pe || !ev || pe <= 0 || ev <= 0) return;
+        if (pe > PE_CAP) { valDataOutliers.push({ ticker: t, name: COMPANY_NAMES[t], pe, ev, mc, quad }); return; }
+        valData.push({ ticker: t, name: COMPANY_NAMES[t], pe, ev, mc, quad });
+    });
+
+    const maxMC = Math.max(...valData.map(d => d.mc));
+    const scaleSize = mc => 14 + (Math.sqrt(mc) / Math.sqrt(maxMC)) * 50;
+
+    const trace = {
+        x: valData.map(d => d.pe),
+        y: valData.map(d => d.ev),
+        mode: 'markers+text',
+        type: 'scatter',
+        text: valData.map(d => d.ticker),
+        textposition: 'top center',
+        textfont: { size: 9, color: '#1a1f36', family: 'system-ui, sans-serif' },
+        marker: {
+            size: valData.map(d => scaleSize(d.mc)),
+            color: valData.map(d => QUADRANT_COLOURS[d.quad] || 'rgba(150,150,150,0.7)'),
+            line: { width: 1, color: '#ffffff' }
+        },
+        customdata: valData.map(d => [d.name, d.pe, d.ev, d.mc, d.quad]),
+        hovertemplate:
+            '<b>%{customdata[0]}</b><br>' +
+            'P/E: %{customdata[1]}x<br>' +
+            'EV/EBITDA: %{customdata[2]}x<br>' +
+            'Market Cap: $%{customdata[3]}B<br>' +
+            'Quadrant: %{customdata[4]}<br>' +
+            '<extra></extra>',
+    };
+
+    // Peer median lines
+    const shapes = [
+        { type:'line', x0:15, x1:15, y0:0, y1:40, line:{ color:'#9ca3af', width:1, dash:'dash' } },
+        { type:'line', x0:0, x1:80, y0:10.4, y1:10.4, line:{ color:'#9ca3af', width:1, dash:'dash' } },
+    ];
+    const annotations = [
+        { x:15, y:38, xref:'x', yref:'y', text:'Peer median P/E', showarrow:false, font:{size:9, color:'#9ca3af'}, xanchor:'left' },
+        { x:1, y:10.4, xref:'x', yref:'y', text:'Peer median EV/EBITDA', showarrow:false, font:{size:9, color:'#9ca3af'}, yanchor:'bottom' },
+    ];
+
+    const layout = {
+        paper_bgcolor: '#ffffff',
+        plot_bgcolor: '#fafafa',
+        font: { family: 'system-ui, sans-serif', color: '#1a1f36' },
+        xaxis: { title: { text: 'P/E Ratio (x)', font:{size:12} }, range:[0, 50], gridcolor:'#e5e7eb', zeroline:false, tickfont:{size:10} },
+        yaxis: { title: { text: 'EV/EBITDA (x)', font:{size:12} }, gridcolor:'#e5e7eb', zeroline:false, tickfont:{size:10} },
+        shapes,
+        annotations,
+        margin: { t:20, r:20, b:60, l:60 },
+        hovermode: 'closest',
+        showlegend: false,
+    };
+
+    Plotly.newPlot('valuation-scatter', [trace], layout, { responsive:true, displayModeBar:false });
+
+}).catch(err => console.error('Insights load error:', err));
+</script>
+
+{% endblock %}

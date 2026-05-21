@@ -259,7 +259,7 @@
                             {% if financial_data and financial_data.get('interest_coverage') == 25.0 and financial_data.get('debt_to_equity', 1) < 0.5 %}
                                 <span class="metric-quirk">⚑ Debt-light adjustment applied — no meaningful interest expense. <a href="/financial-breakdown#health">See methodology</a></span>
                             {% elif peer_context and peer_context.get('interest_coverage_min_ticker') == company.ticker %}
-                                <span class="metric-quirk">⚑ Lowest in peer group — highest interest burden relative to operating earnings among the 19 companies scored. The normalised score reflects peer-relative standing, not an absolute assessment of solvency.</span>
+                                <span class="metric-quirk">⚑ Lowest in peer group — highest interest burden relative to operating earnings among companies in the BrandSignals universe. The normalised score reflects peer-relative standing, not an absolute assessment of solvency.</span>
                             {% elif peer_context and peer_context.get('interest_coverage_max_ticker') == company.ticker %}
                                 <span class="metric-quirk">⚑ Highest in peer group — exceptionally low interest burden relative to operating earnings.</span>
                             {% endif %}
@@ -311,6 +311,32 @@
             }
         }
         </script>
+
+        <!-- 5b ── Valuation Multiples ───────────────────────────── -->
+        <div class="detail-card" id="valuation-card">
+            <h3 class="card-title">Valuation</h3>
+            <span class="card-subtitle" style="display:block; margin-bottom:16px;">Market-implied valuation multiples based on current stock price. Green = trading below peer median (cheaper). Red = trading above peer median (more expensive). P/E and EV/EBITDA are not shown for loss-making companies — Price/Sales remains available in all cases.</span>
+            <div class="valuation-grid" id="valuation-grid">
+                <div class="val-item">
+                    <div class="val-label">P/E Ratio</div>
+                    <div class="val-value" id="val-pe">—</div>
+                    <div class="val-peer" id="val-pe-peer"></div>
+                    <div class="val-desc">How much investors pay per dollar of earnings. Peer median: 15.0x</div>
+                </div>
+                <div class="val-item">
+                    <div class="val-label">EV / EBITDA</div>
+                    <div class="val-value" id="val-ev">—</div>
+                    <div class="val-peer" id="val-ev-peer"></div>
+                    <div class="val-desc">Enterprise value relative to operating earnings. Preferred over P/E for comparing companies with different debt levels. Peer median: 10.4x</div>
+                </div>
+                <div class="val-item">
+                    <div class="val-label">Price / Sales</div>
+                    <div class="val-value" id="val-ps">—</div>
+                    <div class="val-peer" id="val-ps-peer"></div>
+                    <div class="val-desc">Market cap relative to annual revenue. Useful for loss-making firms. Peer median: 1.16x</div>
+                </div>
+            </div>
+        </div>
 
         <!-- 6 ── Behavioural Signals ────────────────────────────── -->
         <div class="detail-card">
@@ -428,25 +454,6 @@
             {% endif %}
         </div>
 
-        <!-- 6b ── Dual Radar Charts ─────────────────────────────────── -->
-        <div class="detail-card">
-            <h3 class="card-title">Signal Profiles Spider Map</h3>
-            <span class="card-subtitle" style="display:block; margin-bottom:16px;">Normalised scores across financial and behavioural signals (0–1 scale)</span>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
-                <div>
-                    <p style="text-align:center; font-size:0.78rem; font-weight:600; color:#1a1f36; margin-bottom:4px;">Financial</p>
-                    <div id="fin-radar-chart" style="width:100%; height:340px;"></div>
-                </div>
-                <div>
-                    <p style="text-align:center; font-size:0.78rem; font-weight:600; color:#1a1f36; margin-bottom:4px;">Behavioural</p>
-                    <div id="beh-radar-chart" style="width:100%; height:340px;"></div>
-                </div>
-            </div>
-    <p class="card-subtitle" style="margin-top: 16px; border-top: 1px solid #f0f0f0; padding-top: 12px;">
-        Each axis represents one signal. Points closer to the outer edge indicate stronger performance relative to peers — a larger, fuller shape means stronger overall signal quality. Points near the centre indicate weaker relative performance on that metric. All values are normalised relative to the 19-company fashion and beauty peer group within the BrandSignals universe.
-    </p>
-</div>
-
         <!-- 7 ── Glassdoor Snapshot ─────────────────────────────── -->
         <div class="detail-card glassdoor-card">
             <h3 class="card-title">Glassdoor Snapshot</h3>
@@ -485,6 +492,76 @@
                 </div>
             </div>
             <p class="gd-note">Glassdoor data is manually collected. Last updated: {{ glassdoor.last_updated }}</p>
+        </div>
+
+        <!-- 6b ── Dual Radar Charts ─────────────────────────────────── -->
+        <div class="detail-card">
+            <h3 class="card-title">Signal Profiles Spider Map</h3>
+            <span class="card-subtitle" style="display:block; margin-bottom:16px;">Normalised scores across financial and behavioural signals (0–1 scale)</span>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+                <div>
+                    <p style="text-align:center; font-size:0.78rem; font-weight:600; color:#1a1f36; margin-bottom:4px;">Financial</p>
+                    <div id="fin-radar-chart" style="width:100%; height:340px;"></div>
+                </div>
+                <div>
+                    <p style="text-align:center; font-size:0.78rem; font-weight:600; color:#1a1f36; margin-bottom:4px;">Behavioural</p>
+                    <div id="beh-radar-chart" style="width:100%; height:340px;"></div>
+                </div>
+            </div>
+    <p class="card-subtitle" style="margin-top: 16px; border-top: 1px solid #f0f0f0; padding-top: 12px;">
+        Each axis represents one signal. Points closer to the outer edge indicate stronger performance relative to peers — a larger, fuller shape means stronger overall signal quality. Points near the centre indicate weaker relative performance on that metric. All values are normalised relative to the companies in the BrandSignals universe.
+    </p>
+</div>
+
+        <!-- 6c ── Market Sentiment ──────────────────────────────── -->
+        <div class="detail-card" id="sentiment-card">
+            <h3 class="card-title">Market Sentiment</h3>
+            <span class="card-subtitle" style="display:block; margin-bottom:16px;">Price momentum and market positioning indicators</span>
+            <div class="sentiment-grid" id="sentiment-grid">
+
+                <div class="sent-item" id="sent-1m">
+                    <div class="sent-label">1-Month Return</div>
+                    <div class="sent-value" id="sent-val-1m">—</div>
+                    <div class="sent-bar-wrap"><div class="sent-bar" id="sent-bar-1m"></div></div>
+                    <div class="sent-desc">Stock price change over the past 30 days.</div>
+                </div>
+
+                <div class="sent-item" id="sent-3m">
+                    <div class="sent-label">3-Month Return</div>
+                    <div class="sent-value" id="sent-val-3m">—</div>
+                    <div class="sent-bar-wrap"><div class="sent-bar" id="sent-bar-3m"></div></div>
+                    <div class="sent-desc">Stock price change over the past 90 days.</div>
+                </div>
+
+                <div class="sent-item" id="sent-xly">
+                    <div class="sent-label">vs XLY (3M)</div>
+                    <div class="sent-value" id="sent-val-xly">—</div>
+                    <div class="sent-desc">3-month return relative to the Consumer Discretionary ETF. Positive = outperforming the sector.</div>
+                </div>
+
+                <div class="sent-item" id="sent-vol">
+                    <div class="sent-label">30-Day Volatility</div>
+                    <div class="sent-value" id="sent-val-vol">—</div>
+                    <div class="sent-peer" id="sent-vol-peer"></div>
+                    <div class="sent-desc">Annualised standard deviation of daily stock price returns — how much the stock price typically fluctuates in a year. Peer median: 44%</div>
+                </div>
+
+                <div class="sent-item" id="sent-52w">
+                    <div class="sent-label">52-Week Position</div>
+                    <div class="sent-value" id="sent-val-52w">—</div>
+                    <div class="sent-bar-wrap"><div class="sent-bar sent-bar--neutral" id="sent-bar-52w"></div></div>
+                    <div class="sent-range" id="sent-range-52w"></div>
+                    <div class="sent-desc">Where the current price sits within the past 52-week range. 0% = at 52-week low, 100% = at 52-week high.</div>
+                </div>
+
+                <div class="sent-item" id="sent-spy">
+                    <div class="sent-label">vs SPY (3M)</div>
+                    <div class="sent-value" id="sent-val-spy">—</div>
+                    <div class="sent-desc">3-month return relative to the S&amp;P 500. Positive = outperforming the broader market.</div>
+                </div>
+
+            </div>
+            <p class="gd-note" style="margin-top:12px;">Returns reflect stock price movement only and do not include dividends paid during the period. Data via Yahoo Finance with a 15-minute delay.</p>
         </div>
 
         <!-- 8 ── Products & Categories ──────────────────────────── -->
@@ -675,6 +752,94 @@
         .catch(() => {
             document.getElementById('cp-price').textContent = '—';
         });
+
+    // ── Fetch sentiment + valuation ───────────────────────────
+    fetch(`/api/sentiment/${ticker}`)
+        .then(r => r.json())
+        .then(data => {
+            // Valuation
+            const v = data.valuation || {};
+            document.getElementById('val-pe').textContent = v.pe_ratio ? v.pe_ratio.toFixed(1) + 'x' : '—';
+            document.getElementById('val-ev').textContent = v.ev_ebitda ? v.ev_ebitda.toFixed(1) + 'x' : '—';
+            document.getElementById('val-ps').textContent = v.price_to_sales ? v.price_to_sales.toFixed(2) + 'x' : '—';
+
+            function renderPeer(elId, vsText) {
+                if (!vsText) return;
+                const el = document.getElementById(elId);
+                if (!el) return;
+                el.textContent = vsText.toUpperCase();
+                el.style.color = vsText.includes('below') ? '#16a34a' : vsText.includes('above') ? '#dc2626' : '#6b7280';
+                el.style.fontSize = '0.72rem';
+                el.style.fontWeight = '700';
+                el.style.marginTop = '2px';
+                el.style.letterSpacing = '0.03em';
+            }
+            renderPeer('val-pe-peer', v.pe_vs_peers);
+            renderPeer('val-ev-peer', v.ev_vs_peers);
+            renderPeer('val-ps-peer', v.ps_vs_peers);
+
+            // Sentiment
+            const s = data.sentiment || {};
+
+            function renderReturn(valId, barId, value) {
+                const el = document.getElementById(valId);
+                const bar = barId ? document.getElementById(barId) : null;
+                if (value === null || value === undefined) { el.textContent = '—'; return; }
+                const sign = value >= 0 ? '+' : '';
+                el.textContent = sign + value.toFixed(1) + '%';
+                el.style.color = value >= 0 ? '#16a34a' : '#dc2626';
+                if (bar) {
+                    const pct = Math.min(Math.abs(value) * 3, 100);
+                    bar.style.width = pct + '%';
+                    bar.style.background = value >= 0 ? '#16a34a' : '#dc2626';
+                }
+            }
+
+            renderReturn('sent-val-1m', 'sent-bar-1m', s.return_1m);
+            renderReturn('sent-val-3m', 'sent-bar-3m', s.return_3m);
+            renderReturn('sent-val-xly', null, s.vs_xly_3m);
+            renderReturn('sent-val-spy', null, s.vs_spy_3m);
+
+            // 52-week position
+            if (s.week52_position !== null && s.week52_position !== undefined) {
+                const pos = s.week52_position;
+                document.getElementById('sent-val-52w').textContent = pos.toFixed(0) + '% of range';
+                const bar = document.getElementById('sent-bar-52w');
+                if (bar) {
+                    bar.style.width = pos + '%';
+                    bar.style.background = pos >= 60 ? '#16a34a' : pos >= 30 ? '#f59e0b' : '#dc2626';
+                }
+                if (s.week52_low && s.week52_high) {
+                    document.getElementById('sent-range-52w').textContent =
+                        `$${s.week52_low.toFixed(2)} — $${s.week52_high.toFixed(2)}`;
+                }
+            }
+
+            // Volatility
+            if (s.volatility_30d !== null && s.volatility_30d !== undefined) {
+                document.getElementById('sent-val-vol').textContent = s.volatility_30d.toFixed(1) + '%';
+                const volPeer = document.getElementById('sent-vol-peer');
+                if (volPeer) {
+                    const peerMedian = 44.0;
+                    if (s.volatility_30d > peerMedian * 1.15) {
+                        volPeer.textContent = 'ABOVE PEER MEDIAN';
+                        volPeer.style.color = '#dc2626';
+                    } else if (s.volatility_30d < peerMedian * 0.85) {
+                        volPeer.textContent = 'BELOW PEER MEDIAN';
+                        volPeer.style.color = '#16a34a';
+                    } else {
+                        volPeer.textContent = 'IN LINE WITH PEERS';
+                        volPeer.style.color = '#6b7280';
+                    }
+                    volPeer.style.fontSize = '0.72rem';
+                    volPeer.style.fontWeight = '700';
+                    volPeer.style.marginTop = '2px';
+                    volPeer.style.letterSpacing = '0.03em';
+                    volPeer.style.display = 'block';
+                }
+            }
+        })
+        .catch(() => {});
 })();
 </script>
 {% endblock %}

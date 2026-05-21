@@ -37,7 +37,7 @@
     <!-- HOW SCORES ARE CALCULATED -->
     <div class="about-section">
         <h2>How Scores Are Calculated</h2>
-        <p>Financial data is drawn from each company's most recently filed annual report, including the income statement, balance sheet, and cash flow statement. Given that fiscal year-end dates vary across the 19 companies, data currency differs slightly between companies; this is disclosed where relevant.</p>
+        <p>Financial data is drawn from each company's most recently filed annual report, including the income statement, balance sheet, and cash flow statement. Given that fiscal year-end dates vary across companies in the universe, data currency differs slightly between companies; this is disclosed where relevant.</p>
         <p>Each metric is collected through a two-source waterfall. The primary structured source is checked first. If a value is missing, a secondary source is consulted. This approach prioritises consistency while preserving broad company coverage.</p>
         <p>Once collected, each metric is converted into a comparable format using min-max normalisation across the BrandSignals universe — meaning every company is scored relative to its peers on each metric. Debt to Equity is the only metric where a lower raw value indicates stronger financial health; its normalised score is therefore inverted. All other nine metrics are directionally positive.</p>
         <p>Each normalised metric is then multiplied by its assigned weight. The weighted values are summed to produce a final Financial Score out of 100.</p>
@@ -155,7 +155,7 @@
         <p>BrandSignals does not use median imputation or fabricated values to fill ordinary missing data.</p>
         <p>If a metric cannot be sourced through the waterfall, the company is scored using only the metrics that are genuinely available. In that case, the weights of the remaining metrics are rebalanced proportionally so that the total still sums to 100%. A separate data completeness indicator records how many metrics were used for each company.</p>
         <p>One exception applies: companies with a Debt-to-Equity ratio below 0.5 that have no reportable interest expense are assigned an Interest Coverage value of 25.0, reflecting the absence of a meaningful interest burden. This is not an attempt to fabricate an average or estimated number, but a documented analytical judgment that awards the company the full strength of that metric. It is disclosed transparently on each affected company's page.</p>
-        <p>In the current dataset, all 19 companies achieved 10/10 data completeness after this adjustment was applied.</p>
+        <p>In the current dataset, all companies in the BrandSignals universe achieved 10/10 data completeness after this adjustment was applied.</p>
     </div>
 
     <!-- WHAT THE SCORE MEANS -->
@@ -169,7 +169,7 @@
     <!-- DATA SOURCES -->
     <div class="about-section">
         <h2>Data Sources</h2>
-        <p>Financial data is drawn from each company's most recently filed annual report, including the income statement, balance sheet, and cash flow statement. Data is sourced via yfinance and refreshed quarterly. The current dataset was collected in May 2026. All 19 companies are scored on their most recently available annual filing — for every company in the BrandSignals universe, this corresponds to fiscal year 2025 results.</p>
+        <p>Financial data is drawn from each company's most recently filed annual report, including the income statement, balance sheet, and cash flow statement. Data is sourced via yfinance and refreshed quarterly. The current dataset was collected in May 2026. All companies in the BrandSignals universe are scored on their most recently available annual filing, which corresponds to fiscal year 2025 results.</p>
         <p>Because companies have different fiscal year end dates, the period covered varies slightly across the universe. The table below shows the exact annual filing period used for each company.</p>
 
         <div class="fb-weights-layout" style="width:100%; margin-top: 20px;">

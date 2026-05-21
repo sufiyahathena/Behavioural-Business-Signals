@@ -7,7 +7,7 @@
         <h2>What is BrandSignals?</h2>
         <p>BrandSignals is an intelligence research and analytics platform built around the Behavioural Business Signals framework, a dual-score model designed to evaluate publicly traded consumer companies through two complementary lenses: financial performance and behavioural business quality.</p>
         <p>It is built for investors, analysts, and commercially curious professionals who want to understand beauty and fashion businesses more holistically. Rather than relying on financial statements alone, BrandSignals explores how a company performs both on paper and in practice — through the combined analysis of financial strength, consumer sentiment, employee feedback, brand visibility, and other behavioural indicators.</p>
-        <p>The platform currently covers 19 publicly traded companies across the beauty, beauty retail, fashion, apparel, and performance lifestyle sectors. The aim is not simply to rank businesses by profitability, but to examine where financial strength and experiential strength align — and where meaningful gaps emerge.</p>
+        <p>The platform currently covers a curated set of publicly traded companies across the beauty, beauty retail, fashion, apparel, and performance lifestyle sectors. The aim is not simply to rank businesses by profitability, but to examine where financial strength and experiential strength align — and where meaningful gaps emerge.</p>
     </div>
 
     <div class="about-section">
@@ -48,7 +48,7 @@
                     <span class="ds-card-title">yfinance</span>
                     <span class="ds-badge ds-badge--financial">Financial — Primary Active Source</span>
                 </div>
-                <p class="ds-card-body">yfinance is an open-source Python library that provides access to Yahoo Finance data, including annual income statements, balance sheets, and cash flow statements. It is currently used to collect all 10 financial metrics for the 19 companies in the BrandSignals universe. All companies are scored on their most recently available FY2025 annual filing, collected in May 2026. Fiscal year-end dates vary across the universe; full detail is provided on the <a href="/financial-breakdown" class="ds-link">Financial Breakdown</a> page.</p>
+                <p class="ds-card-body">yfinance is an open-source Python library that provides access to Yahoo Finance data. It serves multiple purposes across BrandSignals: it collects all 10 financial metrics from annual income statements, balance sheets, and cash flow statements for all companies in the BrandSignals universe; it provides live stock prices (15-minute delayed) shown on individual company pages and the visualise quick-view panel; it provides live market capitalisation used to size bubbles on the visualise page (refreshed every 24 hours); and it provides real-time valuation multiples (P/E, EV/EBITDA, Price/Sales) and market sentiment data (price returns, 52-week range, volatility) shown on individual company pages. All financial scoring data reflects the most recently available FY2025 annual filing, collected in May 2026. Fiscal year-end dates vary across the universe; full detail is provided on the <a href="/financial-breakdown" class="ds-link">Financial</a> page.</p>
             </div>
 
             <div class="ds-card ds-card--financial">
@@ -88,7 +88,7 @@
                     <span class="ds-card-title">Google Trends</span>
                     <span class="ds-badge ds-badge--behavioural">Behavioural — Automated</span>
                 </div>
-                <p class="ds-card-body">Google Trends data is collected via pytrends, an unofficial Python interface for Google Trends. Two scores are collected for each company: a US search interest score and a global search interest score, each based on average weekly search interest over the past 12 months. Which score is used in the Behavioural Score depends on the company's geographic classification: US-focused, global, or mixed. Full detail is provided on the <a href="/behavioural-breakdown" class="ds-link">Behavioural Breakdown</a> page. Data is refreshed quarterly. Last updated May 2026.</p>
+                <p class="ds-card-body">Google Trends data is collected via pytrends, an unofficial Python interface for Google Trends. Two scores are collected for each company: a US search interest score and a global search interest score, each based on average weekly search interest over the past 12 months. Which score is used in the Behavioural Score depends on the company's geographic classification: US-focused, global, or mixed. Full detail is provided on the <a href="/behavioural-breakdown" class="ds-link">Behavioural</a> page. Data is refreshed quarterly. Last updated May 2026.</p>
             </div>
 
             <div class="ds-card ds-card--behavioural">
