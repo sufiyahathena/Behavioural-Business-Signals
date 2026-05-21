@@ -85,6 +85,7 @@
             <div class="qv-brands-section">
                 <div class="qv-brands-label">Brands &amp; Subsidiaries</div>
                 <div class="qv-brands-pills" id="qv-brands"></div>
+                <p class="qv-brands-note">Includes owned and licensed brands. Licensing arrangements vary by company.</p>
             </div>
 
             <!-- Stock price -->
@@ -108,10 +109,10 @@
 <script>
 // ── Static company metadata — enriches API score data ──
 const companyMeta = {
-    "EL":    { hq: "New York City, NY",       founded: 1946, market_cap: 16,  brands: ["Estée Lauder","Clinique","MAC","La Mer","Jo Malone"],            desc: "Prestige multi-brand beauty conglomerate with 20+ brands across skincare, makeup, fragrance, and haircare." },
+    "EL":    { hq: "New York City, NY", founded: 1946, market_cap: 16, brands: ["Estée Lauder","Clinique","MAC","La Mer","Jo Malone London","Tom Ford","Aveda","Bobbi Brown","Too Faced","Dr.Jart+","Origins","Bumble and bumble","Le Labo","AERIN Beauty","Smashbox","KILIAN PARIS","GLAMGLOW","NIOD","The Ordinary","BALMAIN Beauty","Frédéric Malle","Aramis","Darphin Paris","Lab Series"], desc: "Prestige multi-brand beauty conglomerate with 20+ brands across skincare, makeup, fragrance, and haircare." },
     "ULTA":  { hq: "Bolingbrook, IL",         founded: 1990, market_cap: 17,  brands: ["Ulta Beauty","Ulta at Target"],                                  desc: "Largest specialty beauty retailer in the U.S., offering prestige and mass beauty under one roof." },
     "ELF":   { hq: "Oakland, CA",             founded: 2004, market_cap: 7,   brands: ["e.l.f. Cosmetics","e.l.f. Skin","Naturium","Well People"],       desc: "Value-oriented beauty brand with exceptional digital presence and rapid product development cycles." },
-    "COTY":  { hq: "New York City, NY",       founded: 1904, market_cap: 5,   brands: ["CoverGirl","Rimmel","Sally Hansen","Hugo Boss","Gucci"],          desc: "Global beauty company spanning prestige fragrances and mass-market cosmetics across two divisions." },
+    "COTY":  { hq: "New York City, NY", founded: 1904, market_cap: 5, brands: ["CoverGirl","Rimmel","Sally Hansen","Max Factor","Bourjois","Kylie Cosmetics","Kylie Skin","Hugo Boss (lic.)","Gucci (lic.)","Burberry (lic.)","Calvin Klein (lic.)","Marc Jacobs (lic.)"], desc: "Global beauty company spanning prestige fragrances and mass-market cosmetics across two divisions." },
     "OLPX":  { hq: "Santa Barbara, CA",       founded: 2014, market_cap: 1,   brands: ["Olaplex"],                                                      desc: "Patent-protected professional haircare brand built around proprietary bond-building technology." },
     "SBH":   { hq: "Denton, TX",              founded: 1964, market_cap: 1,   brands: ["Sally Beauty Supply","CosmoProf","Armstrong McDowell"],          desc: "International specialty beauty retailer and distributor serving both consumers and licensed professionals." },
     "ODD":   { hq: "New York City, NY",       founded: 2018, market_cap: 3,   brands: ["IL MAKIAGE","SpoiledChild"],                                     desc: "Digital-first beauty company using AI-driven personalisation across IL MAKIAGE and SpoiledChild brands." },
@@ -120,11 +121,11 @@ const companyMeta = {
     "AEO":   { hq: "Pittsburgh, PA",          founded: 1977, market_cap: 2,   brands: ["American Eagle","Aerie","Offline by Aerie"],                     desc: "Specialty retailer known for denim and Aerie's body-positive intimates and activewear positioning." },
     "URBN":  { hq: "Philadelphia, PA",        founded: 1970, market_cap: 4,   brands: ["Urban Outfitters","Free People","Anthropologie","Nuuly"],        desc: "Multi-brand lifestyle retailer spanning Urban Outfitters, Free People, Anthropologie, and Nuuly rental." },
     "GAP":   { hq: "San Francisco, CA",       founded: 1969, market_cap: 3,   brands: ["Old Navy","Gap","Banana Republic","Athleta"],                    desc: "Global apparel group operating Old Navy, Gap, Banana Republic, and Athleta across distinct consumer segments." },
-    "LEVI":  { hq: "San Francisco, CA",       founded: 1853, market_cap: 6,   brands: ["Levi's","Dockers","Beyond Yoga"],                                desc: "One of the world's most iconic denim brands, expanding DTC and growing beyond its core jeans business." },
+    "LEVI":  { hq: "San Francisco, CA", founded: 1853, market_cap: 6, brands: ["Levi's","Beyond Yoga"], desc: "One of the world's most iconic denim brands, expanding DTC and growing beyond its core jeans business." },
     "RVLV":  { hq: "Cerritos, CA",            founded: 2003, market_cap: 1,   brands: ["REVOLVE","FORWARD"],                                            desc: "Digital-first fashion retailer built on influencer marketing, serving Millennial and Gen Z consumers online." },
     "LULU":  { hq: "Vancouver, Canada",       founded: 1998, market_cap: 38,  brands: ["Lululemon"],                                                    desc: "Premium activewear brand with exceptional community loyalty, strong DTC model, and global expansion momentum." },
-    "ONON":  { hq: "Zürich, Switzerland",     founded: 2010, market_cap: 18,  brands: ["On Running","On"],                                              desc: "Swiss premium running and lifestyle footwear brand with rapid global growth and strong innovation positioning." },
-    "RL":    { hq: "New York City, NY",       founded: 1967, market_cap: 14,  brands: ["Polo Ralph Lauren","Purple Label","Double RL","Chaps"],          desc: "Global premium lifestyle brand known for aspirational American aesthetic across apparel, home, and fragrance." },
+    "ONON":  { hq: "Zürich, Switzerland", founded: 2010, market_cap: 18, brands: ["On"], desc: "Swiss premium running and lifestyle footwear brand with rapid global growth and strong innovation positioning." },
+    "RL":    { hq: "New York City, NY", founded: 1967, market_cap: 14, brands: ["Polo Ralph Lauren","Ralph Lauren Purple Label","Double RL","Lauren Ralph Lauren","Chaps (lic.)"], desc: "Global premium lifestyle brand known for aspirational American aesthetic across apparel, home, and fragrance." },
     "COLM":  { hq: "Portland, OR",            founded: 1938, market_cap: 4,   brands: ["Columbia","Sorel","Mountain Hardwear","prAna"],                  desc: "Multi-brand outdoor and active lifestyle company with strong wholesale presence and global distribution." },
     "BIRK":  { hq: "Linz am Rhein, Germany",  founded: 1774, market_cap: 9,   brands: ["Birkenstock","Papillio","Betula"],                               desc: "Premium lifestyle footwear brand repositioned from orthopaedic heritage into fashion-lifestyle crossover." },
 };

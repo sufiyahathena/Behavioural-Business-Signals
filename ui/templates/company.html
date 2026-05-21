@@ -68,6 +68,18 @@
             </div>
         </div>
 
+        {% if company.ticker == 'COTY' %}
+        <div class="holding-company-note">
+            <span class="holding-company-icon">🏢</span>
+            <span>Coty Inc. is a holding company — it operates as a portfolio owner across prestige and consumer beauty divisions rather than as a single consumer-facing brand. Scores and signals are assessed at the corporate level where possible, with subsidiary proxies used where direct corporate-level data is unavailable.</span>
+        </div>
+        {% elif company.ticker == 'ODD' %}
+        <div class="holding-company-note">
+            <span class="holding-company-icon">🏢</span>
+            <span>Oddity Tech is a holding company — it operates as a digital-first beauty and wellness portfolio owner across its consumer brands rather than as a single consumer-facing brand. Scores and signals are assessed at the corporate level where possible, with subsidiary proxies used where direct corporate-level data is unavailable.</span>
+        </div>
+        {% endif %}
+
         <!-- 4 ── Score Summary Cards ────────────────────────────── -->
         <div class="score-cards-row">
             <div class="score-card">
@@ -449,7 +461,7 @@
             {% if company.ticker == 'COTY' %}
             <div class="fin-note" style="margin-top: 12px;">
                 <span class="fin-note-icon">ℹ</span>
-                <span>Coty's behavioural score should be interpreted with caution. Some consumer-facing signals are drawn from a major subsidiary brand rather than a corporate-level source. In particular, the YouTube signal is based on the CoverGirl channel, which may overstate the behavioural reach of the broader holding company relative to more directly comparable single-brand peers. The score is reported as calculated, with explicit disclosure of the proxy-based nature of these inputs.</span>
+                <span>Coty's Behavioural Score should be interpreted with caution for two reasons, both documented on the <a href="/behavioural-breakdown" style="color:inherit;text-decoration:underline;">Behavioural</a> page. First, the Consumer Bucket Collapse rule applies — Coty has no consumer-facing app and fewer than 100 Trustpilot reviews, meaning the App Rating metric is absent and the Consumer Experience and Trust bucket weights are redistributed accordingly. Second, the YouTube signal is proxy-based — it uses the CoverGirl channel as the most representative fully-owned active consumer brand channel, since Coty operates as a holding company with no meaningful direct corporate YouTube presence. This proxy may overstate the behavioural reach of the broader holding company relative to single-brand peers. Additionally, Glassdoor CEO Approval is a missing metric due to unavailable data at the corporate level. Taken together, these factors — a collapsed consumer bucket, a proxy-based YouTube signal, and a missing employee metric — mean Coty's Behavioural Score carries greater uncertainty than most peers and may be a positive outlier relative to its true underlying behavioural quality. The score is reported as calculated, with full disclosure of these limitations.</span>
             </div>
             {% endif %}
         </div>

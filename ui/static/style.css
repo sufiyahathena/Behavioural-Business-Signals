@@ -3109,3 +3109,33 @@ html {
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
+
+.qv-brands-note {
+    font-size: 0.65rem;
+    color: #9ca3af;
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+
+/* ── Holding company note ────────────────────────────────── */
+.holding-company-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(99,102,241,0.05);
+    border: 1px solid rgba(99,102,241,0.20);
+    border-left: 4px solid #6366f1;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.holding-company-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
