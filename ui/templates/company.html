@@ -336,6 +336,11 @@
                     <div class="val-desc">Market cap relative to annual revenue. Useful for loss-making firms. Peer median: 1.16x</div>
                 </div>
             </div>
+            {% if company.ticker == 'ELF' %}
+            <p class="gd-note" style="margin-top:12px;">ℹ Acquisition note: e.l.f. Beauty acquired rhode (founded by Hailey Bieber) in August 2025 for approximately $800M. The FY2025 Financial Score covers the year ended March 2025 — before the acquisition — so rhode is not reflected in the score and will appear in FY2026. However, the live P/E ratio shown above reflects post-acquisition earnings compression from the $600M cash outlay and should be interpreted with this in mind when considering investment context.</p>
+            {% elif company.ticker == 'ULTA' %}
+            <p class="gd-note" style="margin-top:12px;">ℹ Acquisition note: Ulta Beauty acquired Space NK (UK and Ireland luxury beauty retailer) in July 2025. The FY2025 Financial Score covers the year ended January 2025 — before the acquisition — so Space NK is not reflected in the score and will appear in FY2026. The live valuation multiples shown above reflect the current post-acquisition corporate structure.</p>
+            {% endif %}
         </div>
 
         <!-- 6 ── Behavioural Signals ────────────────────────────── -->
@@ -343,7 +348,7 @@
             <div class="metrics-header" onclick="toggleBehMetrics()" id="beh-metrics-toggle">
                 <div class="metrics-header-left">
                     <h2 class="section-title" style="margin:0;">Behavioural Signals</h2>
-                    <span class="section-subtitle">Consumer, employee &amp; market attention — powered by Glassdoor, Google Trends, Trustpilot &amp; App Store</span>
+                    <span class="section-subtitle">10 metrics across consumer experience &amp; trust, employee culture &amp; brand momentum — powered by Glassdoor, Google Trends, Trustpilot &amp; App Store</span>
                 </div>
                 <button class="metrics-toggle-btn" id="beh-metrics-chevron" aria-label="Toggle behavioural metrics">
                     ▾
@@ -399,7 +404,7 @@
                                 {% if m.raw == '—' %}
                                     <span class="metric-quirk">⚑ No consumer app available or insufficient ratings data — not included in behavioural score weighting.</span>
                                 {% elif company.ticker == 'OLPX' %}
-                                    <span class="metric-quirk">⚑ Rating for the Olaplex Pro app — professional/stylist-facing, not a consumer app.</span>
+                                    <span class="metric-quirk">⚑ Apple App Store rating for the Olaplex Pro app (4.4★, 1,200+ ratings). Designed for registered salon professionals — stylists are a significant end consumer of Olaplex products and the app reflects the brand's digital execution for that segment.</span>
                                 {% elif company.ticker == 'EL' %}
                                     <span class="metric-quirk">⚑ Average rating across Estée Lauder Companies' consumer brand apps (Clinique, MAC, Estée Lauder Expert).</span>
                                 {% else %}
@@ -408,8 +413,72 @@
                             {% elif m.key == 'youtube_subscribers' %}
                                 {% if m.raw == '—' %}
                                     <span class="metric-quirk">⚑ No significant YouTube channel found — not included in behavioural score weighting.</span>
+                                {% elif company.ticker == 'LEVI' %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach. #2 in the BrandSignals universe, behind only Coty's proxy channel.</span>
+                                {% elif company.ticker == 'GAP' %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach. #3 in the universe, ahead of most premium peers.</span>
+                                {% elif company.ticker == 'RL' %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach. #4 in the universe, strong for a premium lifestyle brand.</span>
+                                {% elif company.ticker == 'LULU' %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach. #5 in the universe, reflecting strong community-led content.</span>
+                                {% elif company.ticker == 'COLM' %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach. Relatively strong YouTube presence versus weak Instagram and TikTok signals.</span>
+                                {% elif company.ticker == 'BIRK' %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach. Lowest in the universe — consistent with Birkenstock's minimal social media investment strategy.</span>
+                                {% elif company.ticker == 'ODD' %}
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach. Lowest in the universe excluding Birkenstock, despite IL MAKIAGE's digital-first positioning.</span>
                                 {% else %}
-                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — proxy for brand cultural reach and content engagement.</span>
+                                    <span class="metric-quirk">⚑ Total YouTube channel subscribers — indicator of brand cultural reach and chosen ongoing content followership.</span>
+                                {% endif %}
+                            {% elif m.key == 'instagram_followers' %}
+                                {% if company.ticker == 'RL' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — #1 in the BrandSignals universe at 16.6M. Ralph Lauren's premium lifestyle aesthetic translates exceptionally well to Instagram.</span>
+                                {% elif company.ticker == 'LRLCY' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — #3 in the universe at 12M, reflecting L'Oréal's global brand scale across 150+ countries.</span>
+                                {% elif company.ticker == 'LEVI' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — #4 in the universe at 10.2M, strong for a denim heritage brand competing with premium lifestyle peers.</span>
+                                {% elif company.ticker == 'URBN' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — #5 in the universe at 8.5M, reflecting the culturally resonant positioning of the Urban Outfitters brand.</span>
+                                {% elif company.ticker == 'ELF' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — joint #6 in the universe at 7.5M, notable for a value-oriented mass beauty brand competing with premium peers.</span>
+                                {% elif company.ticker == 'ULTA' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — joint #6 in the universe at 7.5M, strong for a beauty retailer versus single-brand peers.</span>
+                                {% elif company.ticker == 'SBH' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — lowest in the universe at 679K, reflecting Sally Beauty's professional-channel positioning over consumer brand building.</span>
+                                {% elif company.ticker == 'COLM' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — second lowest in the universe at 700K, a notable gap versus outdoor lifestyle peers.</span>
+                                {% elif company.ticker == 'BIRK' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — 1.6M, modest relative to Birkenstock's cultural resurgence and premium lifestyle repositioning.</span>
+                                {% elif company.ticker == 'ODD' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — 1.5M for IL MAKIAGE (proxy), second lowest in the universe. Low social following is a recurring theme across Oddity Tech's behavioural signals.</span>
+                                {% elif company.ticker == 'GAP' %}
+                                    <span class="metric-quirk">⚑ Instagram followers — 3.6M, relatively modest for a brand with one of the highest TikTok engagement scores in the universe.</span>
+                                {% else %}
+                                    <span class="metric-quirk">⚑ Instagram followers — indicator of active brand audience size and ongoing consumer attention.</span>
+                                {% endif %}
+                            {% elif m.key == 'tiktok_total_likes' %}
+                                {% if company.ticker == 'ELF' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — #1 in the BrandSignals universe by a significant margin at 63.3M. e.l.f. is widely cited as one of the most TikTok-native brands in beauty, pioneering the platform before most competitors.</span>
+                                {% elif company.ticker == 'GAP' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — #2 in the universe at 36.7M, a standout signal. Gap's TikTok engagement is remarkably high relative to its financial score — a key driver of its Hidden Momentum classification.</span>
+                                {% elif company.ticker == 'LEVI' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — #3 in the universe at 26.1M, reflecting strong cultural relevance for a heritage denim brand across a younger demographic.</span>
+                                {% elif company.ticker == 'RVLV' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — #4 in the universe at 24.8M, consistent with Revolve's influencer-led, occasion-wear positioning that translates well to TikTok content.</span>
+                                {% elif company.ticker == 'RL' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — #6 in the universe at 16.2M, strong for a premium lifestyle brand and consistent with Ralph Lauren's broad social media reach.</span>
+                                {% elif company.ticker == 'BIRK' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — lowest in the universe at 209K, consistent with Birkenstock's minimal social media investment. The brand relies more on cultural cachet and selective distribution than active content marketing.</span>
+                                {% elif company.ticker == 'COLM' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — second lowest in the universe at 703K, a notable gap versus outdoor lifestyle peers. Weak TikTok presence is consistent with Columbia's more functional, wholesale-led positioning.</span>
+                                {% elif company.ticker == 'EL' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — lowest in the universe among non-proxy companies at 1.6M, despite Estée Lauder Companies owning several brands with strong TikTok presence at the brand level.</span>
+                                {% elif company.ticker == 'LRLCY' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — 3.9M for the @lorealmakeup account, relatively modest given L'Oréal's scale. The corporate TikTok presence is weaker than its Instagram footprint.</span>
+                                {% elif company.ticker == 'ODD' %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — 4.9M for IL MAKIAGE (proxy). Moderate engagement for a digital-first brand — TikTok is less central to IL MAKIAGE's acquisition model than its proprietary data and quiz-based DTC approach.</span>
+                                {% else %}
+                                    <span class="metric-quirk">⚑ TikTok total likes — cumulative engagement indicator reflecting cultural momentum, content reach, and platform relevance.</span>
                                 {% endif %}
                             {% elif m.key == 'glassdoor_overall' %}
                                 <span class="metric-quirk">⚑ Overall employee rating on Glassdoor (1–5).</span>
@@ -421,6 +490,9 @@
                                 {% endif %}
                             {% elif m.key == 'glassdoor_recommend' %}
                                 <span class="metric-quirk">⚑ % of employees who would recommend the company to a friend.</span>
+                            {% endif %}
+                            {% if m.proxy_note %}
+                                <span class="metric-proxy-note">{{ m.proxy_note }}</span>
                             {% endif %}
                         </td>
                     </tr>
@@ -447,10 +519,7 @@
             </p>
 
             {% if company.ticker == 'COTY' %}
-            <div class="fin-note" style="margin-top: 12px;">
-                <span class="fin-note-icon">ℹ</span>
-                <span>Coty's Behavioural Score should be interpreted with caution for two reasons, both documented on the <a href="/behavioural-breakdown" style="color:inherit;text-decoration:underline;">Behavioural</a> page. First, the Consumer Bucket Collapse rule applies — Coty has no consumer-facing app and fewer than 100 Trustpilot reviews, meaning the App Rating metric is absent and the Consumer Experience and Trust bucket weights are redistributed accordingly. Second, the YouTube signal is proxy-based — it uses the CoverGirl channel as the most representative fully-owned active consumer brand channel, since Coty operates as a holding company with no meaningful direct corporate YouTube presence. This proxy may overstate the behavioural reach of the broader holding company relative to single-brand peers. Additionally, Glassdoor CEO Approval is a missing metric due to unavailable data at the corporate level. Taken together, these factors — a collapsed consumer bucket, a proxy-based YouTube signal, and a missing employee metric — mean Coty's Behavioural Score carries greater uncertainty than most peers and may be a positive outlier relative to its true underlying behavioural quality. The score is reported as calculated, with full disclosure of these limitations.</span>
-            </div>
+            <p class="gd-note" style="margin-top:10px;">ℹ Coty's Behavioural Score should be interpreted with caution. Three factors apply: the Consumer Bucket Collapse rule (no app, fewer than 100 Trustpilot reviews); all three social signals (YouTube, Instagram, TikTok) are proxy-based using CoverGirl and/or Kylie Cosmetics rather than a direct corporate channel; and Glassdoor CEO Approval is unavailable at the corporate level. Together these mean Coty's score carries greater uncertainty than most peers. Full methodology is on the <a href="/behavioural-breakdown">Behavioural</a> page.</p>
             {% endif %}
         </div>
 

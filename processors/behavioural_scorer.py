@@ -22,15 +22,20 @@ BEHAVIOURAL_METRICS = [
     "trustpilot_rating",
     "app_rating",
     "youtube_subscribers",
+    "instagram_followers",
+    "tiktok_total_likes",
     "glassdoor_overall",
     "glassdoor_ceo_approval",
     "glassdoor_recommend",
 ]
 
-# Bucket membership — used for intra-bucket weight redistribution
+# Bucket membership — used for completeness tracking
 CONSUMER_METRICS = ["trustpilot_rating", "app_rating"]
 EMPLOYEE_METRICS = ["glassdoor_overall", "glassdoor_ceo_approval", "glassdoor_recommend"]
-MOMENTUM_METRICS = ["google_trends_score_us", "google_trends_score_global", "youtube_subscribers"]
+MOMENTUM_METRICS = [
+    "google_trends_score_us", "google_trends_score_global",
+    "youtube_subscribers", "instagram_followers", "tiktok_total_likes",
+]
 
 GLASSDOOR_COL_MAP = {
     "overall_rating": "glassdoor_overall",
@@ -138,90 +143,105 @@ def load_collector_outputs(behavioural_dir: str = config.BEHAVIOURAL_DIR) -> pd.
     return merged if merged is not None else pd.DataFrame()
 
 
-def _build_company_weights(ticker: str, trustpilot_review_count) -> dict:
-    """Build per-company metric weights based on geography and Trustpilot confidence.
+def _get_weights(ticker: str, metrics: set, trustpilot_reviews, geography: dict) -> dict:
+    """Calculate per-company weights with missing-data redistribution within each bucket.
 
-    Rules:
-    - Consumer bucket: Trustpilot weight depends on review count (>=100 = high confidence)
-    - Employee bucket: fixed weights always
-    - Momentum bucket: Google Trends weights depend on company geography
-    - Missing metrics: weight redistributed equally within same bucket only
+    Returns a dict of metric -> weight where all weights sum to 100.
 
     Args:
         ticker: Company ticker symbol.
-        trustpilot_review_count: Raw review count from data (float or NaN).
-
-    Returns:
-        Dict of metric -> weight (all weights sum to 1.0 across available metrics).
+        metrics: Set of metric names with valid (non-NaN) normalised values.
+        trustpilot_reviews: Raw Trustpilot review count, or None if unavailable.
+        geography: Full COMPANY_GEOGRAPHY mapping dict.
     """
-    # ── Consumer bucket weights ───────────────────────────────────────
-    try:
-        review_count = float(trustpilot_review_count)
-        high_confidence = pd.notna(review_count) and review_count >= config.TRUSTPILOT_CONFIDENCE_THRESHOLD
-    except (ValueError, TypeError):
-        high_confidence = False
-
-    consumer_weights = dict(
-        config.CONSUMER_WEIGHTS_HIGH_CONFIDENCE if high_confidence
-        else config.CONSUMER_WEIGHTS_LOW_CONFIDENCE
-    )
-
-    # ── Employee bucket weights ───────────────────────────────────────
-    employee_weights = dict(config.EMPLOYEE_WEIGHTS)
-
-    # ── Momentum bucket weights ───────────────────────────────────────
-    geo = config.COMPANY_GEOGRAPHY.get(ticker, "mixed")
-    if geo == "us":
-        momentum_weights = dict(config.MOMENTUM_WEIGHTS_US)
-    elif geo == "global":
-        momentum_weights = dict(config.MOMENTUM_WEIGHTS_GLOBAL)
+    # Consumer bucket
+    if trustpilot_reviews is not None and trustpilot_reviews >= config.TRUSTPILOT_CONFIDENCE_THRESHOLD:
+        w_tp = 10
+        w_app = 12
     else:
-        momentum_weights = dict(config.MOMENTUM_WEIGHTS_MIXED)
+        w_tp = 6
+        w_app = 16
 
-    # Apply proxy discount to YouTube if company uses a subsidiary channel
-    if ticker in config.YOUTUBE_PROXY_TICKERS:
-        momentum_weights["youtube_subscribers"] = (
-            momentum_weights["youtube_subscribers"] * config.YOUTUBE_PROXY_DISCOUNT
-        )
+    # Employee bucket
+    w_gd_overall   = 10
+    w_gd_ceo       = 8
+    w_gd_recommend = 12
 
-    return {**consumer_weights, **employee_weights, **momentum_weights}
+    # Momentum bucket — geography-dependent Trends split
+    geo = geography.get(ticker, "mixed")
+    if geo == "us":
+        w_trends_us = 15; w_trends_global = 0
+    elif geo == "global":
+        w_trends_us = 0;  w_trends_global = 15
+    else:
+        w_trends_us = 7.5; w_trends_global = 7.5
 
+    w_youtube   = 9
+    w_instagram = 13
+    w_tiktok    = 11
 
-def _redistribute_within_bucket(
-    weights: dict,
-    bucket_metrics: list,
-    available_metrics: set,
-) -> dict:
-    """Redistribute missing metric weights equally within the same bucket.
+    # Build each bucket from available metrics only
+    consumer: dict = {}
+    if "trustpilot_rating" in metrics:
+        consumer["trustpilot_rating"] = w_tp
+    if "app_rating" in metrics:
+        consumer["app_rating"] = w_app
 
-    If a metric is missing (not in available_metrics), its weight is split
-    equally across the other available metrics in the same bucket.
-    Other buckets are not affected.
+    # Consumer collapse: app missing + low-confidence Trustpilot → redistribute consumer
+    # weight proportionally to Employee and Momentum rather than piling onto weak signal
+    consumer_collapse = (
+        "app_rating" not in metrics and
+        (trustpilot_reviews is None or trustpilot_reviews < config.TRUSTPILOT_CONFIDENCE_THRESHOLD)
+    )
+    missing_consumer = (w_tp + w_app) - sum(consumer.values())
 
-    Args:
-        weights: Current weight dict for all metrics.
-        bucket_metrics: All metrics belonging to this bucket.
-        available_metrics: Set of metrics that have real data for this company.
+    employee: dict = {}
+    if "glassdoor_overall" in metrics:
+        employee["glassdoor_overall"] = w_gd_overall
+    if "glassdoor_ceo_approval" in metrics:
+        employee["glassdoor_ceo_approval"] = w_gd_ceo
+    if "glassdoor_recommend" in metrics:
+        employee["glassdoor_recommend"] = w_gd_recommend
 
-    Returns:
-        Updated weights dict with redistributed weights within this bucket.
-    """
-    weights = dict(weights)
+    if len(employee) < 3 and employee:
+        missing_emp = sum([w_gd_overall, w_gd_ceo, w_gd_recommend]) - sum(employee.values())
+        emp_per = missing_emp / len(employee)
+        employee = {k: v + emp_per for k, v in employee.items()}
 
-    bucket_available = [m for m in bucket_metrics if m in available_metrics]
-    bucket_missing   = [m for m in bucket_metrics if m not in available_metrics]
+    momentum: dict = {}
+    if "google_trends_score_us" in metrics and w_trends_us > 0:
+        momentum["google_trends_score_us"] = w_trends_us
+    if "google_trends_score_global" in metrics and w_trends_global > 0:
+        momentum["google_trends_score_global"] = w_trends_global
+    if "youtube_subscribers" in metrics:
+        momentum["youtube_subscribers"] = w_youtube
+    if "instagram_followers" in metrics:
+        momentum["instagram_followers"] = w_instagram
+    if "tiktok_total_likes" in metrics:
+        momentum["tiktok_total_likes"] = w_tiktok
 
-    for missing in bucket_missing:
-        missing_weight = weights.get(missing, 0.0)
-        if missing_weight == 0.0 or not bucket_available:
-            weights[missing] = 0.0
-            continue
-        share = missing_weight / len(bucket_available)
-        for m in bucket_available:
-            weights[m] = weights.get(m, 0.0) + share
-        weights[missing] = 0.0
+    base_momentum_total = w_trends_us + w_trends_global + w_youtube + w_instagram + w_tiktok
+    momentum_missing = base_momentum_total - sum(momentum.values())
+    if momentum_missing > 0 and momentum:
+        per = momentum_missing / len(momentum)
+        momentum = {k: v + per for k, v in momentum.items()}
 
-    return weights
+    if consumer_collapse and missing_consumer > 0:
+        emp_total = sum(employee.values())
+        mom_total = sum(momentum.values())
+        combined = emp_total + mom_total
+        if combined > 0:
+            emp_per = missing_consumer * (emp_total / combined) / len(employee) if employee else 0
+            mom_per = missing_consumer * (mom_total / combined) / len(momentum) if momentum else 0
+            employee = {k: v + emp_per for k, v in employee.items()}
+            momentum = {k: v + mom_per for k, v in momentum.items()}
+
+    all_weights = {**consumer, **employee, **momentum}
+    total = sum(all_weights.values())
+    if total > 0:
+        all_weights = {k: v / total * 100 for k, v in all_weights.items()}
+
+    return all_weights
 
 
 def compute_behavioural_scores(df: pd.DataFrame) -> pd.DataFrame:
@@ -276,48 +296,12 @@ def compute_behavioural_scores(df: pd.DataFrame) -> pd.DataFrame:
             continue
 
         trustpilot_count = row.get("trustpilot_review_count", np.nan)
-        weights = _build_company_weights(ticker, trustpilot_count)
-
-        # ── Special case: low-confidence Trustpilot + missing App Rating ──
-        # If both conditions are true, do not let the missing App Rating weight
-        # collapse onto a weak Trustpilot signal. Instead redistribute the
-        # App Rating weight proportionally across Employee and Momentum buckets.
         try:
-            review_count = float(trustpilot_count) if pd.notna(trustpilot_count) else 0
+            review_count = float(trustpilot_count) if pd.notna(trustpilot_count) else None
         except (ValueError, TypeError):
-            review_count = 0
+            review_count = None
 
-        app_missing = "app_rating" not in available
-        low_confidence = review_count < config.TRUSTPILOT_CONFIDENCE_THRESHOLD
-
-        if app_missing and low_confidence:
-            app_weight = weights.get("app_rating", 0.0)
-            weights["app_rating"] = 0.0
-
-            # Redistribute app_weight proportionally across Employee and Momentum
-            # Employee bucket total = 30%, Momentum bucket total = 28%
-            employee_share = app_weight * (30 / 58)
-            momentum_share = app_weight * (28 / 58)
-
-            available_employee = [m for m in EMPLOYEE_METRICS if m in available]
-            if available_employee:
-                per_employee = employee_share / len(available_employee)
-                for m in available_employee:
-                    weights[m] = weights.get(m, 0.0) + per_employee
-
-            available_momentum = [m for m in MOMENTUM_METRICS if m in available]
-            if available_momentum:
-                per_momentum = momentum_share / len(available_momentum)
-                for m in available_momentum:
-                    weights[m] = weights.get(m, 0.0) + per_momentum
-
-            weights = _redistribute_within_bucket(weights, EMPLOYEE_METRICS, available)
-            weights = _redistribute_within_bucket(weights, MOMENTUM_METRICS, available)
-
-        else:
-            weights = _redistribute_within_bucket(weights, CONSUMER_METRICS, available)
-            weights = _redistribute_within_bucket(weights, EMPLOYEE_METRICS, available)
-            weights = _redistribute_within_bucket(weights, MOMENTUM_METRICS, available)
+        weights = _get_weights(ticker, available, review_count, config.COMPANY_GEOGRAPHY)
 
         weighted_score = sum(
             row[f"{m}_norm"] * weights.get(m, 0.0)
@@ -325,7 +309,7 @@ def compute_behavioural_scores(df: pd.DataFrame) -> pd.DataFrame:
             if weights.get(m, 0.0) > 0
         )
 
-        scores.append(round(weighted_score * 100, 2))
+        scores.append(round(weighted_score, 2))
         completeness_list.append(f"{len(available)}/{len(BEHAVIOURAL_METRICS)}")
         missing_list.append(", ".join(missing) if missing else "")
 
@@ -368,6 +352,17 @@ def run(
     logger.info("Loading collector outputs from %s", behavioural_dir)
     collector_df = load_collector_outputs(behavioural_dir)
 
+    logger.info("Loading social media data")
+    social_path = Path(behavioural_dir) / "social_manual.csv"
+    if social_path.exists():
+        social_df = pd.read_csv(social_path).rename(columns={
+            "ig_followers":   "instagram_followers",
+            "tt_total_likes": "tiktok_total_likes",
+        })[["ticker", "instagram_followers", "tiktok_total_likes"]]
+    else:
+        logger.warning("social_manual.csv not found at %s — social metrics skipped", social_path)
+        social_df = pd.DataFrame()
+
     # Merge all data sources
     df = glassdoor_df if not glassdoor_df.empty else pd.DataFrame()
 
@@ -382,6 +377,12 @@ def run(
             df = collector_df
         else:
             df = df.merge(collector_df, on="ticker", how="outer")
+
+    if not social_df.empty:
+        if df.empty:
+            df = social_df
+        else:
+            df = df.merge(social_df, on="ticker", how="left")
 
     if df.empty:
         logger.error("No behavioural data found — cannot compute scores.")

@@ -2040,6 +2040,14 @@ table.scoreboard td a:hover {
     text-decoration: underline;
 }
 
+.metric-proxy-note {
+    display: block;
+    color: #9c7a2a;
+    font-size: 0.73rem;
+    font-style: italic;
+    margin-top: 3px;
+}
+
 /* Interest coverage analytical note on company pages */
 .fin-note {
     display: flex;

@@ -15,7 +15,7 @@
         <a href="#consumer" class="fb-bucket-card bb-bucket-consumer">
             <div class="fb-bucket-icon">★</div>
             <div class="fb-bucket-label">Consumer Experience and Trust</div>
-            <div class="fb-bucket-weight">42%</div>
+            <div class="fb-bucket-weight">22%</div>
         </a>
         <a href="#employee" class="fb-bucket-card bb-bucket-employee">
             <div class="fb-bucket-icon">♥</div>
@@ -25,7 +25,7 @@
         <a href="#momentum" class="fb-bucket-card bb-bucket-momentum">
             <div class="fb-bucket-icon">◈</div>
             <div class="fb-bucket-label">Brand Momentum</div>
-            <div class="fb-bucket-weight">28%</div>
+            <div class="fb-bucket-weight">48%</div>
         </a>
     </div>
 
@@ -37,32 +37,32 @@
     <!-- HOW SCORES ARE CALCULATED -->
     <div class="about-section">
         <h2>How Scores Are Calculated</h2>
-        <p>Behavioural data is drawn from a mix of automated and manually collected public sources. These include customer review platforms, employee review platforms, Google Trends, app ratings, and brand-owned YouTube channels. Because these sources update on different cycles and not all signals exist for every company, behavioural scoring is designed to reflect genuine available information only.</p>
+        <p>Behavioural data is drawn from a mix of automated and manually collected public sources. These include customer review platforms, employee review platforms, Google Trends, app ratings, and brand-owned or proxy social media channels. Because these sources update on different cycles and not all signals exist for every company, behavioural scoring is designed to reflect genuine available information only.</p>
         <p>Each signal is normalised using min-max normalisation across the BrandSignals universe. This means every company is scored relative to its peers on each metric. All behavioural signals are directionally positive — higher is always better. There are no inverted behavioural metrics. Each normalised metric is then multiplied by its assigned weight. The weighted values are summed to produce a final Behavioural Score out of 100.</p>
         <p>Unlike the Financial Score, the Behavioural Score uses conditional weighting rules in two places: Google Trends weighting changes depending on whether a company is primarily US-focused, primarily global, or mixed; and the Consumer Experience and Trust bucket changes depending on Trustpilot review count and App Rating availability. These rules are designed to make the behavioural framework more representative of how consumer-facing brands actually operate.</p>
     </div>
 
     <!-- BUCKET 1: CONSUMER -->
     <div class="about-section fb-bucket-section" id="consumer">
-        <div class="fb-bucket-tag bb-tag-consumer">Consumer Experience and Trust — 42%</div>
+        <div class="fb-bucket-tag bb-tag-consumer">Consumer Experience and Trust — 22%</div>
         <h2>1. Consumer Experience and Trust</h2>
-        <p>This is the largest behavioural dimension. It captures how consumers experience the brand directly, particularly through post-purchase satisfaction and digital product experience.</p>
+        <p>This dimension captures how consumers experience the brand directly, particularly through post-purchase satisfaction and digital product experience.</p>
 
         <div class="fb-metric-block">
-            <div class="fb-metric-name">Trustpilot Rating <span class="fb-metric-w">20% / 12%</span></div>
+            <div class="fb-metric-name">Trustpilot Rating <span class="fb-metric-w">10% / 6%</span></div>
             <p>Trustpilot Rating captures consumer satisfaction with the brand's products, customer service, and shopping experience. It is useful because it reflects post-purchase sentiment from real customers rather than passive awareness alone.</p>
             <p>However, Trustpilot must be interpreted carefully. Retail and beauty brands tend to attract disproportionately negative reviews, because dissatisfied customers are more likely to leave public feedback than satisfied ones. For this reason, Trustpilot is most useful comparatively within the peer group, not as an absolute measure of quality.</p>
         </div>
 
-        <div class="bb-confidence-bubble">
-            <div class="bb-confidence-title">Trustpilot Reviews as Confidence Modifier</div>
-            <p>Trustpilot review count is not treated as a standalone weighted metric. Instead, it acts as a confidence modifier on the Trustpilot Rating. A rating based on very few reviews is less reliable than one based on broader consumer participation. If the review count is 100 or more, Trustpilot Rating carries 20%. If the review count is under 100, it carries 12%.</p>
+        <div style="background: rgba(160,100,40,0.08); border: 1.5px solid rgba(160,100,40,0.30); border-radius: 12px; padding: 16px 20px; margin: 16px 0;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: #8B5E2A; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px;">Trustpilot Reviews as Confidence Modifier</div>
+            <p>Trustpilot review count is not treated as a standalone weighted metric. Instead, it acts as a confidence modifier on the Trustpilot Rating. A rating based on very few reviews is less reliable than one based on broader consumer participation. If the review count is 100 or more, Trustpilot Rating carries 10%. If the review count is under 100, it carries 6%.</p>
         </div>
 
         <div class="fb-metric-block">
-            <div class="fb-metric-name">App Rating <span class="fb-metric-w">22% / 30%</span></div>
+            <div class="fb-metric-name">App Rating <span class="fb-metric-w">12% / 16%</span></div>
             <p>App Rating captures the quality of the company's consumer-facing mobile commerce or brand experience. It is a strong signal because it reflects not only sentiment, but the quality of digital execution. In modern consumer businesses, particularly in beauty, fashion, and retail, the mobile experience is often a meaningful part of brand performance.</p>
-            <p>When Trustpilot review volume is low, App Rating becomes more important because it is often the stronger consumer-quality signal available. If the review count is 100 or more, App Rating carries 22%. If the review count is under 100, it carries 30%.</p>
+            <p>When Trustpilot review volume is low, App Rating becomes more important because it is often the stronger consumer-quality signal available. If the review count is 100 or more, App Rating carries 12%. If the review count is under 100, it carries 16%.</p>
         </div>
     </div>
 
@@ -91,9 +91,9 @@
 
     <!-- BUCKET 3: MOMENTUM -->
     <div class="about-section fb-bucket-section" id="momentum">
-        <div class="fb-bucket-tag bb-tag-momentum">Brand Momentum — 28%</div>
+        <div class="fb-bucket-tag bb-tag-momentum">Brand Momentum — 48%</div>
         <h2>3. Brand Momentum</h2>
-        <p>This dimension captures attention, relevance, and chosen brand followership. It is designed to measure not just whether a company is liked, but whether it remains present, searched, followed, and culturally active.</p>
+        <p>This is now the largest behavioural dimension. It captures attention, relevance, and chosen brand followership across search and social platforms. In beauty, fashion, and lifestyle, momentum is not peripheral — it is often central to how brands build awareness, sustain relevance, and influence future demand.</p>
 
         <div class="fb-metric-block">
             <div class="fb-metric-name">Google Trends US <span class="fb-metric-w">15% / 7.5% / 0%</span></div>
@@ -106,8 +106,18 @@
         </div>
 
         <div class="fb-metric-block">
-            <div class="fb-metric-name">YouTube Subscribers <span class="fb-metric-w">13%</span></div>
-            <p>YouTube Subscribers measure chosen, ongoing brand followership. This is treated as more meaningful than passive reach alone because subscribing reflects a deliberate act of continued interest. In beauty and fashion, brand storytelling, tutorials, launches, and campaign content often contribute materially to consumer attention and cultural presence.</p>
+            <div class="fb-metric-name">Instagram Followers <span class="fb-metric-w">13%</span></div>
+            <p>Instagram captures chosen brand followership on one of the most commercially relevant platforms for beauty, fashion, and lifestyle companies. In this universe, it is a stronger indicator of ongoing consumer attention and brand investment than YouTube, because it sits closer to product discovery, image-building, campaigns, and day-to-day brand engagement.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">TikTok Likes <span class="fb-metric-w">11%</span></div>
+            <p>TikTok Likes capture cumulative engagement rather than simple audience size. This makes them especially useful in beauty and fashion, where virality, influencer ecosystems, and repeated interaction often matter more than passive following alone. They are particularly relevant for brands whose momentum depends on cultural visibility, trend circulation, and social discovery.</p>
+        </div>
+
+        <div class="fb-metric-block">
+            <div class="fb-metric-name">YouTube Subscribers <span class="fb-metric-w">9%</span></div>
+            <p>YouTube Subscribers measure longer-term content followership and brand reach. Subscribing reflects a deliberate act of continued interest, but in this universe YouTube is weighted below Instagram and TikTok because it is often a less central day-to-day brand surface for beauty and fashion companies.</p>
         </div>
     </div>
 
@@ -168,8 +178,8 @@
                     <tr><th>Metric</th><th>Trustpilot Reviews ≥ 100</th><th>Trustpilot Reviews &lt; 100</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Trustpilot Rating</td><td>20%</td><td>12%</td></tr>
-                    <tr><td>App Rating</td><td>22%</td><td>30%</td></tr>
+                    <tr><td>Trustpilot Rating</td><td>10%</td><td>6%</td></tr>
+                    <tr><td>App Rating</td><td>12%</td><td>16%</td></tr>
                 </tbody>
             </table>
         </div>
@@ -197,7 +207,9 @@
                 <tbody>
                     <tr><td>Google Trends US</td><td>15%</td><td>0%</td><td>7.5%</td></tr>
                     <tr><td>Google Trends Global</td><td>0%</td><td>15%</td><td>7.5%</td></tr>
-                    <tr><td>YouTube Subscribers</td><td>13%</td><td>13%</td><td>13%</td></tr>
+                    <tr><td>Instagram Followers</td><td>13%</td><td>13%</td><td>13%</td></tr>
+                    <tr><td>TikTok Total Likes</td><td>11%</td><td>11%</td><td>11%</td></tr>
+                    <tr><td>YouTube Subscribers</td><td>9%</td><td>9%</td><td>9%</td></tr>
                 </tbody>
             </table>
         </div>
@@ -218,14 +230,12 @@
         <p>This rule exists to prevent a low-confidence Trustpilot rating from absorbing the full consumer bucket simply because no app signal exists. Without this rule, weak review data could be given too much influence over the final score.</p>
     </div>
 
-    <!-- PROXY-BASED YOUTUBE CHANNELS -->
+    <!-- PROXY-BASED SOCIAL MEDIA CHANNELS -->
     <div class="about-section">
-        <h2>Proxy-Based YouTube Channels</h2>
-        <p>Some companies do not have a direct company-level YouTube channel that is sufficiently representative of the scored entity. This applies specifically to holding companies — businesses that operate primarily as portfolio owners rather than consumer-facing brands in their own right. In those cases, the primary active consumer-facing subsidiary brand channel is used as a proxy.</p>
-
-        <p>Proxy channel selection follows three principles. First, the channel must belong to the largest and most representative fully-owned consumer brand within the portfolio. Second, the channel must be active — dormant channels are excluded regardless of subscriber count, as an inactive channel does not represent current brand momentum. Third, where a portfolio contains multiple significant consumer brands, averaging across those brands would be considered; however, newer or smaller brands that would dilute rather than improve the signal are excluded from the average, so in practice a single primary brand channel is typically used.</p>
-
-        <p>For proxy-based channels, the YouTube metric receives a modest confidence discount of 15% in the scoring calculation. This reflects the fact that a subsidiary brand channel may not perfectly represent the behavioural reach of the wider holding company. This adjustment is not intended to suppress the signal, but to reduce distortion in peer comparisons where one brand may overrepresent the broader organisation. Individual company pages disclose when a proxy channel is in use.</p>
+        <h2>Proxy-Based Social Media Channels</h2>
+        <p>Some companies do not maintain a direct corporate-level social media presence that is sufficiently representative of the scored entity. BrandSignals applies the following rules to determine which channel to use.</p>
+        <p><strong>When to use the corporate account directly:</strong> Where the corporate entity operates under the same name as its flagship consumer brand and maintains an active consumer-facing social presence under that identity, the corporate account is used directly. This applies even where the company operates multiple significant sub-brands, because the corporate account represents a genuine and meaningful consumer brand signal in its own right.</p>
+        <p><strong>When to use subsidiary proxies:</strong> Where the corporate entity has no meaningful direct consumer-facing social presence, typically holding companies whose corporate identity is invisible to consumers, the largest fully-owned active consumer brand channels are used as proxies. To be used as a proxy, a channel must belong to a significant fully-owned consumer brand and must be active. Dormant channels are excluded regardless of follower count, as an inactive channel does not represent current brand momentum. Where multiple significant owned brands are active, follower counts are averaged to better represent the portfolio's total social footprint. Newer or smaller brands that would dilute rather than improve the signal are excluded from the average.</p>
     </div>
 
     <!-- WHAT THE BEHAVIOURAL SCORE MEANS -->
@@ -246,13 +256,15 @@
                 </thead>
                 <tbody>
                     <tr><td>Trustpilot Rating</td><td>Trustpilot</td><td>Manual</td><td>Quarterly</td></tr>
-                    <tr><td>App Rating</td><td>Google Play Store</td><td>Automated + manual</td><td>Quarterly</td></tr>
+                    <tr><td>App Rating</td><td>Google Play Store / Apple App Store</td><td>Automated + manual</td><td>Quarterly</td></tr>
                     <tr><td>Glassdoor Overall Rating</td><td>Glassdoor</td><td>Manual</td><td>Every 3–6 months</td></tr>
                     <tr><td>Glassdoor CEO Approval</td><td>Glassdoor</td><td>Manual</td><td>Every 3–6 months</td></tr>
                     <tr><td>Glassdoor Recommend %</td><td>Glassdoor</td><td>Manual</td><td>Every 3–6 months</td></tr>
                     <tr><td>Google Trends US</td><td>Google Trends</td><td>Automated</td><td>Quarterly</td></tr>
                     <tr><td>Google Trends Global</td><td>Google Trends</td><td>Automated</td><td>Quarterly</td></tr>
                     <tr><td>YouTube Subscribers</td><td>YouTube Data API v3</td><td>Automated</td><td>Quarterly</td></tr>
+                    <tr><td>Instagram Followers</td><td>Instagram</td><td>Manual</td><td>Quarterly</td></tr>
+                    <tr><td>TikTok Total Likes</td><td>TikTok</td><td>Manual</td><td>Quarterly</td></tr>
                 </tbody>
             </table>
         </div>

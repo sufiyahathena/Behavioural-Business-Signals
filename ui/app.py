@@ -85,9 +85,17 @@ _BEHAVIOURAL_METRIC_LABELS = {
     "trustpilot_rating": "Trustpilot Rating",
     "app_rating": "App Rating",
     "youtube_subscribers": "YouTube Subscribers",
+    "instagram_followers": "Instagram Followers",
+    "tiktok_total_likes":  "TikTok Total Likes",
     "glassdoor_overall": "Glassdoor Overall Rating",
     "glassdoor_ceo_approval": "Glassdoor CEO Approval %",
     "glassdoor_recommend": "Glassdoor Recommend %",
+}
+
+_BEHAVIOURAL_METRIC_NOTES = {
+    "youtube_subscribers": "Total YouTube channel subscribers — indicator of brand cultural reach and chosen ongoing content followership.",
+    "instagram_followers":  "Follower count for the company's primary brand account — indicator of active brand audience size and ongoing consumer attention.",
+    "tiktok_total_likes":   "Cumulative likes across all videos on the company's primary brand account — indicator of cultural engagement, content reach, and platform momentum.",
 }
 
 _EMPTY_GLASSDOOR = {
@@ -266,8 +274,16 @@ def _fmt_beh_metric(key: str, val) -> str:
     except (ValueError, TypeError):
         return "—"
 
-    # Integer fields — review counts and subscriber counts
-    if key in ("trustpilot_review_count", "youtube_subscribers"):
+    # Large counts — format with K/M suffix
+    if key in ("youtube_subscribers", "instagram_followers", "tiktok_total_likes"):
+        if fv >= 1_000_000:
+            return f"{fv / 1_000_000:.1f}M"
+        if fv >= 1_000:
+            return f"{fv / 1_000:.0f}K"
+        return str(int(fv))
+
+    # Integer fields — review counts
+    if key == "trustpilot_review_count":
         return f"{int(fv):,}"
 
     # Percentage fields — stored as 0–1 after conversion
@@ -464,14 +480,28 @@ def create_app() -> Flask:
                 for key, label in _BEHAVIOURAL_METRIC_LABELS.items():
                     raw_val = beh_row.get(key)
                     norm_val = beh_row.get(f"{key}_norm")
-                    # Mark zero-weight Trends metrics as excluded (not used in scoring)
                     excluded = key in zero_weight_trends
+
+                    note = _BEHAVIOURAL_METRIC_NOTES.get(key, "")
+
+                    proxy_note = ""
+                    if ticker == "COTY":
+                        if key == "youtube_subscribers":
+                            proxy_note = "Proxy: CoverGirl channel — Kylie Cosmetics YouTube channel is dormant"
+                        elif key in ("instagram_followers", "tiktok_total_likes"):
+                            proxy_note = "Proxy: average of CoverGirl and Kylie Cosmetics"
+                    elif ticker == "ODD":
+                        if key in ("youtube_subscribers", "instagram_followers", "tiktok_total_likes"):
+                            proxy_note = "Proxy: IL MAKIAGE — primary consumer brand; SpoiledChild is smaller and METHODIQ too new"
+
                     beh_metrics.append({
                         "label": label,
                         "key": key,
                         "raw": _fmt_beh_metric(key, raw_val),
                         "norm": _fmt_norm(norm_val) if not excluded else "—",
                         "excluded": excluded,
+                        "note": note,
+                        "proxy_note": proxy_note,
                     })
 
         # ── Glassdoor data ────────────────────────────────────────
@@ -624,7 +654,7 @@ def create_app() -> Flask:
                         "temperature": 0.3,
                     }
                 },
-                timeout=60,
+                timeout=90,
             )
 
             result = response.json()
@@ -635,7 +665,7 @@ def create_app() -> Flask:
                 status_code = error.get("code", 0)
                 # Handle quota exceeded gracefully
                 if status_code == 429 or "quota" in error_msg.lower() or "exceeded" in error_msg.lower():
-                    return jsonify({"reply": "The assistant has reached its daily request limit and will be back tomorrow. In the meantime, you can explore the Financial Breakdown and Behavioural Breakdown pages for full methodology details."}), 200
+                    return jsonify({"reply": "The assistant is temporarily unavailable — this is usually due to a slow response from the AI model. Please try again in a moment."}), 200
                 # Handle other errors
                 return jsonify({"reply": "Sorry, the assistant is temporarily unavailable. Please try again in a moment."}), 200
             reply = result["candidates"][0]["content"]["parts"][0]["text"]

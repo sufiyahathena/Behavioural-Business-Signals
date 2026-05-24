@@ -77,10 +77,10 @@
 
             <div class="ds-card ds-card--behavioural">
                 <div class="ds-card-header">
-                    <span class="ds-card-title">Google Play Store</span>
+                    <span class="ds-card-title">Google Play Store & Apple App Store</span>
                     <span class="ds-badge ds-badge--behavioural">Behavioural — Automated and Manual</span>
                 </div>
-                <p class="ds-card-body">App ratings are collected from the Google Play Store for each company's primary consumer-facing mobile app. Data is gathered through automated scraping with manual fallback where automation is blocked. Companies without a meaningful consumer app are excluded from this signal, and the weight is redistributed within the Consumer Experience and Trust bucket. Data is refreshed quarterly. Last updated May 2026.</p>
+                <p class="ds-card-body">App ratings are collected from the Google Play Store or Apple App Store depending on data availability, using whichever source provides the most complete and representative rating for each company's primary consumer-facing mobile app. Google Play Store is the primary source; Apple App Store is used where Google Play data is unavailable or insufficient. Data is gathered through automated scraping and manual collection. Companies without a meaningful consumer app are excluded from this signal, and the weight is redistributed within the Consumer Experience and Trust bucket. Data is refreshed quarterly. Last updated May 2026.</p>
             </div>
 
             <div class="ds-card ds-card--behavioural">
@@ -97,6 +97,22 @@
                     <span class="ds-badge ds-badge--behavioural">Behavioural — Automated</span>
                 </div>
                 <p class="ds-card-body">YouTube subscriber counts are collected via the YouTube Data API v3, Google's official API for channel data. Each company's primary consumer-facing YouTube channel is used where available. For holding companies with no meaningful direct corporate YouTube presence, the largest fully-owned active consumer brand channel is used as a proxy. Proxy channels must meet an activity threshold — dormant channels are excluded regardless of subscriber count. A modest confidence discount is applied to proxy-based metrics. Full methodology and current proxy assignments are detailed on the <a href="/behavioural-breakdown" class="ds-link">Behavioural</a> page. Data is refreshed quarterly. Last updated May 2026.</p>
+            </div>
+
+            <div class="ds-card ds-card--behavioural">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">Instagram</span>
+                    <span class="ds-badge ds-badge--behavioural">Behavioural — Manual Collection</span>
+                </div>
+                <p class="ds-card-body">Follower counts for each company's primary brand account, collected manually. Used as a brand momentum signal reflecting chosen ongoing followership. Last updated May 2026.</p>
+            </div>
+
+            <div class="ds-card ds-card--behavioural">
+                <div class="ds-card-header">
+                    <span class="ds-card-title">TikTok</span>
+                    <span class="ds-badge ds-badge--behavioural">Behavioural — Manual Collection</span>
+                </div>
+                <p class="ds-card-body">Total likes for each company's primary brand account, collected manually. Used as a brand momentum signal reflecting cumulative engagement and cultural relevance. Last updated May 2026.</p>
             </div>
 
         </div>

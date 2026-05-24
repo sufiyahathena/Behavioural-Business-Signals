@@ -28,42 +28,28 @@ FINANCIAL_WEIGHTS = {
     "interest_coverage": 0.06,
 }
 
-# Behavioural scoring — bucket base weights (computed dynamically per company)
+# Behavioural scoring — base weights by metric (applied dynamically per company in scorer)
 
-# Consumer Experience and Trust bucket (total = 42%)
-CONSUMER_WEIGHTS_HIGH_CONFIDENCE = {
-    "trustpilot_rating": 0.20,
-    "app_rating":        0.22,
+# Consumer Experience and Trust — 22%
+# Trustpilot reviews >= 100 (high confidence): tp=10, app=12
+# Trustpilot reviews <  100 (low confidence):  tp=6,  app=16
+WEIGHTS = {
+    "trustpilot_rating":          {"base": 10, "low_confidence": 6},
+    "app_rating":                 {"base": 12, "low_confidence": 16},
+    # Employee Culture and Leadership — 30%
+    "glassdoor_overall":          10,
+    "glassdoor_ceo_approval":     8,
+    "glassdoor_recommend":        12,
+    # Brand Momentum — 48%
+    # Google Trends weights are geography-dependent (see COMPANY_GEOGRAPHY)
+    "google_trends_score_us":     {"us": 15, "mixed": 7.5, "global": 0},
+    "google_trends_score_global": {"us": 0,  "mixed": 7.5, "global": 15},
+    "youtube_subscribers":        9,
+    "instagram_followers":        13,
+    "tiktok_total_likes":         11,
 }
-CONSUMER_WEIGHTS_LOW_CONFIDENCE = {
-    "trustpilot_rating": 0.12,
-    "app_rating":        0.30,
-}
-TRUSTPILOT_CONFIDENCE_THRESHOLD = 100  # reviews
 
-# Employee Culture and Leadership bucket (total = 30%)
-EMPLOYEE_WEIGHTS = {
-    "glassdoor_overall":      0.10,
-    "glassdoor_ceo_approval": 0.08,
-    "glassdoor_recommend":    0.12,
-}
-
-# Brand Momentum bucket (total = 28%)
-MOMENTUM_WEIGHTS_US = {
-    "google_trends_score_us":     0.15,
-    "google_trends_score_global": 0.00,
-    "youtube_subscribers":        0.13,
-}
-MOMENTUM_WEIGHTS_GLOBAL = {
-    "google_trends_score_us":     0.00,
-    "google_trends_score_global": 0.15,
-    "youtube_subscribers":        0.13,
-}
-MOMENTUM_WEIGHTS_MIXED = {
-    "google_trends_score_us":     0.075,
-    "google_trends_score_global": 0.075,
-    "youtube_subscribers":        0.13,
-}
+TRUSTPILOT_CONFIDENCE_THRESHOLD = 100  # minimum reviews for high-confidence Trustpilot weight
 
 # Company geography classification for Google Trends weighting
 COMPANY_GEOGRAPHY = {
